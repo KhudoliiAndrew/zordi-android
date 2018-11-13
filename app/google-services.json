@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1030572573278:android:008314fa71e223ce",
+        "mobilesdk_app_id": "1:1030572573278:android:55ebb9f5afa42ce8",
         "android_client_info": {
-          "package_name": "com.example.admin.miplus"
+          "package_name": "com.penguin.miplus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1030572573278-iujcrhtd0fangv5j5uued7jpf5ive6n4.apps.googleusercontent.com",
+          "client_id": "1030572573278-irp6obk9voipo63nkp2k1e5gtp6thqeo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.admin.miplus",
+            "package_name": "com.penguin.miplus",
             "certificate_hash": "cb9c29a29d9e399c33e157b3d838f652c943d6cf"
           }
         },
@@ -44,37 +44,6 @@
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1030572573278:android:55ebb9f5afa42ce8",
-        "android_client_info": {
-          "package_name": "com.penguin.miplus"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1030572573278-8rjasprbtcjshmp2ms79npopdvonpeuf.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBI1lQdtAh8AW3sOwhFsEwUlu2AFQz8lbU"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

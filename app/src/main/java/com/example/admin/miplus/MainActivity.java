@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
         initTabs();
         initToolbar();
 
+
+
+
     }
     private void initTabs(){
         viewPager = (ViewPager) findViewById(R.id.viewPager);
