@@ -29,9 +29,6 @@ public class LoginFacebook extends AppCompatActivity implements
 
     private static final String TAG = "FacebookLogin";
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
-
     private FirebaseAuth mAuth;
 
     private CallbackManager mCallbackManager;
@@ -44,7 +41,7 @@ public class LoginFacebook extends AppCompatActivity implements
 
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.buttonFacebookLogin);
+        LoginButton loginButton = findViewById(R.id.facebook);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override

@@ -24,9 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="148dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="8dp"
         android:text="Google"
         app:layout_constraintBottom_toTopOf="@+id/facebook"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,18 +35,18 @@
         app:layout_constraintTop_toBottomOf="@+id/twitter" />
 
     <Button
-        android:id="@+id/facebook"
+        android:id="@+id/facebook1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="18dp"
         android:layout_marginEnd="148dp"
         android:layout_marginBottom="167dp"
         android:text="Facebook"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/google" />
+        app:layout_constraintTop_toBottomOf="@+id/facebook" />
 
     <Button
         android:id="@+id/twitter"
@@ -55,11 +55,23 @@
         android:layout_marginStart="148dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="148dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="13dp"
         android:text="Twitter"
         app:layout_constraintBottom_toTopOf="@+id/google"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="103dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/facebook1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/google" />
 </android.support.constraint.ConstraintLayout>
