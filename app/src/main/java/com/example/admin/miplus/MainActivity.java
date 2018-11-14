@@ -23,11 +23,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(LAYOUT);
         initTabs();
         initToolbar();
-
-
-
-
     }
+
     private void initTabs(){
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         TabsPagerFragmentAdapter adapter = new TabsPagerFragmentAdapter(getSupportFragmentManager());
@@ -35,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
     }
+
     private void initToolbar(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);

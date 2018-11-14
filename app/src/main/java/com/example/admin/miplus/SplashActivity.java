@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
-    private final int SPLASH_DISPLEY_LENGHT = 5000;
+    private final int SPLASH_DISPLEY_LENGHT = 1000;
     private FirebaseAuth mAuth;
 
 
@@ -17,7 +17,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
-        setContentView(R.layout.login_activity);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -29,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (currentUser == null){
-                    Intent userIntent = new Intent(SplashActivity.this, LoginActivity.class);
+                    Intent userIntent = new Intent(SplashActivity.this, LoginGoogle.class);
                     SplashActivity.this.startActivity(userIntent);
                     SplashActivity.this.finish();
                 } else {
