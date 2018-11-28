@@ -12,8 +12,5 @@
     <item
         android:title="Feedback"
         android:orderInCategory="1"   />
-    <item
-        android:title="Log Out"
-        android:orderInCategory="1" />
 
 </menu>

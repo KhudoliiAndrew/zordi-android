@@ -30,6 +30,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:4.38.1'
+    implementation 'com.android.support:mediarouter-v7:27.1.1'
 
 }
 

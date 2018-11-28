@@ -23,8 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class LoginGoogle extends AppCompatActivity implements
-        View.OnClickListener {
+public class LoginGoogle extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -41,6 +40,7 @@ public class LoginGoogle extends AppCompatActivity implements
         setContentView(R.layout.login_activity);
 
         findViewById(R.id.google).setOnClickListener(this);
+        findViewById(R.id.log_out).setOnClickListener(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -97,7 +97,19 @@ public class LoginGoogle extends AppCompatActivity implements
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    private void signOut() {
+        // Firebase sign out
+        mAuth.signOut();
 
+        // Google sign out
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(null);
+                    }
+                });
+    }
 
     private void revokeAccess() {
         // Firebase sign out
@@ -131,5 +143,5 @@ public class LoginGoogle extends AppCompatActivity implements
         if (i == R.id.google) {
             signIn();
         }
-        }
+    }
 }

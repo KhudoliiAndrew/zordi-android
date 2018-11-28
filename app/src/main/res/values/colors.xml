@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#448AFF</color>
-    <color name="colorPrimaryDark">#1A237E</color>
-    <color name="colorAccent">#8C9EFF</color>
-    <color name="colorBackground">#FFF</color>
+    <color name="colorPrimary">#d8edff</color>
+    <color name="colorPrimaryDark">#a6bbcc</color>
+    <color name="colorAccent">#ffffff</color>
+    <color name="colorBackground">#F2F2F2</color>
+
+    <color name="colorPrimaryDay">#d8edff</color>
+    <color name="colorPrimaryDarkDay">#a6bbcc</color>
+    <color name="colorAccentDay">#ffffff</color>
+
+    <color name="colorPrimaryMorning">#d8edff</color>
+    <color name="colorPrimaryDarkMorning">#a6bbcc</color>
+    <color name="colorAccentMorning">#ffffff</color>
+
+    <color name="colorPrimaryNight">#1b3993</color>
+    <color name="colorPrimaryDarkNight">#001564</color>
+    <color name="colorAccentNight">#5763c4</color>
 </resources>
