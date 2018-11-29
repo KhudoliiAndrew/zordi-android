@@ -37,7 +37,8 @@
                 app:tabIndicatorColor="@android:color/background_dark"
                 app:tabIndicatorHeight="4dp"
                 app:tabSelectedTextColor="@android:color/black"
-                app:tabTextColor="@android:color/darker_gray" />
+                app:tabTextColor="@android:color/darker_gray"
+                android:elevation="10dp"/>
 
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>

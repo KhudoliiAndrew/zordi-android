@@ -23,7 +23,6 @@ public class SplashActivity extends AppCompatActivity {
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
 
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

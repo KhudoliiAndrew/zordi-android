@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-        <item android:id="@+id/usermenu"
-         android:title="@string/usermenu_title"
-         android:orderInCategory="1"   />
-
-
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <item
+            android:id="@+id/usermenu"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="@string/usermenu_title"
+            app:showAsAction="always"
+            android:orderInCategory="1"/>
 </menu>

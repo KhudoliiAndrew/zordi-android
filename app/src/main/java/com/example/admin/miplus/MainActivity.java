@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private Toolbar toolbar;
     private Button logout;
-
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         initNavigationView();
         logout = (Button) findViewById(R.id.log_out);
+
 
     }
 
@@ -70,9 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(View view) {
+                final FirebaseUser currentUser = mAuth.getCurrentUser();
+                currentUser.delete();
                 Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
                 MainActivity.this.startActivity(userIntent);
-                MainActivity.this.finish();
                 FirebaseAuth.getInstance().signOut();
+                MainActivity.this.finish();
     }
 }
