@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:title="@string/usermenu_title"
-        android:orderInCategory="1"   />
-    <item
-        android:title="Dynamic theme"
-        android:orderInCategory="1"   />
-    <item
-        android:title="Help to Developers"
-        android:orderInCategory="1"   />
-    <item
-        android:title="Feedback"
-        android:orderInCategory="1"   />
-
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Settings of app">
+        <menu>
+            <item
+                android:orderInCategory="1"
+                android:title="Notification"
+                android:icon="@drawable/ic_notifications_black_24dp"/>
+            <item
+                android:checkable="true"
+                android:orderInCategory="1"
+                android:title="Dynamic theme"
+                android:icon="@drawable/ic_center_focus_weak_black_24dp"/>
+        </menu>
+    </item>
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:title="Help to Developers"
+                android:icon="@drawable/ic_help_black_24dp"
+                android:orderInCategory="1"   />
+            <item
+                android:title="Feedback"
+                android:icon="@drawable/ic_feedback_black_24dp"
+                android:orderInCategory="1"   />
+        </menu>
+    </item>
 </menu>

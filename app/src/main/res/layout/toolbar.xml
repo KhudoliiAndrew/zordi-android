@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     style="@style/NightTheme"
-    android:elevation="3dp">
+    android:elevation="1dp">
 
 
 </android.support.v7.widget.Toolbar>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/Goal_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="top"
+        card_view:cardCornerRadius="4dp">
+
+        <TextView
+            android:id="@+id/Goals_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Goals"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/steps_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Steps"
+            android:layout_gravity="center"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            />
+
+        <Button
+            android:id="@+id/sleep_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:text="Sleep"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/Theme_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center_vertical"
+        card_view:cardCornerRadius="4dp">
+
+        <TextView
+            android:id="@+id/theme_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Theme your watch"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/light_theme_watch_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Light"
+            android:layout_gravity="center"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            />
+
+        <Button
+            android:id="@+id/dark_theme_watch_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:text="Dark"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/notifications_watch_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        card_view:cardCornerRadius="4dp">
+
+        <TextView
+            android:id="@+id/notifications_watch_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Notifications"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/goal_achievement_watch_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Goal achievement"
+            android:layout_gravity="center"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            />
+
+        <Button
+            android:id="@+id/information_upon_waking_watch_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:text="Information upon waking"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+    </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

@@ -5,6 +5,7 @@
     <color name="colorAccent">#ffffff</color>
     <color name="colorBackground">#F2F2F2</color>
 
+    <color name="textColor">#000000</color>
     <color name="colorPrimaryDay">#d8edff</color>
     <color name="colorPrimaryDarkDay">#a6bbcc</color>
     <color name="colorAccentDay">#ffffff</color>

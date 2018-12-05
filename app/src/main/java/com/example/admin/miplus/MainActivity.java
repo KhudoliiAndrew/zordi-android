@@ -1,6 +1,7 @@
 package com.example.admin.miplus;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         initNavigationView();
         initHeader();
 
-
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     }
 

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.example.admin.miplus.R;
 
 public class ExampleFragment extends Fragment {
-        private static final int LAYOUT = R.layout.fragment_example;
+        private static final int LAYOUT = R.layout.secondwindow_activity;
 
 
         private View view;

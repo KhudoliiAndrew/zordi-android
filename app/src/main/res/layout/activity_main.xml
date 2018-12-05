@@ -37,7 +37,8 @@
                 app:tabIndicatorColor="@android:color/background_dark"
                 app:tabIndicatorHeight="4dp"
                 app:tabSelectedTextColor="@android:color/black"
-                app:tabTextColor="@android:color/darker_gray" />
+                app:tabTextColor="@android:color/darker_gray"
+                app:tabMode="fixed"/>
 
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
@@ -55,7 +56,7 @@
             android:layout_width="match_parent"
             style="?android:attr/borderlessButtonStyle"
             android:layout_gravity="bottom"
-            android:text="@string/app_name"
+            android:text="Log Out"
             android:onClick="onClick"/>
     </android.support.design.widget.NavigationView>
 
