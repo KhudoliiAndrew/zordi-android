@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.example.admin.miplus.R;
 
 public class ExampleFragment extends Fragment {
@@ -27,7 +28,7 @@ public class ExampleFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(LAYOUT, container, false);
+        view = inflater.inflate(R.layout.secondwindow_activity, container, false);
         return view;
     }
 }
