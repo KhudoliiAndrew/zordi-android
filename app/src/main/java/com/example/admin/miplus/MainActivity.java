@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initHeader(){
         final FirebaseUser currentUser = mAuth.getCurrentUser();
-        String nametext = currentUser.getDisplayName();
-        String emailtext = currentUser.getEmail();
+        //String nametext = currentUser.getDisplayName();
+        //String emailtext = currentUser.getEmail();
        // name.setText(currentUser.getDisplayName());
         //email.setText(emailtext, TextView.BufferType.EDITABLE);
         //logo.setImageMatrix(currentUser.getPhotoUrl());

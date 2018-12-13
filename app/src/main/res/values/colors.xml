@@ -17,4 +17,5 @@
     <color name="colorPrimaryNight">#1b3993</color>
     <color name="colorPrimaryDarkNight">#001564</color>
     <color name="colorAccentNight">#5763c4</color>
+    <color name="colorGoogleRed">#EA4335</color>
 </resources>

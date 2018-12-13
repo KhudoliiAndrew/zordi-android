@@ -6,72 +6,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:background="@drawable/round_corners"
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="83dp"/>
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginBottom="3dp"
-        android:text="Please, Кegister"
-        app:layout_constraintBottom_toTopOf="@+id/twitter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_height="50dp"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:text="Log in"
+        android:textColor="#000000"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/google"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginBottom="8dp"
-        android:text="Google"
-        app:layout_constraintBottom_toTopOf="@+id/facebook"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/twitter" />
-
-    <Button
-        android:id="@+id/facebook1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginBottom="167dp"
-        android:text="Facebook"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:background="@color/colorGoogleRed"
+        android:gravity="center"
+        android:text="      Google"
+        android:textColor="#ffffff"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/facebook" />
-
-    <Button
-        android:id="@+id/twitter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginBottom="13dp"
-        android:text="Twitter"
-        app:layout_constraintBottom_toTopOf="@+id/google"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        tools:layout_editor_absoluteY="250dp" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="103dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="103dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/facebook1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/google" />
+        android:layout_width="200dp"
+        android:layout_height="32dp"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="92dp"
+        tools:layout_editor_absoluteY="360dp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/google_icon"
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="258dp" />
+
 </android.support.constraint.ConstraintLayout>
