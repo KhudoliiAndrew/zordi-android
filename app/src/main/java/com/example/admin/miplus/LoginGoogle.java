@@ -39,7 +39,7 @@ public class LoginGoogle extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        findViewById(R.id.google).setOnClickListener(this);
+        findViewById(R.id.google_btn).setOnClickListener(this);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -141,7 +141,7 @@ public class LoginGoogle extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.google) {
+        if (i == R.id.google_btn) {
             signIn();
         }
     }

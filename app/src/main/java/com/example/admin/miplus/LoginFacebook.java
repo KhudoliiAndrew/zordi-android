@@ -37,11 +37,11 @@ public class LoginFacebook extends AppCompatActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        findViewById(R.id.facebook).setOnClickListener(this);
+        findViewById(R.id.facebook_btn).setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.facebook);
+        LoginButton loginButton = findViewById(R.id.facebook_btn);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
