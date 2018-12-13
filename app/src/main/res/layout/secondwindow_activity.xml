@@ -1,7 +1,5 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
@@ -13,7 +11,150 @@
             android:layout_marginTop="56dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent">
+            android:background="@color/colorAccent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                android:background="@drawable/menu_container_background"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/activity_target_watch_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:text="Activity Target"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+                <view
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:layout_below="@id/activity_target_watch_text"/>
+
+                <Button
+                    android:id="@+id/steps_watch_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:text="Steps"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_below="@id/activity_target_watch_text"
+                    android:textAlignment="textStart"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1200"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/steps_watch_button"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="20dp"/>
+
+                <view
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:layout_below="@id/steps_watch_button"/>
+                <Button
+                    android:id="@+id/waking_watch_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wake"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_below="@id/steps_watch_button"
+                    android:textAlignment="textStart"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="27"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/waking_watch_button"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="20dp"/>
+            </RelativeLayout>
+
+           <!-- <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/menu_container_background"
+                android:padding="@dimen/default_Padding"
+                android:layout_marginBottom="@dimen/divider_height">
+
+                <TextView
+                    android:id="@+id/theme_watch_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="Theme"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+
+                <view
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:layout_below="@id/theme_watch_text" />
+
+                <Button
+                    android:id="@+id/light_watch_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/theme_watch_text"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:text="Light"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/light_watch_button"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="20dp"/>
+
+                <view
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:layout_below="@id/light_watch_button" />
+
+                <Button
+                    android:id="@+id/dark_watch_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/light_watch_button"
+                    android:text="Dark"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/dark_watch_button"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="20dp"/>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -29,7 +170,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
-                    android:text="Notifications"
+                    android:text="Measurement"
                     android:textColor="@color/textColor"
                     android:textSize="20sp" />
                 <view
@@ -44,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="0dp"
-                    android:text="Goal achievement"
+                    android:text="Weight"
                     android:textColor="@color/textColor"
                     android:textSize="20sp"
                     android:layout_below="@id/measurement_watch_text"
@@ -65,16 +206,93 @@
                     android:layout_height="@dimen/divider_height"
                     android:layout_below="@id/weight_watch_button"/>
                 <Button
-                    android:id="@+id/Destination_watch_button"
+                    android:id="@+id/destination_watch_button"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Information upon waking"
+                    android:text="Steps"
                     android:textColor="@color/textColor"
                     android:textSize="20sp"
                     android:layout_below="@id/weight_watch_button"
                     android:textAlignment="textStart"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1200"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/destination_watch_button"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="20dp"/>
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_Padding"
+                android:background="@drawable/menu_container_background"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/notification_watch_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:text="Notifications"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+                <view
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:layout_below="@id/notification_watch_text"/>
+
+                <Button
+                    android:id="@+id/goalAchievement_watch_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:text="Goal Achievement"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_below="@id/goalAchievement_watch_button"
+                    android:textAlignment="textStart"/>
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/goalAchievement_watch_button"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="20dp"/>
+
+                <view
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:layout_below="@id/goalAchievement_watch_button"/>
+                <Button
+                    android:id="@+id/uponWaking_watch_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Upon Waking"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_below="@id/goalAchievement_watch_button"
+                    android:textAlignment="textStart"/>
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/uponWaking_watch_button"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="20dp"/>
+            </RelativeLayout>-->
         </LinearLayout>
     </ScrollView>
 

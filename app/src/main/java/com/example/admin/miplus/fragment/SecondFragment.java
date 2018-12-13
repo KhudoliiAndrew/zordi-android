@@ -8,27 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.example.admin.miplus.R;
 
-public class ExampleFragment extends Fragment {
+public class SecondFragment extends Fragment {
         private static final int LAYOUT = R.layout.secondwindow_activity;
-
-
         private View view;
 
-    public static ExampleFragment getInstance(){
+    public static SecondFragment getInstance(){
         Bundle args = new Bundle();
-        ExampleFragment fragment = new ExampleFragment();
+        SecondFragment fragment = new SecondFragment();
         fragment.setArguments(args);
-
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.secondwindow_activity, container, false);
+        view = inflater.inflate(LAYOUT, container, false);
         return view;
     }
 }

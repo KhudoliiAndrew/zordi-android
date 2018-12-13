@@ -10,17 +10,14 @@ import android.view.ViewGroup;
 
 import com.example.admin.miplus.R;
 
-public class FirstWindow extends Fragment {
-    private static final int LAYOUT = R.layout.activity_main;
+public class FirstFragment extends Fragment {
+        private static final int LAYOUT = R.layout.activity_main;
+        private View view;
 
-
-    private View view;
-
-    public static FirstWindow getInstance(){
+    public static FirstFragment getInstance(){
         Bundle args = new Bundle();
-        FirstWindow fragment = new FirstWindow();
+        FirstFragment fragment = new FirstFragment();
         fragment.setArguments(args);
-
         return fragment;
     }
 
