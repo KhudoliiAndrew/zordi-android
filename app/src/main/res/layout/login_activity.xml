@@ -18,9 +18,9 @@
 
     <Button
         android:id="@+id/google_btn"
-        android:layout_width="200dp"
+        android:layout_width="225dp"
         android:layout_height="50dp"
-        android:background="@drawable/google_sign_in"
+        android:background="@drawable/round_corner"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="200dp" />
