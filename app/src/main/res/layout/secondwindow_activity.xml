@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimaryDarkDay"
     android:fitsSystemWindows="true">
     <ScrollView
         android:layout_width="match_parent"
@@ -11,7 +11,7 @@
             android:layout_marginTop="56dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:background="@color/colorBackground"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -19,8 +19,11 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
                 android:background="@drawable/menu_container_background"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp">
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="7dp">
 
                 <TextView
                     android:id="@+id/activity_target_watch_text"
@@ -31,10 +34,10 @@
                     android:text="Activity Target"
                     android:textColor="@color/textColor"
                     android:textSize="20sp" />
-                <view
+                <!--<view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/activity_target_watch_text"/>
+                    android:layout_below="@id/activity_target_watch_text"/>-->
 
                 <Button
                     android:id="@+id/steps_watch_button"
@@ -59,10 +62,10 @@
                     android:textSize="20sp"
                     android:layout_marginEnd="20dp"/>
 
-                <view
+              <!--  <view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/steps_watch_button"/>
+                    android:layout_below="@id/steps_watch_button"/>-->
                 <Button
                     android:id="@+id/waking_watch_button"
                     style="?android:attr/borderlessButtonStyle"
@@ -86,14 +89,15 @@
                     android:layout_marginEnd="20dp"/>
             </RelativeLayout>
 
-           <!-- <RelativeLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:background="@drawable/menu_container_background"
-                android:padding="@dimen/default_Padding"
-                android:layout_marginBottom="@dimen/divider_height">
+                android:padding="@dimen/default_padding"
+                android:layout_marginBottom="8dp"
+                android:elevation="7dp">
 
                 <TextView
                     android:id="@+id/theme_watch_text"
@@ -105,10 +109,10 @@
                     android:textColor="@color/textColor"
                     android:textSize="20sp" />
 
-                <view
+                <!--<view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/theme_watch_text" />
+                    android:layout_below="@id/theme_watch_text" />-->
 
                 <Button
                     android:id="@+id/light_watch_button"
@@ -131,10 +135,10 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="20dp"/>
 
-                <view
+               <!-- <view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/light_watch_button" />
+                    android:layout_below="@id/light_watch_button" />-->
 
                 <Button
                     android:id="@+id/dark_watch_button"
@@ -159,10 +163,12 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/default_Padding"
+                android:padding="@dimen/default_padding"
                 android:background="@drawable/menu_container_background"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp">
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="7dp">
 
                 <TextView
                     android:id="@+id/measurement_watch_text"
@@ -173,10 +179,10 @@
                     android:text="Measurement"
                     android:textColor="@color/textColor"
                     android:textSize="20sp" />
-                <view
+                <!--<view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/measurement_watch_text"/>
+                    android:layout_below="@id/measurement_watch_text"/>-->
 
                 <Button
                     android:id="@+id/weight_watch_button"
@@ -201,10 +207,10 @@
                     android:textSize="20sp"
                     android:layout_marginEnd="20dp"/>
 
-                <view
+                <!--<view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/weight_watch_button"/>
+                    android:layout_below="@id/weight_watch_button"/>-->
                 <Button
                     android:id="@+id/destination_watch_button"
                     style="?android:attr/borderlessButtonStyle"
@@ -231,10 +237,11 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/default_Padding"
+                android:padding="@dimen/default_padding"
                 android:background="@drawable/menu_container_background"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp">
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:elevation="7dp">
 
                 <TextView
                     android:id="@+id/notification_watch_text"
@@ -245,10 +252,10 @@
                     android:text="Notifications"
                     android:textColor="@color/textColor"
                     android:textSize="20sp" />
-                <view
+              <!-- <view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/notification_watch_text"/>
+                    android:layout_below="@id/notification_watch_text"/>-->
 
                 <Button
                     android:id="@+id/goalAchievement_watch_button"
@@ -270,10 +277,10 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="20dp"/>
 
-                <view
+                <!--<view
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/goalAchievement_watch_button"/>
+                    android:layout_below="@id/goalAchievement_watch_button"/>-->
                 <Button
                     android:id="@+id/uponWaking_watch_button"
                     style="?android:attr/borderlessButtonStyle"
@@ -292,7 +299,7 @@
                     android:layout_alignBottom="@id/uponWaking_watch_button"
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="20dp"/>
-            </RelativeLayout>-->
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 
