@@ -4,7 +4,9 @@
     <color name="colorPrimaryDark">#F2F2F2</color>
     <color name="colorAccent">#ffffff</color>
 
-    <color name="colorBackgroundCard">#f9f9f9</color>
+
+    <color name="colorLine">#969696</color>
+    <color name="colorBackgroundCard">#ededed</color>
     <color name="colorBackground">#F2F2F2</color>
     <color name="colorBackgroundGray">#c4c4c4</color>
     <color name="textColor">#000000</color>
