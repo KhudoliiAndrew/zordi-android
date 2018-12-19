@@ -131,7 +131,7 @@ public class LoginGoogle extends AppCompatActivity implements View.OnClickListen
            // Toast.makeText(LoginGoogle.this,"Error", Toast.LENGTH_SHORT).show();
        // } else {
             Toast.makeText(LoginGoogle.this,"Done", Toast.LENGTH_SHORT).show();
-            Intent userIntent = new Intent(LoginGoogle.this, MainActivity.class);
+            Intent userIntent = new Intent(LoginGoogle.this, FirstActivity.class);
             LoginGoogle.this.startActivity(userIntent);
             LoginGoogle.this.finish();
        // }

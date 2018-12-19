@@ -6,13 +6,58 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="56dp">
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="48dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
             android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/green_connect_backround"
+                android:elevation="7dp">
+
+                <ImageView
+                    android:id="@+id/image_watch"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/ic_check_black_24dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_centerHorizontal="true"/>
+                <ImageView
+                    android:id="@+id/circle_watch"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/ic_circle_black_24"
+                    android:layout_marginTop="30dp"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:id="@+id/connect_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Connected"
+                    android:layout_below="@id/image_watch"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/textColor"
+                    android:textSize="30sp"/>
+
+                <TextView
+                    android:layout_below="@id/connect_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Your Device"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"/>
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

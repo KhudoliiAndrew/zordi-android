@@ -22,4 +22,5 @@
     <color name="colorPrimaryNight">#1b3993</color>
     <color name="colorPrimaryDarkNight">#001564</color>
     <color name="colorAccentNight">#5763c4</color>
+    <color name="green_connect_backround">#038b27</color>
 </resources>

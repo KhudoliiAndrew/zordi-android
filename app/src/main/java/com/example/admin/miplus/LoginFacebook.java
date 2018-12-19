@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -127,7 +126,7 @@ public class LoginFacebook extends AppCompatActivity implements
             Toast.makeText(LoginFacebook.this,"Error", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(LoginFacebook.this,"Done", Toast.LENGTH_SHORT).show();
-            Intent userIntent = new Intent(LoginFacebook.this, MainActivity.class);
+            Intent userIntent = new Intent(LoginFacebook.this, FirstActivity.class);
             LoginFacebook.this.startActivity(userIntent);
             LoginFacebook.this.finish();
         }

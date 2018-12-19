@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.example.admin.miplus.R;
 
 public class FirstFragment extends Fragment {
-        private static final int LAYOUT = R.layout.activity_main;
+        private static final int LAYOUT = R.layout.first_activity;
         private View view;
 
     public static FirstFragment getInstance(){

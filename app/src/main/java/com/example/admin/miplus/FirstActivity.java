@@ -21,9 +21,9 @@ import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class FirstActivity extends AppCompatActivity {
 
-    private static final int LAYOUT = R.layout.activity_main;
+    private static final int LAYOUT = R.layout.first_activity;
     private DrawerLayout Drawer_Layout;
     private ViewPager viewPager;
     private Toolbar toolbar;
@@ -97,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view) {
             final FirebaseUser currentUser = mAuth.getCurrentUser();
             currentUser.delete();
-                Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
-                MainActivity.this.startActivity(userIntent);
+                Intent userIntent = new Intent(FirstActivity.this, SplashActivity.class);
+                FirstActivity.this.startActivity(userIntent);
                 FirebaseAuth.getInstance().signOut();
                 finish();
-                MainActivity.this.finish();
+                FirstActivity.this.finish();
     }
 
     @Override
