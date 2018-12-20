@@ -9,32 +9,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.DayTheme">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="NightTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimaryNight</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkNight</item>
-        <item name="colorAccent">@color/colorAccentNight</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:toolbarStyle">@color/colorPrimaryNight</item>
-    </style>
-
-    <style name="AppTheme.MorningTheme">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
 </resources>

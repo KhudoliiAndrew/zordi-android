@@ -2,6 +2,7 @@ package com.example.admin.miplus;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -61,6 +62,7 @@ public class FirstActivity extends AppCompatActivity {
     private void initToolbar(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
+        toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

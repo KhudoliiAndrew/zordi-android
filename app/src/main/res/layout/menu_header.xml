@@ -5,7 +5,7 @@
     android:layout_height="192dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryDay"
+    android:background="@color/colorPrimaryLight"
     android:id="@+id/header">
 
 
