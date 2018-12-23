@@ -12,46 +12,38 @@
         android:id="@+id/user_name_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="108dp"
         android:maxLines="1"
         android:paddingTop="@dimen/cardview_compat_inset_shadow"
         android:text="Android Studio"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="25sp"
         android:textColor="@color/textColor"
-        app:layout_constraintBottom_toTopOf="@+id/user_email_google"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="120dp"
+        />
 
     <TextView
         android:id="@+id/user_email_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="24dp"
         android:text="android@gmail.com"
         android:textSize="15sp"
         android:textColor="@color/textColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="150dp" />
 
     <ImageView
         android:id="@+id/user_logo_google"
-        android:layout_width="72dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/user_name_google"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="45dp"
         app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>

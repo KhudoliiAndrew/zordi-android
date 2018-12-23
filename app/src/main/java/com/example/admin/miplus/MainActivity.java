@@ -18,10 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.facebook.CallbackManager;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity  {
 
     private static final int LAYOUT = R.layout.activity_main;
     private DrawerLayout Drawer_Layout;
@@ -112,5 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        CallbackManager callbackManager = CallbackManager.Factory.create();
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

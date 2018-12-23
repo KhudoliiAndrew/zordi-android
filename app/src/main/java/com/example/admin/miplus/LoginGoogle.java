@@ -127,17 +127,17 @@ public class LoginGoogle extends AppCompatActivity implements View.OnClickListen
     }
 
     private void updateUI(FirebaseUser user) {
-        /*if (user == null){
-            Toast.makeText(LoginGoogle.this,"Error", Toast.LENGTH_SHORT).show();
-        } else {*/
-            Toast.makeText(LoginGoogle.this,"Done", Toast.LENGTH_SHORT).show();
+        if (user == null) {
+           //Toast.makeText(LoginGoogle.this, "Error", Toast.LENGTH_SHORT).show();
+       // } else {
+            Toast.makeText(LoginGoogle.this, "Done", Toast.LENGTH_SHORT).show();
             Intent userIntent = new Intent(LoginGoogle.this, MainActivity.class);
             LoginGoogle.this.startActivity(userIntent);
             LoginGoogle.this.finish();
-        //}
+            //}
 
+        }
     }
-
     @Override
     public void onClick(View v) {
         int i = v.getId();

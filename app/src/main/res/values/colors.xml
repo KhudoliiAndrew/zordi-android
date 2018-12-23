@@ -17,6 +17,6 @@
     <color name="colorPrimaryNight">#1b3993</color>
     <color name="colorPrimaryDarkNight">#001564</color>
     <color name="colorAccentNight">#5763c4</color>
-    <color name="colorGoogleRed">#EA4335</color>
-    <color name="colorLoginBlue">#f51e2ddc</color>
+    <color name="colorGoogleRed">#ea4335</color>
+    <color name="colorLoginBlue">#3b52b2</color>
 </resources>
