@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "713343747939",
+    "firebase_url": "https://zingrunning.firebaseio.com",
+    "project_id": "zingrunning",
+    "storage_bucket": "zingrunning.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713343747939:android:55ebb9f5afa42ce8",
+        "android_client_info": {
+          "package_name": "com.penguin.miplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713343747939-7pk7psf0ssr5ri9tkffsl6pee27hm9u7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.penguin.miplus",
+            "certificate_hash": "5a725fd0d69c520631093c70db53cb16631b37b1"
+          }
+        },
+        {
+          "client_id": "713343747939-d35t8f5926vcperk8brpe73uta15372v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHvLww8IdMp16gD0eFF5VMmq9QV87FPS8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713343747939-d35t8f5926vcperk8brpe73uta15372v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

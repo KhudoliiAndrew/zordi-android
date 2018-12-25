@@ -1,5 +1,6 @@
 package com.example.admin.miplus;
 
+
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.constraint.ConstraintLayout;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity  {
     private TextView email;
     private ImageView logo;
     private ConstraintLayout header;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,4 +125,5 @@ public class MainActivity extends AppCompatActivity  {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 }

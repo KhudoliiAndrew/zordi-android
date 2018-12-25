@@ -105,4 +105,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="65dp"
         app:srcCompat="@color/colorGoogleRed" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/SignInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </com.google.android.gms.common.SignInButton>
+
 </RelativeLayout>
