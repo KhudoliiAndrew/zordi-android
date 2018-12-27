@@ -9,4 +9,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="DefaultNumberPickerTheme" parent="AppTheme">
+        <item name="colorControlNormal">@android:color/transparent</item>
+    </style>
+
 </resources>

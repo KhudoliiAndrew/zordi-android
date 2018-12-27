@@ -3,7 +3,6 @@ package com.example.admin.miplus;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -33,8 +32,7 @@ public class FirstActivity extends AppCompatActivity {
     private TextView name;
     private TextView email;
     private ImageView logo;
-    private ConstraintLayout header;
-
+    private Button secondActivity_steps_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +43,6 @@ public class FirstActivity extends AppCompatActivity {
         initTabs();
         initToolbar();
         initNavigationView();
-        initHeader();
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -74,27 +71,19 @@ public class FirstActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
     }
     private void initNavigationView(){
         Drawer_Layout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
-    private void initHeader(){
-        final FirebaseUser currentUser = mAuth.getCurrentUser();
-      // String nametext = currentUser.getDisplayName();
-      //  String emailtext = currentUser.getEmail();
-       // name.setText(currentUser.getDisplayName());
-        //email.setText(emailtext, TextView.BufferType.EDITABLE);
-        //logo.setImageMatrix(currentUser.getPhotoUrl());
-    }
+
     private void  initView(){
         logout = (Button) findViewById(R.id.log_out);
         name = (TextView) findViewById(R.id.user_name_google);
         email = (TextView) findViewById(R.id.user_email_google);
         logo = (ImageView) findViewById(R.id.user_logo_google);
-        header = (ConstraintLayout) findViewById(R.id.header);
+        secondActivity_steps_button = (Button) findViewById(R.id.steps_watch_button);
     }
-
 
     public void onClick(View view) {
             final FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -114,5 +103,11 @@ public class FirstActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onClick_secondActivity_steps_button(View v) {
+        Intent stepsIntent = new Intent(FirstActivity.this, TargetActivity.class );
+        FirstActivity.this.startActivity(stepsIntent);
+        FirstActivity.this.finish();
     }
 }
