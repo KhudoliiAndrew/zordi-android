@@ -8,4 +8,8 @@
     <string name="facebook_sign_in">With Facebook</string>
     <string name="facebook_app_id">328765904388621</string>
     <string name="fb_login_protocol_scheme">fb328765904388621</string>
+    <string name="steps">Steps</string>
+    <string name="sleeping_monitor">Sleeping monitor</string>
+    <string name="heart_rate">Heart rate</string>
+    <string name="family_access">Family access</string>
 </resources>

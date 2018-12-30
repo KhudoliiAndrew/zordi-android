@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener  {
 
     private static final int LAYOUT = R.layout.activity_main;
     private DrawerLayout Drawer_Layout;
@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity  {
     private ImageView logo;
     private ConstraintLayout header;
 
+    private Button Steps_btn;
+    private Button Sleeping_monitor_btn;
+    private Button Heart_rate_btn;
+    private Button Family_access_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,55 @@ public class MainActivity extends AppCompatActivity  {
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        Steps_btn = (Button) findViewById(R.id.steps_btn);
+        Steps_btn.setOnClickListener(this);
+
+        Sleeping_monitor_btn = (Button) findViewById(R.id.sleeping_monitor_btn);
+        Sleeping_monitor_btn.setOnClickListener(this);
+
+        Heart_rate_btn = (Button) findViewById(R.id.heart_rate_btn);
+        Heart_rate_btn.setOnClickListener(this);
+
+        Family_access_btn = (Button) findViewById(R.id.family_access_btn);
+        Family_access_btn.setOnClickListener(this);
+
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.steps_btn:
+                Intent intent = new Intent (this, StepsActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        switch (view.getId()) {
+            case R.id.sleeping_monitor_btn:
+                Intent intent = new Intent (this, SleepingMonitorActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        switch (view.getId()) {
+            case R.id.heart_rate_btn:
+                Intent intent = new Intent (this, HeartRateActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        switch (view.getId()) {
+            case R.id.family_access_btn:
+                Intent intent = new Intent (this, FamilyAccessActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 
     private void initTabs(){
@@ -96,17 +149,6 @@ public class MainActivity extends AppCompatActivity  {
         email = (TextView) findViewById(R.id.user_email_google);
         logo = (ImageView) findViewById(R.id.user_logo_google);
         header = (ConstraintLayout) findViewById(R.id.header);
-    }
-
-
-    public void onClick(View view) {
-            final FirebaseUser currentUser = mAuth.getCurrentUser();
-            currentUser.delete();
-                Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
-                MainActivity.this.startActivity(userIntent);
-                FirebaseAuth.getInstance().signOut();
-                finish();
-                MainActivity.this.finish();
     }
 
     @Override

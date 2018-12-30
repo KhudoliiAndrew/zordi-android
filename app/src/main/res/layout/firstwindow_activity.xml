@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Button
+        android:id="@+id/steps_btn"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/sleeping_monitor_btn"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="375dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/heart_rate_btn"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="450dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/family_access_btn"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="525dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/steps_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/steps"
+        android:elevation="2dp"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="@id/steps_btn"
+        app:layout_constraintTop_toTopOf="@id/steps_btn"
+        app:layout_constraintBottom_toBottomOf="@id/steps_btn"/>
+
+    <TextView
+        android:id="@+id/sleeping_monitor_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sleeping_monitor"
+        android:elevation="2dp"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="@id/sleeping_monitor_btn"
+        app:layout_constraintTop_toTopOf="@id/sleeping_monitor_btn"
+        app:layout_constraintBottom_toBottomOf="@id/sleeping_monitor_btn"/>
+
+    <TextView
+        android:id="@+id/heart_rate_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/heart_rate"
+        android:elevation="2dp"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="@id/heart_rate_btn"
+        app:layout_constraintTop_toTopOf="@id/heart_rate_btn"
+        app:layout_constraintBottom_toBottomOf="@id/heart_rate_btn"/>
+
+    <TextView
+        android:id="@+id/family_access_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/family_access"
+        android:elevation="2dp"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="@id/family_access_btn"
+        app:layout_constraintTop_toTopOf="@id/family_access_btn"
+        app:layout_constraintBottom_toBottomOf="@id/family_access_btn"/>
+
+    <ImageView
+        android:id="@+id/next_ic1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="2dp"
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/steps_btn"
+        app:layout_constraintTop_toTopOf="@id/steps_btn"
+        app:layout_constraintBottom_toBottomOf="@id/steps_btn"
+        />
+
+    <ImageView
+        android:id="@+id/next_ic2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="2dp"
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/sleeping_monitor_btn"
+        app:layout_constraintTop_toTopOf="@id/sleeping_monitor_btn"
+        app:layout_constraintBottom_toBottomOf="@id/sleeping_monitor_btn"
+        />
+
+    <ImageView
+        android:id="@+id/next_ic3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="2dp"
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/heart_rate_btn"
+        app:layout_constraintTop_toTopOf="@id/heart_rate_btn"
+        app:layout_constraintBottom_toBottomOf="@id/heart_rate_btn"
+        />
+
+    <ImageView
+        android:id="@+id/next_ic4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="2dp"
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/family_access_btn"
+        app:layout_constraintTop_toTopOf="@id/family_access_btn"
+        app:layout_constraintBottom_toBottomOf="@id/family_access_btn"
+        />
+
+
+</android.support.constraint.ConstraintLayout>
