@@ -55,7 +55,7 @@
             android:id="@+id/log_out"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            style="?android:attr/borderlessButtonStyle"
+            android:background="@android:color/transparent"
             android:layout_gravity="bottom"
             android:text="Log Out"
             android:onClick="onClick"/>

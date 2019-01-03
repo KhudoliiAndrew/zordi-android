@@ -33,21 +33,27 @@ public class FirstActivity extends AppCompatActivity {
     private TextView email;
     private ImageView logo;
     private Button secondActivity_steps_button;
+    private TextView quantitySteps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mAuth = FirebaseAuth.getInstance();
         setTheme(R.style.AppTheme);
         setContentView(LAYOUT);
-        initView();
+        inNavigationView();
         initTabs();
         initToolbar();
         initNavigationView();
-
+        setView();
+        textInstaller();
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     }
 
+    private void  setView(){
+
+    }
     private void initTabs(){
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         TabsPagerFragmentAdapter adapter = new TabsPagerFragmentAdapter(getSupportFragmentManager());
@@ -77,7 +83,7 @@ public class FirstActivity extends AppCompatActivity {
         Drawer_Layout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
 
-    private void  initView(){
+    private void inNavigationView(){
         logout = (Button) findViewById(R.id.log_out);
         name = (TextView) findViewById(R.id.user_name_google);
         email = (TextView) findViewById(R.id.user_email_google);
@@ -86,13 +92,10 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-            final FirebaseUser currentUser = mAuth.getCurrentUser();
-            currentUser.delete();
-                Intent userIntent = new Intent(FirstActivity.this, SplashActivity.class);
-                FirstActivity.this.startActivity(userIntent);
-                FirebaseAuth.getInstance().signOut();
-                finish();
-                FirstActivity.this.finish();
+            mAuth.signOut();
+            Intent userIntent = new Intent(FirstActivity.this, SplashActivity.class);
+            FirstActivity.this.startActivity(userIntent);
+            FirstActivity.this.finish();
     }
 
     @Override
@@ -109,5 +112,12 @@ public class FirstActivity extends AppCompatActivity {
         Intent stepsIntent = new Intent(FirstActivity.this, TargetActivity.class );
         FirstActivity.this.startActivity(stepsIntent);
         FirstActivity.this.finish();
+    }
+
+    private void textInstaller(){
+        quantitySteps = (TextView) findViewById(R.id.quantity_of_steps_text);
+        Intent CheckFromTargetActivity = getIntent();
+        String StepsQuantity = String.valueOf(CheckFromTargetActivity.getIntExtra("StepsQuantity", 1000));
+        //quantitySteps.setText("1");
     }
 }

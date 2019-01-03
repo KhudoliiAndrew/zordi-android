@@ -18,14 +18,14 @@ import java.lang.reflect.Field;
 public class TargetActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NumberPicker numberPicker;
-    private TextView quantitySteps;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.target_steps_activity);
         numberPicker = (NumberPicker) findViewById(R.id.StepsPicker);
-        quantitySteps = (TextView) findViewById(R.id.quantity_of_steps_text);
+
         initToolbar();
         isPicker();
         changeDividerColor(numberPicker, Color.parseColor("#00000000"));
@@ -63,9 +63,10 @@ public class TargetActivity extends AppCompatActivity {
         numberPicker.setMinValue(1000);
         numberPicker.setWrapSelectorWheel(false);
     }
+
     public void onCLick_Steps_Cuantity_Button(View v){
-        quantitySteps.setText("1");
         Intent Go_to_firstActivity = new Intent(TargetActivity.this, FirstActivity.class);
+        Go_to_firstActivity.putExtra("StepsQuantity", numberPicker.getValue());
         TargetActivity.this.startActivity(Go_to_firstActivity);
 
     }
