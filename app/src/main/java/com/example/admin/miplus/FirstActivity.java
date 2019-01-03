@@ -91,11 +91,11 @@ public class FirstActivity extends AppCompatActivity {
         secondActivity_steps_button = (Button) findViewById(R.id.steps_watch_button);
     }
 
-    public void onClick(View view) {
-            mAuth.signOut();
-            Intent userIntent = new Intent(FirstActivity.this, SplashActivity.class);
-            FirstActivity.this.startActivity(userIntent);
-            FirstActivity.this.finish();
+    public void signOut_onClick(View view) {
+        mAuth.signOut();
+        Intent userIntent = new Intent(FirstActivity.this, SplashActivity.class);
+        FirstActivity.this.startActivity(userIntent);
+        FirstActivity.this.finish();
     }
 
     @Override

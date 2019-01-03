@@ -6,73 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginBottom="3dp"
-        android:text="Please, Кegister"
-        app:layout_constraintBottom_toTopOf="@+id/twitter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <Button
         android:id="@+id/google_signIn_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="148dp"
-        android:layout_marginBottom="8dp"
+        android:onClick="signIn"
         android:text="Google"
-        app:layout_constraintBottom_toTopOf="@+id/facebook"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/twitter"
-        android:onClick="signIn"/>
+        tools:layout_editor_absoluteY="259dp" />
 
     <Button
         android:id="@+id/facebook1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
-        android:layout_marginTop="18dp"
         android:layout_marginEnd="148dp"
         android:layout_marginBottom="167dp"
         android:text="Facebook"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/facebook" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/twitter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginBottom="13dp"
-        android:text="Twitter"
-        app:layout_constraintBottom_toTopOf="@+id/google_signIn_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebook"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="103dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="103dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/facebook1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/google_signIn_button" />
 </android.support.constraint.ConstraintLayout>

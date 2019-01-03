@@ -58,7 +58,7 @@
             android:background="@android:color/transparent"
             android:layout_gravity="bottom"
             android:text="Log Out"
-            android:onClick="onClick"/>
+            android:onClick="signOut_onClick"/>
     </android.support.design.widget.NavigationView>
 
 

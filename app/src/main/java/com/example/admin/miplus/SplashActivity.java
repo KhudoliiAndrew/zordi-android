@@ -21,12 +21,11 @@ public class SplashActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         final FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (currentUser == null){
+                if (currentUser == null) {
                     Intent userIntent = new Intent(SplashActivity.this, LoginActivity.class);
                     SplashActivity.this.startActivity(userIntent);
                     SplashActivity.this.finish();
@@ -37,13 +36,5 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         }, SPLASH_DISPLEY_LENGHT);
-    }
-
-    private void updateUI(FirebaseUser currentUser) {
-    }
-
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
     }
 }
