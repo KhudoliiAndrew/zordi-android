@@ -7,39 +7,43 @@
 
     <Button
         android:id="@+id/steps_btn"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="300dp"
+        android:layout_width="400dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="310dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/round_corner"/>
 
     <Button
         android:id="@+id/sleeping_monitor_btn"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="375dp"
+        android:layout_width="400dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="385dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/round_corner"/>
 
     <Button
         android:id="@+id/heart_rate_btn"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="450dp"
+        android:layout_width="400dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="460dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/round_corner"/>
 
     <Button
         android:id="@+id/family_access_btn"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="525dp"
+        android:layout_width="400dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="535dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/round_corner"/>
 
     <TextView
         android:id="@+id/steps_txt"

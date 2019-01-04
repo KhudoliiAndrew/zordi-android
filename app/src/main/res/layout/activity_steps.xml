@@ -10,4 +10,8 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <include
+        android:id="@+id/step_counter"
+        layout="@layout/step_counter" />
+
 </android.support.constraint.ConstraintLayout>

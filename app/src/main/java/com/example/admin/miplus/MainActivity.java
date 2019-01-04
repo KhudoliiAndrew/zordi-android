@@ -1,10 +1,16 @@
 package com.example.admin.miplus;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.facebook.CallbackManager;
@@ -25,7 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener  {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     private static final int LAYOUT = R.layout.activity_main;
     private DrawerLayout Drawer_Layout;
@@ -42,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button Sleeping_monitor_btn;
     private Button Heart_rate_btn;
     private Button Family_access_btn;
+
+    SensorManager sensorManager;
+    TextView steps_info;
+    boolean running = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Family_access_btn = (Button) findViewById(R.id.family_access_btn);
         Family_access_btn.setOnClickListener(this);
 
+        steps_info = (TextView) findViewById(R.id.steps_info);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
     }
 
@@ -76,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.steps_btn:
-                Intent intent = new Intent (this, StepsActivity.class);
+                Intent intent = new Intent(this, StepsActivity.class);
                 startActivity(intent);
                 break;
             default:
@@ -84,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         switch (view.getId()) {
             case R.id.sleeping_monitor_btn:
-                Intent intent = new Intent (this, SleepingMonitorActivity.class);
+                Intent intent = new Intent(this, SleepingMonitorActivity.class);
                 startActivity(intent);
                 break;
             default:
@@ -92,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         switch (view.getId()) {
             case R.id.heart_rate_btn:
-                Intent intent = new Intent (this, HeartRateActivity.class);
+                Intent intent = new Intent(this, HeartRateActivity.class);
                 startActivity(intent);
                 break;
             default:
@@ -100,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         switch (view.getId()) {
             case R.id.family_access_btn:
-                Intent intent = new Intent (this, FamilyAccessActivity.class);
+                Intent intent = new Intent(this, FamilyAccessActivity.class);
                 startActivity(intent);
                 break;
             default:
@@ -108,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void initTabs(){
+    private void initTabs() {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         TabsPagerFragmentAdapter adapter = new TabsPagerFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
@@ -116,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -132,18 +145,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
     }
-    private void initNavigationView(){
+
+    private void initNavigationView() {
         Drawer_Layout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
-    private void initHeader(){
+
+    private void initHeader() {
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         //String nametext = currentUser.getDisplayName();
         //String emailtext = currentUser.getEmail();
-       // name.setText(currentUser.getDisplayName());
+        // name.setText(currentUser.getDisplayName());
         //email.setText(emailtext, TextView.BufferType.EDITABLE);
         //logo.setImageMatrix(currentUser.getPhotoUrl());
     }
-    private void  initView(){
+
+    private void initView() {
         logout = (Button) findViewById(R.id.log_out);
         name = (TextView) findViewById(R.id.user_name_google);
         email = (TextView) findViewById(R.id.user_email_google);
@@ -168,4 +184,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        running = true;
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if (countSensor !=null){
+            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+        } else{
+            Toast.makeText(this, "Sensor not found!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        running = false;
+    }
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (running) {
+            steps_info.setText(String.valueOf(event.values[0]));
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
+
