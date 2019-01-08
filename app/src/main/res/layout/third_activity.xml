@@ -137,7 +137,8 @@
                         android:textSize="20sp"
                         android:layout_below="@id/steps_watch_button"
                         android:textAlignment="textStart"
-                        android:background="@android:color/transparent"/>
+                        android:background="@android:color/transparent"
+                        android:onClick="onClick_to_Wake_activity"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -191,13 +192,14 @@
                         android:background="@android:color/transparent"/>
 
                     <Switch
+                        android:id="@+id/light_theme_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_alignBottom="@id/light_watch_button"
                         android:layout_marginBottom="10dp"
                         android:layout_marginEnd="20dp"
-                        android:elevation="10dp"/>
+                        android:elevation="10dp" />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
@@ -217,6 +219,7 @@
                         android:background="@android:color/transparent"/>
 
                     <Switch
+                        android:id="@+id/dark_theme_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"

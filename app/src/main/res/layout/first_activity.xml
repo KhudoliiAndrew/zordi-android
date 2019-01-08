@@ -80,7 +80,8 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:elevation="7dp">
+                    android:elevation="7dp"
+                    android:onClick="toStepsInformation">
 
                     <TextView
                         android:id="@+id/activity_steps_text"
@@ -143,7 +144,8 @@
                     android:background="@drawable/menu_container_background"
                     android:padding="@dimen/default_padding"
                     android:layout_marginBottom="8dp"
-                    android:elevation="7dp">
+                    android:elevation="7dp"
+                    android:onClick="toSleepInformation">
                     <TextView
                         android:id="@+id/activity_sleep_text"
                         android:layout_width="match_parent"
@@ -205,7 +207,8 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
                     android:elevation="7dp"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:onClick="toPulseInformation">
 
                     <TextView
                         android:id="@+id/activity_pulse_text"

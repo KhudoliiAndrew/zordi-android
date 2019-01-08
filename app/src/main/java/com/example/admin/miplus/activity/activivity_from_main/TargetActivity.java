@@ -1,10 +1,9 @@
-package com.example.admin.miplus.activity;
+package com.example.admin.miplus.activity.activivity_from_main;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +34,7 @@ public class TargetActivity extends AppCompatActivity {
     }
     private void initToolbar(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Target Activity_in_main");
+        toolbar.setTitle("Target Activity");
         toolbar.setTitleTextColor(Color.BLACK);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
