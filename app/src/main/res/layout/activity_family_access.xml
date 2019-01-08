@@ -10,4 +10,70 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <Button
+        android:id="@+id/family_user_btn"
+        android:layout_width="400dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="65dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/round_corner"/>
+
+    <TextView
+        android:id="@+id/user_name_family"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/user_name_family"
+        android:elevation="2dp"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="@id/family_user_btn"
+        app:layout_constraintTop_toTopOf="@id/family_user_btn"
+        app:layout_constraintBottom_toBottomOf="@id/family_user_btn"/>
+
+    <ImageView
+        android:id="@+id/next_ic_family"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="2dp"
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/family_user_btn"
+        app:layout_constraintTop_toTopOf="@id/family_user_btn"
+        app:layout_constraintBottom_toBottomOf="@id/family_user_btn"/>
+
+    <Button
+        android:id="@+id/family_add_btn"
+        android:layout_width="400dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="75dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/family_user_btn"
+        android:background="@drawable/round_corner"/>
+
+    <TextView
+        android:id="@+id/add_family"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_family"
+        android:elevation="2dp"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="@id/family_add_btn"
+        app:layout_constraintTop_toTopOf="@id/family_add_btn"
+        app:layout_constraintBottom_toBottomOf="@id/family_add_btn"/>
+
+    <ImageView
+        android:id="@+id/add_ic_family"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:elevation="2dp"
+        app:srcCompat="@drawable/ic_add_circle_outline_black_24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/family_add_btn"
+        app:layout_constraintTop_toTopOf="@id/family_add_btn"
+        app:layout_constraintBottom_toBottomOf="@id/family_add_btn"/>
+
 </android.support.constraint.ConstraintLayout>

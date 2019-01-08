@@ -20,7 +20,7 @@ public class FamilyAccessActivity extends AppCompatActivity {
     }
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Heart rate");
+        toolbar.setTitle("Family access");
         toolbar.setTitleTextColor(Color.BLACK);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

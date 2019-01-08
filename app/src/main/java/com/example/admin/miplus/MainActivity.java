@@ -32,7 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     private static final int LAYOUT = R.layout.activity_main;
     private DrawerLayout Drawer_Layout;
@@ -49,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button Sleeping_monitor_btn;
     private Button Heart_rate_btn;
     private Button Family_access_btn;
+
+    private SensorManager sensorManager;
+    private TextView steps_info;
+    boolean activityRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Family_access_btn = (Button) findViewById(R.id.family_access_btn);
         Family_access_btn.setOnClickListener(this);
+
+        steps_info = (TextView) findViewById(R.id.steps_info);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
@@ -174,5 +181,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CallbackManager callbackManager = CallbackManager.Factory.create();
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activityRunning = true;
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(countSensor != null) {
+            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+        } else {Toast.makeText(this, "Count sensor is not available!", Toast.LENGTH_LONG).show();
+            }
+        }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        activityRunning = false;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(activityRunning){
+            steps_info.setText(String.valueOf(event.values[0]));
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

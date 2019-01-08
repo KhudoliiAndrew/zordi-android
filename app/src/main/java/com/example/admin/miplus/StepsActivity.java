@@ -21,7 +21,7 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
     private Toolbar toolbar;
 
     SensorManager sensorManager;
-    TextView steps_info;
+    TextView steps_information;
     boolean running = false;
 
     @Override
@@ -30,7 +30,7 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
         setContentView(R.layout.activity_steps);
         initToolbar();
 
-        steps_info = (TextView) findViewById(R.id.steps_info);
+        steps_information = (TextView) findViewById(R.id.steps_information);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
     }
@@ -85,7 +85,7 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (running) {
-            steps_info.setText(String.valueOf(event.values[0]));
+            steps_information.setText(String.valueOf(event.values[0]));
         }
 
     }

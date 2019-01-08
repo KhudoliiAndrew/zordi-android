@@ -12,4 +12,6 @@
     <string name="sleeping_monitor">Sleeping monitor</string>
     <string name="heart_rate">Heart rate</string>
     <string name="family_access">Family access</string>
+    <string name="user_name_family">UserName</string>
+    <string name="add_family">Add</string>
 </resources>

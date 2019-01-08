@@ -28,10 +28,6 @@
             android:id="@+id/firstwindow_activity"
             layout="@layout/firstwindow_activity" />
 
-        <include
-            android:id="@+id/googlemaps_activity"
-            layout="@layout/googlemaps_activity" />
-
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
