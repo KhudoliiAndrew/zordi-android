@@ -37,7 +37,7 @@
                 app:tabGravity="fill"
                 app:tabSelectedTextColor="@android:color/black"
                 app:tabTextColor="@android:color/darker_gray"
-                app:tabMode="fixed" />
+                app:tabMode="fixed"/>
 
 
         </android.support.design.widget.AppBarLayout>

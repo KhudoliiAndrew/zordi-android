@@ -22,6 +22,7 @@ import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.activity.TargetActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,18 +44,18 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         setTheme(R.style.AppTheme);
         setContentView(LAYOUT);
-        inNavigationView();
         initTabs();
         initToolbar();
-        initNavigationView();
         setView();
-        textInstaller();
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     }
 
     private void  setView(){
+        Drawer_Layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        logout = (Button) findViewById(R.id.log_out);
 
+        secondActivity_steps_button = (Button) findViewById(R.id.steps_watch_button);
     }
     private void initTabs(){
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -81,18 +82,15 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
     }
-    private void initNavigationView(){
-        Drawer_Layout = (DrawerLayout) findViewById(R.id.drawer_layout);
-    }
 
-    private void inNavigationView(){
-        logout = (Button) findViewById(R.id.log_out);
+    private void setContentView(){
+        logo = (ImageView) findViewById(R.id.user_logo_google);
         name = (TextView) findViewById(R.id.user_name_google);
         email = (TextView) findViewById(R.id.user_email_google);
-        logo = (ImageView) findViewById(R.id.user_logo_google);
-        secondActivity_steps_button = (Button) findViewById(R.id.steps_watch_button);
+        name.setText(mAuth.getCurrentUser().getDisplayName());
+        email.setText(mAuth.getCurrentUser().getEmail());
+        logo.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
     }
-
     public void signOut_onClick(View view) {
         mAuth.signOut();
         Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
@@ -105,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Drawer_Layout.openDrawer(GravityCompat.START);
+                setContentView();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -116,10 +115,12 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.finish();
     }
 
-    private void textInstaller(){
+    public void textInstaller(){
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout.Tab tab = tabLayout.getTabAt(3);
+        tab.select();
         quantitySteps = (TextView) findViewById(R.id.quantity_of_steps_text);
         Intent CheckFromTargetActivity = getIntent();
         String StepsQuantity = String.valueOf(CheckFromTargetActivity.getIntExtra("StepsQuantity", 1000));
-        //quantitySteps.setText("1");
     }
 }

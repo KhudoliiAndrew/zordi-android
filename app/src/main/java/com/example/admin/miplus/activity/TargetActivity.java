@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,14 +14,15 @@ import android.widget.NumberPicker;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
+import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 
 import java.lang.reflect.Field;
 
 public class TargetActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NumberPicker numberPicker;
-
-
+    TabsPagerFragmentAdapter tabsPagerFragmentAdapter = new TabsPagerFragmentAdapter(null);
+    MainActivity mainActivity = new MainActivity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,8 @@ public class TargetActivity extends AppCompatActivity {
         Intent Go_to_firstActivity = new Intent(TargetActivity.this, MainActivity.class);
         Go_to_firstActivity.putExtra("StepsQuantity", numberPicker.getValue());
         TargetActivity.this.startActivity(Go_to_firstActivity);
-
+        tabsPagerFragmentAdapter.getPageTitle(3);
+        mainActivity.textInstaller();
     }
     private void changeDividerColor(NumberPicker picker, int color) {
         try {
