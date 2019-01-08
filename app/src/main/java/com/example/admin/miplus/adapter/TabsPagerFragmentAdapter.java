@@ -1,14 +1,13 @@
 package com.example.admin.miplus.adapter;
 
 
-import android.graphics.drawable.Icon;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.admin.miplus.R;
 import com.example.admin.miplus.fragment.SecondFragment;
 import com.example.admin.miplus.fragment.FirstFragment;
+import com.example.admin.miplus.fragment.ThirdFragment;
 
 public class TabsPagerFragmentAdapter extends FragmentPagerAdapter {
 
@@ -16,7 +15,7 @@ public class TabsPagerFragmentAdapter extends FragmentPagerAdapter {
 
     public TabsPagerFragmentAdapter(FragmentManager fm) {
         super(fm);
-        tabs = new String[]{ "Main", "Settings",  };
+        tabs = new String[]{ "Main", "Map", "Settings", };
     }
 
     @Override
@@ -31,6 +30,8 @@ public class TabsPagerFragmentAdapter extends FragmentPagerAdapter {
                 return FirstFragment.getInstance();
             case 1:
                 return SecondFragment.getInstance();
+            case 2:
+                return ThirdFragment.getInstance();
         }
         return  null;
 

@@ -1,4 +1,4 @@
-package com.example.admin.miplus;
+package com.example.admin.miplus.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -115,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Intent GoToMainActivity = new Intent(LoginActivity.this, FirstActivity.class);
+            Intent GoToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
             LoginActivity.this.startActivity(GoToMainActivity);
             LoginActivity.this.finish();
         }

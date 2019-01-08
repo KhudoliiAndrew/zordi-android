@@ -1,7 +1,4 @@
 <resources>
-    <string name="app_name">Mi Plus</string>
-    <string name="settings_for_your_mi_band_3">Settings for your Mi Band 3:</string>
-    <string name="usermenu_title">Usermenu</string>
+    <string name="app_name">Zordi</string>
     <string name="facebook_app_id">328765904388621</string>
-    <string name="log_out">Log Out</string>
 </resources>

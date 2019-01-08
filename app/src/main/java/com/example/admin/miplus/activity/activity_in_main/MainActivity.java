@@ -1,4 +1,4 @@
-package com.example.admin.miplus;
+package com.example.admin.miplus.activity.activity_in_main;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -17,13 +17,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.SplashActivity;
+import com.example.admin.miplus.activity.TargetActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class FirstActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private static final int LAYOUT = R.layout.first_activity;
+    private static final int LAYOUT = R.layout.main_activity;
     private DrawerLayout Drawer_Layout;
     private ViewPager viewPager;
     private Toolbar toolbar;
@@ -93,9 +95,9 @@ public class FirstActivity extends AppCompatActivity {
 
     public void signOut_onClick(View view) {
         mAuth.signOut();
-        Intent userIntent = new Intent(FirstActivity.this, SplashActivity.class);
-        FirstActivity.this.startActivity(userIntent);
-        FirstActivity.this.finish();
+        Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
+        MainActivity.this.startActivity(userIntent);
+        MainActivity.this.finish();
     }
 
     @Override
@@ -109,9 +111,9 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     public void onClick_secondActivity_steps_button(View v) {
-        Intent stepsIntent = new Intent(FirstActivity.this, TargetActivity.class );
-        FirstActivity.this.startActivity(stepsIntent);
-        FirstActivity.this.finish();
+        Intent stepsIntent = new Intent(MainActivity.this, TargetActivity.class );
+        MainActivity.this.startActivity(stepsIntent);
+        MainActivity.this.finish();
     }
 
     private void textInstaller(){

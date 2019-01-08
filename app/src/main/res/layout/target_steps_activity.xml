@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/second_toolbar"/>
+        layout="@layout/toolbar"/>
 
     <NumberPicker
         android:id="@+id/StepsPicker"

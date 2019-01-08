@@ -1,17 +1,18 @@
-package com.example.admin.miplus;
+package com.example.admin.miplus.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.NumberPicker;
-import android.widget.TextView;
+
+import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 
 import java.lang.reflect.Field;
 
@@ -32,7 +33,7 @@ public class TargetActivity extends AppCompatActivity {
     }
     private void initToolbar(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Target Activity");
+        toolbar.setTitle("Target Activity_in_main");
         toolbar.setTitleTextColor(Color.BLACK);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -52,7 +53,7 @@ public class TargetActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent Go_to_firstActivity = new Intent(TargetActivity.this, FirstActivity.class);
+                Intent Go_to_firstActivity = new Intent(TargetActivity.this, MainActivity.class);
                 TargetActivity.this.startActivity(Go_to_firstActivity);
                 return true;
         }
@@ -65,7 +66,7 @@ public class TargetActivity extends AppCompatActivity {
     }
 
     public void onCLick_Steps_Cuantity_Button(View v){
-        Intent Go_to_firstActivity = new Intent(TargetActivity.this, FirstActivity.class);
+        Intent Go_to_firstActivity = new Intent(TargetActivity.this, MainActivity.class);
         Go_to_firstActivity.putExtra("StepsQuantity", numberPicker.getValue());
         TargetActivity.this.startActivity(Go_to_firstActivity);
 
