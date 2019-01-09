@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity {
          light_switch = (Switch) findViewById(R.id.light_theme_switch);
          dark_switch = (Switch) findViewById(R.id.dark_theme_switch);
          if(light_switch!= null){
-             dark_switch = null;
+            // dark_switch = null;
          }
          if(dark_switch!= null){
-             light_switch = null;
+             //light_switch = null;
          }
     }
 
