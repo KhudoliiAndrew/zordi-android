@@ -21,7 +21,7 @@ public class StepsTargetActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NumberPicker numberPicker;
     TabsPagerFragmentAdapter tabsPagerFragmentAdapter = new TabsPagerFragmentAdapter(null);
-    MainActivity mainActivity = new MainActivity();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,10 +66,11 @@ public class StepsTargetActivity extends AppCompatActivity {
         numberPicker.setWrapSelectorWheel(false);
     }
 
-    public void onCLick_Steps_Cuantity_Button(View v){
+    public void onCLickStepsCuantityButton(View v){
         Intent Go_to_firstActivity = new Intent(StepsTargetActivity.this, MainActivity.class);
         Go_to_firstActivity.putExtra("StepsQuantity", numberPicker.getValue());
         StepsTargetActivity.this.startActivity(Go_to_firstActivity);
+        MainActivity mainActivity = new MainActivity();
         mainActivity.textInstaller();
     }
     private void changeDividerColor(NumberPicker picker, int color) {

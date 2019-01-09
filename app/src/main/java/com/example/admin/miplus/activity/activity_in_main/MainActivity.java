@@ -1,13 +1,18 @@
 package com.example.admin.miplus.activity.activity_in_main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +23,10 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.activity.activivity_from_main.InformationPulseActivity;
@@ -27,6 +36,9 @@ import com.example.admin.miplus.activity.activivity_from_main.StepsTargetActivit
 import com.example.admin.miplus.activity.activivity_from_main.WakeActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView quantitySteps;
     private Switch light_switch;
     private Switch dark_switch;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private int steps = 0;
+    private TextView how_many_steps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         setView();
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        viewPager.setCurrentItem(2);
+
     }
 
     private void  setView(){
@@ -87,14 +105,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setContentView(){
-        if(Drawer_Layout.isDrawerOpen(GravityCompat.START)){
+        /*toolbar = (Toolbar) findViewById(R.id.toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, Drawer_Layout, toolbar, GravityCompat.START, GravityCompat.END) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+                // getSupportActionBar().setTitle(mTitle);
+                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+
+                super.onDrawerOpened(drawerView);
+                //getSupportActionBar().setTitle(mTitle);
+                // invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+
+            }
+        };
+        Drawer_Layout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();*/
+
             logo = (ImageView) findViewById(R.id.user_logo_google);
             name = (TextView) findViewById(R.id.user_name_google);
             email = (TextView) findViewById(R.id.user_email_google);
             name.setText(mAuth.getCurrentUser().getDisplayName());
             email.setText(mAuth.getCurrentUser().getEmail());
-            logo.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
-        }
+            RequestOptions cropOptions = new RequestOptions().centerCrop();
+            Glide.with(this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
     }
     public void signOut_onClick(View view) {
         mAuth.signOut();
@@ -119,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(stepsIntent);
         MainActivity.this.finish();
      //   Drawer_Layout.addDrawerListener();   лушатель открыт дровбл или нет
-      //  Drawer_Layout.isDrawerOpen(GravityCompat.START) роверка на то, открыт или нет.
+
     }
     public void onClick_to_Wake_activity(View v){
         Intent wakeIntent = new Intent(MainActivity.this, WakeActivity.class );
@@ -128,10 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void textInstaller(){
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setCurrentItem(2);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        TabLayout.Tab tab = tabLayout.getTabAt(3);
         quantitySteps = (TextView) findViewById(R.id.quantity_of_steps_text);
         Intent CheckFromTargetActivity = getIntent();
         String StepsQuantity = String.valueOf(CheckFromTargetActivity.getIntExtra("StepsQuantity", 1000));
@@ -162,5 +201,28 @@ public class MainActivity extends AppCompatActivity {
         Intent infPulseIntent = new Intent(MainActivity.this, InformationPulseActivity.class );
         MainActivity.this.startActivity(infPulseIntent);
         MainActivity.this.finish();
+    }
+
+    private void pedometr(){
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor sSensor= sensorManager .getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        how_many_steps = (TextView) findViewById(R.id.how_many_steps_text);
+        how_many_steps.setText(steps);
+    }
+
+    public void onSensorChanged(SensorEvent event) {
+        Sensor sensor = event.sensor;
+        float[] values = event.values;
+        int value = -1;
+
+        if (values.length > 0) {
+            value = (int) values[0];
+        }
+
+
+        if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+            steps++;
+            pedometr();
+        }
     }
 }

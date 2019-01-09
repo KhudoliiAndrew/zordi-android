@@ -43,6 +43,6 @@
         android:background="@drawable/menu_container_background"
         android:text="Ok"
         android:textSize="25sp"
-        android:onClick="onCLick_Steps_Cuantity_Button" />
+        android:onClick="onCLickStepsCuantityButton" />
 
 </android.support.constraint.ConstraintLayout>
