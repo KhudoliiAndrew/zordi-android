@@ -199,7 +199,8 @@
                         android:layout_alignBottom="@id/light_watch_button"
                         android:layout_marginBottom="10dp"
                         android:layout_marginEnd="20dp"
-                        android:elevation="10dp" />
+                        android:elevation="10dp"
+                        android:onClick="light_or_dark_setter"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
@@ -226,7 +227,8 @@
                         android:layout_alignBottom="@id/dark_watch_button"
                         android:layout_marginBottom="10dp"
                         android:layout_marginEnd="20dp"
-                        android:elevation="10dp"/>
+                        android:elevation="10dp"
+                        android:onClick="light_or_dark_setter"/>
                 </RelativeLayout>
 
                 <RelativeLayout

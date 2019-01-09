@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.activity.activivity_from_main.InformationPulseActivity;
 import com.example.admin.miplus.activity.activivity_from_main.InformationSleepActivity;
 import com.example.admin.miplus.activity.activivity_from_main.InformationStepsActivity;
-import com.example.admin.miplus.activity.activivity_from_main.TargetActivity;
+import com.example.admin.miplus.activity.activivity_from_main.StepsTargetActivity;
 import com.example.admin.miplus.activity.activivity_from_main.WakeActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setCurrentItem(2);
     }
 
     private void initToolbar(){
@@ -117,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick_secondActivity_steps_button(View v) {
-        Intent stepsIntent = new Intent(MainActivity.this, TargetActivity.class );
+        Intent stepsIntent = new Intent(MainActivity.this, StepsTargetActivity.class );
         MainActivity.this.startActivity(stepsIntent);
         MainActivity.this.finish();
      //   Drawer_Layout.addDrawerListener();   лушатель открыт дровбл или нет
@@ -130,13 +128,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void textInstaller(){
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setCurrentItem(2);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         TabLayout.Tab tab = tabLayout.getTabAt(3);
         quantitySteps = (TextView) findViewById(R.id.quantity_of_steps_text);
         Intent CheckFromTargetActivity = getIntent();
         String StepsQuantity = String.valueOf(CheckFromTargetActivity.getIntExtra("StepsQuantity", 1000));
     }
-    public void light_or_dark_setter(View v, CompoundButton buttonView, boolean isChecked){
+    public void light_or_dark_setter(View v){
          light_switch = (Switch) findViewById(R.id.light_theme_switch);
          dark_switch = (Switch) findViewById(R.id.dark_theme_switch);
          if(light_switch!= null){

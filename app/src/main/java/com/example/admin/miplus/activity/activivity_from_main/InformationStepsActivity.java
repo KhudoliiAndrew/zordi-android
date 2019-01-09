@@ -19,10 +19,11 @@ public class InformationStepsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information_about_steps_activity);
+        initToolbar();
     }
     private void initToolbar(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Wake");
+        toolbar.setTitle("Steps");
         toolbar.setTitleTextColor(Color.BLACK);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
