@@ -1,16 +1,24 @@
 package com.example.admin.miplus;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -24,13 +32,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ZoomControls;
 
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.facebook.CallbackManager;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -40,7 +54,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final int LAYOUT = R.layout.activity_main;
     private DrawerLayout Drawer_Layout;
@@ -63,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean activityRunning;
 
     private GoogleMap mMap;
+    GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,11 +217,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         activityRunning = true;
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if(countSensor != null) {
+        if (countSensor != null) {
             sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-        } else {Toast.makeText(this, "StepCount sensor is not available!", Toast.LENGTH_LONG).show();
-            }
+        } else {
+            Toast.makeText(this, " ", Toast.LENGTH_LONG).show();
         }
+    }
 
     @Override
     protected void onPause() {
@@ -216,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(activityRunning){
+        if (activityRunning) {
             steps_info.setText(String.valueOf(event.values[0]));
         }
     }
@@ -226,15 +242,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initMap(){
-        SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+    private void initMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        goToLocation(-34, 151, 15);
+        // goToLocation(-34, 151, 15);
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        // if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the documentation
+        // for ActivityCompat#requestPermissions for more details.
+        //return;
+        // }}
+        // mMap.setMyLocationEnabled(true);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mGoogleApiClient.connect();
     }
 
     private void goToLocation(double lat, double lng) {
@@ -248,4 +283,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
         mMap.moveCamera(update);
     }
+
+    LocationRequest mLocationRequest;
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location == null) {
+            Toast.makeText(this, "Cant get current location", Toast.LENGTH_LONG).show();
+        } else {
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 10);
+            mMap.animateCamera(update);
+        }
+    }
 }
+
