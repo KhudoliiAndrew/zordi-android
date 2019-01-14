@@ -7,12 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 
 public class FirstFragment extends Fragment {
         private static final int LAYOUT = R.layout.first_activity;
-        private View view;
 
     public static FirstFragment getInstance(){
         Bundle args = new Bundle();
@@ -24,7 +25,23 @@ public class FirstFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(LAYOUT, container, false);
+        View view = inflater.inflate(LAYOUT, container, false);
+
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        MainActivity mainActivity = new MainActivity();
+    }
+    public void setStep(int step){
+    }
+    public void setStepsToUI(){
+        if(getView() != null){
+            TextView how_many_steps = (TextView)  getView().findViewById(R.id.how_many_steps_text);
+           // how_many_steps.setText();
+        }
+
     }
 }

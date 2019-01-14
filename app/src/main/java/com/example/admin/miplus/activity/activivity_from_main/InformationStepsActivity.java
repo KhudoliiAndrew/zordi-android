@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 
+import java.util.ArrayList;
+
+import im.dacer.androidcharts.LineView;
+
 public class InformationStepsActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
@@ -48,5 +52,12 @@ public class InformationStepsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void schedule(){
+        LineView lineView = (LineView)findViewById(R.id.line_view);
+        lineView.setDrawDotLine(false); //optional
+        lineView.setShowPopup(LineView.SHOW_POPUPS_MAXMIN_ONLY); //optional
+        ArrayList<String> strList;
+        lineView.setColorArray(new int[]{Color.BLACK,Color.GREEN,Color.GRAY,Color.CYAN});
     }
 }

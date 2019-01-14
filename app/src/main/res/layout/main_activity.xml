@@ -10,35 +10,32 @@
     android:fitsSystemWindows="true">
 
 
-    <android.support.v4.view.ViewPager
+    <com.example.admin.miplus.CustomXML.NonSwipeableViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBackground" />
+        android:background="@color/colorBackground"
+        android:isScrollContainer="false" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar" />
+
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/colorBackground">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabLayout"
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/bottom_main_navigation_view"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                app:tabIndicatorColor="@android:color/background_dark"
-                app:tabIndicatorHeight="2dp"
-                app:tabGravity="fill"
-                app:tabSelectedTextColor="@android:color/black"
-                app:tabTextColor="@android:color/darker_gray"
-                app:tabMode="fixed"/>
-
+                android:layout_height="wrap_content"
+                app:menu="@menu/bottom_navigation_view" />
 
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
@@ -57,7 +54,7 @@
             android:background="@android:color/transparent"
             android:layout_gravity="bottom"
             android:text="Log Out"
-            android:onClick="signOut_onClick"/>
+            android:onClick="signoutOnclick"/>
     </android.support.design.widget.NavigationView>
 
 
