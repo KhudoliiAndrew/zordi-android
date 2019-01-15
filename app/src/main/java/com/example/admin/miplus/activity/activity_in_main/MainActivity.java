@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -20,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -126,25 +128,24 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, Drawer_Layout, toolbar, GravityCompat.START, GravityCompat.END) {
 
             @Override
-            public void onDrawerClosed(View drawerView) {
-                logo = (ImageView) findViewById(R.id.user_logo_google);
-                name = (TextView) findViewById(R.id.user_name_google);
-                email = (TextView) findViewById(R.id.user_email_google);
-                name.setText(mAuth.getCurrentUser().getDisplayName());
-                email.setText(mAuth.getCurrentUser().getEmail());
-                RequestOptions cropOptions = new RequestOptions().centerCrop();
-                Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
+            public void onDrawerOpened(View drawerView) {
             }
 
             @Override
-            public void onDrawerOpened(View drawerView) {
-                logo = (ImageView) findViewById(R.id.user_logo_google);
-                name = (TextView) findViewById(R.id.user_name_google);
-                email = (TextView) findViewById(R.id.user_email_google);
-                name.setText(mAuth.getCurrentUser().getDisplayName());
-                email.setText(mAuth.getCurrentUser().getEmail());
-                RequestOptions cropOptions = new RequestOptions().centerCrop();
-                Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
+            public void onDrawerClosed(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                if(newState == DrawerLayout.STATE_DRAGGING) {
+                    logo = (ImageView) findViewById(R.id.user_logo_google);
+                    name = (TextView) findViewById(R.id.user_name_google);
+                    email = (TextView) findViewById(R.id.user_email_google);
+                    name.setText(mAuth.getCurrentUser().getDisplayName());
+                    email.setText(mAuth.getCurrentUser().getEmail());
+                    RequestOptions cropOptions = new RequestOptions().centerCrop();
+                    Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
+                }
             }
         };
         Drawer_Layout.addDrawerListener(actionBarDrawerToggle);
@@ -207,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
     private void pedometr(){
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Sensor sSensor= sensorManager .getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        TextView how_many_steps = (TextView) findViewById(R.id.how_many_steps_text);
+       // TextView how_many_steps = (TextView) findViewById(R.id.how_many_steps_text);
         //how_many_steps.setText(steps);
     }
 

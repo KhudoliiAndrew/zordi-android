@@ -39,7 +39,7 @@ public class FirstFragment extends Fragment {
     }
     public void setStepsToUI(){
         if(getView() != null){
-            TextView how_many_steps = (TextView)  getView().findViewById(R.id.how_many_steps_text);
+           // TextView how_many_steps = (TextView)  getView().findViewById(R.id.how_many_steps_text);
            // how_many_steps.setText();
         }
 
