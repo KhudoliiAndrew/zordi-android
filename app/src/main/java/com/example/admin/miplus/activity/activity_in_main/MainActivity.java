@@ -8,8 +8,11 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Debug;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -39,7 +42,30 @@ import com.example.admin.miplus.activity.activivity_from_main.InformationStepsAc
 import com.example.admin.miplus.activity.activivity_from_main.StepsTargetActivity;
 import com.example.admin.miplus.activity.activivity_from_main.WakeActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.example.admin.miplus.fragment.FirstFragment;
+import com.facebook.FacebookAuthorizationException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.internal.firebase_auth.zzcz;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FacebookAuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.auth.UserInfo;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -71,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         setView();
         setContentNavigationView();
-        pedometr();
     }
 
     private void  setView(){
@@ -137,92 +162,58 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                if(newState == DrawerLayout.STATE_DRAGGING) {
                     logo = (ImageView) findViewById(R.id.user_logo_google);
                     name = (TextView) findViewById(R.id.user_name_google);
                     email = (TextView) findViewById(R.id.user_email_google);
                     name.setText(mAuth.getCurrentUser().getDisplayName());
                     email.setText(mAuth.getCurrentUser().getEmail());
+                   // email.setText(LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email")));
                     RequestOptions cropOptions = new RequestOptions().centerCrop();
                     Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
-                }
             }
         };
         Drawer_Layout.addDrawerListener(actionBarDrawerToggle);
     }
 
     public void signoutOnclick(View view) {
-        mAuth.signOut();
-        Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
-        MainActivity.this.startActivity(userIntent);
-        MainActivity.this.finish();
+        GoogleSignInClient mGoogleSignInClient ;
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getBaseContext(), gso);
+        mGoogleSignInClient.signOut().addOnCompleteListener(MainActivity.this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        FirebaseAuth.getInstance().signOut();
+                        Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
+                        MainActivity.this.startActivity(userIntent);
+                        MainActivity.this.finish();
+                    }
+                });
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Drawer_Layout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void onClickSecondActivityStepsButton(View v) {
+    public void toStepsSetActivity(View v) {
         Intent stepsIntent = new Intent(MainActivity.this, StepsTargetActivity.class );
         MainActivity.this.startActivity(stepsIntent);
-        MainActivity.this.finish();
     }
 
-    public void onClickToWakeActivity(View v){
+    public void toSleepSetActivity(View v){
         Intent wakeIntent = new Intent(MainActivity.this, WakeActivity.class );
         MainActivity.this.startActivity(wakeIntent);
-        MainActivity.this.finish();
-    }
-
-    public void textInstaller(){
-        viewPager.setCurrentItem(2);
-        quantitySteps = (TextView) findViewById(R.id.quantity_of_steps_text);
-        Intent CheckFromTargetActivity = getIntent();
-        String StepsQuantity = String.valueOf(CheckFromTargetActivity.getIntExtra("StepsQuantity", 1000));
     }
 
     public void toStepsInformation(View view){
         Intent infStepsIntent = new Intent(MainActivity.this, InformationStepsActivity.class );
         MainActivity.this.startActivity(infStepsIntent);
-        MainActivity.this.finish();
     }
 
     public void toSleepInformation(View view){
         Intent infSleepIntent = new Intent(MainActivity.this, InformationSleepActivity.class );
         MainActivity.this.startActivity(infSleepIntent);
-        MainActivity.this.finish();
     }
 
     public void toPulseInformation(View view){
         Intent infPulseIntent = new Intent(MainActivity.this, InformationPulseActivity.class );
         MainActivity.this.startActivity(infPulseIntent);
-        MainActivity.this.finish();
-    }
-
-    private void pedometr(){
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor sSensor= sensorManager .getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-       // TextView how_many_steps = (TextView) findViewById(R.id.how_many_steps_text);
-        //how_many_steps.setText(steps);
-    }
-
-    public void onSensorChanged(SensorEvent event) {
-        Sensor sensor = event.sensor;
-        float[] values = event.values;
-        int value = -1;
-
-        if (values.length > 0) {
-            value = (int) values[0];
-        }
-        if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            steps++;
-            pedometr();
-        }
     }
 }

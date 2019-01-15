@@ -71,7 +71,6 @@ public class StepsTargetActivity extends AppCompatActivity {
         Go_to_firstActivity.putExtra("StepsQuantity", numberPicker.getValue());
         StepsTargetActivity.this.startActivity(Go_to_firstActivity);
         MainActivity mainActivity = new MainActivity();
-        mainActivity.textInstaller();
     }
     private void changeDividerColor(NumberPicker picker, int color) {
         try {

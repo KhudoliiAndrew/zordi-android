@@ -1,19 +1,20 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/colorPrimary"
     android:fadingEdge="none"
+    android:fitsSystemWindows="true"
     android:requiresFadingEdge="vertical">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
         android:layout_marginBottom="48dp"
         android:fadingEdge="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,120 +24,126 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/image_watch"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="50dp"
-                        android:background="@drawable/ic_check_24dp"
-                        android:elevation="1dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/circle_watch"
-                        app:layout_constraintEnd_toEndOf="@+id/circle_watch"
-                        app:layout_constraintStart_toStartOf="@+id/circle_watch"
-                        app:layout_constraintTop_toTopOf="@+id/circle_watch"
-                        app:layout_constraintVertical_bias="0.6" />
+                <ImageView
+                    android:id="@+id/image_watch"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="50dp"
+                    android:background="@drawable/ic_check_24dp"
+                    android:elevation="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/circle_watch"
+                    app:layout_constraintEnd_toEndOf="@+id/circle_watch"
+                    app:layout_constraintStart_toStartOf="@+id/circle_watch"
+                    app:layout_constraintTop_toTopOf="@+id/circle_watch"
+                    app:layout_constraintVertical_bias="0.6" />
 
-                    <ImageView
-                        android:id="@+id/circle_watch"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="30dp"
-                        android:background="@drawable/ic_circle_white_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/circle_watch"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/ic_circle_white_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/how_many_steps_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="-1dp"
-                        android:gravity="center_horizontal"
-                        android:text="Connected"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="30sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/circle_watch"
-                        app:layout_constraintEnd_toEndOf="@+id/circle_watch"
-                        app:layout_constraintStart_toStartOf="@+id/circle_watch"
-                        app:layout_constraintTop_toTopOf="@+id/circle_watch"
-                        app:layout_constraintVertical_bias="0.59000003" />
+                <TextView
+                    android:id="@+id/how_many_steps_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="-1dp"
+                    android:gravity="center_horizontal"
+                    android:text="Connected"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/circle_watch"
+                    app:layout_constraintEnd_toEndOf="@+id/circle_watch"
+                    app:layout_constraintStart_toStartOf="@+id/circle_watch"
+                    app:layout_constraintTop_toTopOf="@+id/circle_watch"
+                    app:layout_constraintVertical_bias="0.59000003" />
 
             </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/menu_big_container_background"
-                android:elevation="7dp">
+                android:elevation="7dp"
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:background="@drawable/menu_container_background"
-                    android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginBottom="8dp"
+                    android:background="@drawable/menu_container_background"
                     android:elevation="7dp"
-                    android:onClick="toStepsInformation">
+                    android:onClick="toStepsInformation"
+                    android:padding="@dimen/default_padding">
 
                     <TextView
                         android:id="@+id/activity_steps_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:text="Steps"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
+
                     <View
                         android:layout_width="match_parent"
-                        android:background="@color/colorLine"
                         android:layout_height="@dimen/divider_height"
-                        android:layout_below="@id/activity_steps_text"/>
+                        android:layout_below="@id/activity_steps_text"
+                        android:background="@color/colorLine" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12:43"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
                         android:layout_below="@id/activity_steps_text"
                         android:layout_marginStart="30dp"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Start of activity"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_below="@id/activity_steps_text"
-                        android:layout_marginTop="40dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1243"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_below="@id/activity_steps_text"
-                        android:layout_marginEnd="30dp"
                         android:layout_marginTop="10dp"
-                        android:layout_alignParentEnd="true" />
+                        android:text="12:43"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Steps quantity"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
                         android:layout_below="@id/activity_steps_text"
                         android:layout_marginTop="40dp"
-                        android:layout_alignParentEnd="true"/>
+                        android:text="Start of activity"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_steps_text"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="30dp"
+                        android:text="1243"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_steps_text"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="40dp"
+                        android:text="Steps quantity"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
 
                 </RelativeLayout>
 
@@ -145,126 +152,137 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/menu_container_background"
-                    android:padding="@dimen/default_padding"
                     android:layout_marginBottom="8dp"
+                    android:background="@drawable/menu_container_background"
                     android:elevation="7dp"
-                    android:onClick="toSleepInformation">
+                    android:onClick="toSleepInformation"
+                    android:padding="@dimen/default_padding">
+
                     <TextView
                         android:id="@+id/activity_sleep_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:text="Sleep"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
+
                     <View
                         android:layout_width="match_parent"
-                        android:background="@color/colorLine"
                         android:layout_height="@dimen/divider_height"
-                        android:layout_below="@id/activity_sleep_text"/>
+                        android:layout_below="@id/activity_sleep_text"
+                        android:background="@color/colorLine" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="23:43"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
                         android:layout_below="@id/activity_sleep_text"
                         android:layout_marginStart="30dp"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Start sleep"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_below="@id/activity_sleep_text"
-                        android:layout_marginTop="40dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="7:13"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_below="@id/activity_sleep_text"
-                        android:layout_marginEnd="30dp"
                         android:layout_marginTop="10dp"
-                        android:layout_alignParentEnd="true" />
+                        android:text="23:43"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="End sleep"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
                         android:layout_below="@id/activity_sleep_text"
                         android:layout_marginTop="40dp"
+                        android:text="Start sleep"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_sleep_text"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="30dp"
+                        android:text="7:13"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_sleep_text"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="40dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_alignParentEnd="true"/>
+                        android:text="End sleep"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:background="@drawable/menu_container_background"
-                    android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
-                    android:elevation="7dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginBottom="8dp"
-                    android:onClick="toPulseInformation">
+                    android:background="@drawable/menu_container_background"
+                    android:elevation="7dp"
+                    android:onClick="toPulseInformation"
+                    android:padding="@dimen/default_padding">
 
                     <TextView
                         android:id="@+id/activity_pulse_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:text="Pulse"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
+
                     <View
                         android:layout_width="match_parent"
-                        android:background="@color/colorLine"
                         android:layout_height="@dimen/divider_height"
-                        android:layout_below="@id/activity_pulse_text"/>
+                        android:layout_below="@id/activity_pulse_text"
+                        android:background="@color/colorLine" />
+
                     <TextView
                         android:id="@+id/today_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_pulse_text"
+                        android:layout_marginTop="5dp"
                         android:text="Today"
-                        android:textSize="20sp"
                         android:textColor="@color/textColor"
-                        android:layout_below="@id/activity_pulse_text"
-                        android:layout_marginTop="5dp"/>
+                        android:textSize="20sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="70"
-                        android:textSize="25sp"
-                        android:textColor="@color/textColor"
+                        android:layout_below="@id/activity_pulse_text"
                         android:layout_alignParentEnd="true"
-                        android:layout_below="@id/activity_pulse_text"
                         android:layout_marginTop="5dp"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        android:text="70"
+                        android:textColor="@color/textColor"
+                        android:textSize="25sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/today_text"
+                        android:layout_marginTop="5dp"
                         android:text="Yesterday"
-                        android:textSize="20sp"
                         android:textColor="@color/textColor"
-                        android:layout_below="@id/today_text"
-                        android:layout_marginTop="5dp"/>
+                        android:textSize="20sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="70"
-                        android:textSize="25sp"
-                        android:textColor="@color/textColor"
-                        android:layout_alignParentEnd="true"
                         android:layout_below="@id/today_text"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="5dp"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        android:text="70"
+                        android:textColor="@color/textColor"
+                        android:textSize="25sp" />
                 </RelativeLayout>
             </LinearLayout>
 

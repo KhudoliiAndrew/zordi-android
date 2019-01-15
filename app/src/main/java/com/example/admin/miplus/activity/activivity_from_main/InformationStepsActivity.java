@@ -49,15 +49,9 @@ public class InformationStepsActivity extends AppCompatActivity {
             case android.R.id.home:
                 Intent Go_to_firstActivity = new Intent(InformationStepsActivity.this, MainActivity.class);
                 InformationStepsActivity.this.startActivity(Go_to_firstActivity);
+                this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    private void schedule(){
-        LineView lineView = (LineView)findViewById(R.id.line_view);
-        lineView.setDrawDotLine(false); //optional
-        lineView.setShowPopup(LineView.SHOW_POPUPS_MAXMIN_ONLY); //optional
-        ArrayList<String> strList;
-        lineView.setColorArray(new int[]{Color.BLACK,Color.GREEN,Color.GRAY,Color.CYAN});
     }
 }

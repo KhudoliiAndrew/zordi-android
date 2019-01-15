@@ -45,6 +45,7 @@ public class InformationPulseActivity extends AppCompatActivity {
             case android.R.id.home:
                 Intent Go_to_firstActivity = new Intent(InformationPulseActivity.this, MainActivity.class);
                 InformationPulseActivity.this.startActivity(Go_to_firstActivity);
+                this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

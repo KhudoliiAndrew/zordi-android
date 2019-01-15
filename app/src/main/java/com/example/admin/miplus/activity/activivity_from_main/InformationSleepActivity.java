@@ -45,6 +45,7 @@ public class InformationSleepActivity extends AppCompatActivity {
             case android.R.id.home:
                 Intent Go_to_firstActivity = new Intent(InformationSleepActivity.this, MainActivity.class);
                 InformationSleepActivity.this.startActivity(Go_to_firstActivity);
+                this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

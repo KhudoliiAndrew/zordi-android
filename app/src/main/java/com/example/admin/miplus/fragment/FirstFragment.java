@@ -33,15 +33,7 @@ public class FirstFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainActivity mainActivity = new MainActivity();
     }
-    public void setStep(int step){
-    }
-    public void setStepsToUI(){
-        if(getView() != null){
-           // TextView how_many_steps = (TextView)  getView().findViewById(R.id.how_many_steps_text);
-           // how_many_steps.setText();
-        }
 
-    }
+
 }

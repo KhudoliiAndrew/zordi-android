@@ -54,11 +54,11 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        Button facebook_login_button = (Button) findViewById(R.id.facebook1);
-        facebook_login_button.setOnClickListener(new View.OnClickListener() {
+        Button facebookLoginButton = (Button) findViewById(R.id.facebook1);
+        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "user_friends"));
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "user_friends", "email"));
                 FirebaseUser FacebookUser = mAuth.getCurrentUser();
                 updateUI(FacebookUser);
             }
