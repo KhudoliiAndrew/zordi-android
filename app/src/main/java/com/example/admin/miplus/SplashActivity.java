@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
 
-        mAuth = FirebaseAuth.getInstance();
+       /* mAuth = FirebaseAuth.getInstance();
 
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
@@ -36,7 +36,7 @@ public class SplashActivity extends AppCompatActivity {
                     SplashActivity.this.finish();
                 }
             }
-        }, SPLASH_DISPLEY_LENGHT);
+        }, SPLASH_DISPLEY_LENGHT);*/
     }
 
     private void updateUI(FirebaseUser currentUser) {

@@ -48,13 +48,20 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CustomCap;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnPolylineClickListener, GoogleMap.OnPolygonClickListener {
 
     private static final int LAYOUT = R.layout.activity_main;
     private DrawerLayout Drawer_Layout;
@@ -78,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
+
+    private static final int COLOR_BLACK_ARGB = 0xff000000;
+    private static final int POLYLINE_STROKE_WIDTH_PX = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,12 +274,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // }}
         // mMap.setMyLocationEnabled(true);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+       /* mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-        mGoogleApiClient.connect();
+        mGoogleApiClient.connect();*/
+
+        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .add(
+                        new LatLng(-35.016, 143.321),
+                        new LatLng(-34.747, 145.592),
+                        new LatLng(-34.364, 147.891),
+                        new LatLng(-33.501, 150.217),
+                        new LatLng(-32.306, 149.248),
+                        new LatLng(-32.491, 147.309)));
+
+        polyline1.setTag("A");
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-23.684, 133.903), 4));
+
+        googleMap.setOnPolylineClickListener(this);
+        googleMap.setOnPolygonClickListener(this);
     }
 
     private void goToLocation(double lat, double lng) {
@@ -286,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     LocationRequest mLocationRequest;
 
+    @Deprecated
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = LocationRequest.create();
@@ -323,9 +351,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Cant get current location", Toast.LENGTH_LONG).show();
         } else {
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 10);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 5);
             mMap.animateCamera(update);
         }
     }
-}
 
+    @Override
+    public void onPolylineClick(Polyline polyline) {
+
+    }
+
+    @Override
+    public void onPolygonClick(Polygon polygon) {
+
+    }
+    private void stylePolyline(Polyline polyline) {
+        String type = "";
+        // Get the data object stored with the polyline.
+        if (polyline.getTag() != null) {
+            type = polyline.getTag().toString();
+        }
+
+        switch (type) {
+            // If no type is given, allow the API to use the default.
+            case "A":
+                // Use a custom bitmap as the cap at the start of the line.
+                polyline.setStartCap(
+                        new CustomCap(
+                                BitmapDescriptorFactory.fromResource(R.drawable.ic_navigate_next_black_24dp), 10));
+                break;
+            case "B":
+                // Use a round cap at the start of the line.
+                polyline.setStartCap(new RoundCap());
+                break;
+        }
+
+        polyline.setEndCap(new RoundCap());
+        polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
+        polyline.setColor(COLOR_BLACK_ARGB);
+        polyline.setJointType(JointType.ROUND);
+    }
+}
