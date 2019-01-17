@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.admin.miplus.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,7 +25,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback {
     private static final int LAYOUT = R.layout.second_activity;
     private View view;
 
-    private GoogleMap mMap;
+    private GoogleMap mGoogleMap;
 
     public static SecondFragment getInstance() {
         Bundle args = new Bundle();
@@ -32,8 +33,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback {
         fragment.setArguments(args);
         return fragment;
     }
-
-    SupportMapFragment mapFragment;
 
     @Nullable
     @Override
@@ -52,13 +51,19 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        LatLng ll = new LatLng(20, 20);
-        MarkerOptions option = new MarkerOptions();
-        option.position(ll).title("Jopa");
-        mMap.addMarker(option);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
+        mGoogleMap = googleMap;
+        goToLocationZoom(48.464834,35.056275, 15);
+    }
 
+    private void goToLocation(double lat, double lng) {
+        LatLng ll = new LatLng(lat, lng);
+        CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
+        mGoogleMap.moveCamera(update);
+    }
+    private void goToLocationZoom(double lat, double lng, float zoom) {
+        LatLng ll = new LatLng(lat, lng);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
+        mGoogleMap.moveCamera(update);
     }
 }
 
