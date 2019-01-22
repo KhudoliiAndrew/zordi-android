@@ -14,6 +14,7 @@ import android.widget.NumberPicker;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.example.admin.miplus.fragment.ThirdFragment;
 
 import java.lang.reflect.Field;
 
@@ -66,7 +67,11 @@ public class StepsTargetActivity extends AppCompatActivity {
         numberPicker.setWrapSelectorWheel(false);
     }
 
-    public void onCLickStepsCuantityButton(View v){
+    public void onClickStepsCuantityButton(View v){
+        Bundle bundle = new Bundle();
+        bundle.putInt("Steps", numberPicker.getValue());
+       // ThirdFragment.setArguments(bundle);
+
         Intent Go_to_firstActivity = new Intent(StepsTargetActivity.this, MainActivity.class);
         Go_to_firstActivity.putExtra("StepsQuantity", numberPicker.getValue());
         StepsTargetActivity.this.startActivity(Go_to_firstActivity);

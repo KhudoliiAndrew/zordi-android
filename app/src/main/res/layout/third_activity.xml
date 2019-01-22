@@ -1,16 +1,17 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
         android:layout_marginBottom="48dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,88 +69,91 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/menu_big_container_background"
-                android:elevation="7dp">
+                android:elevation="7dp"
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:background="@drawable/menu_container_background"
-                    android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginBottom="8dp"
-                    android:elevation="7dp">
+                    android:background="@drawable/menu_container_background"
+                    android:elevation="7dp"
+                    android:padding="@dimen/default_padding">
 
                     <TextView
                         android:id="@+id/activity_target_watch_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:text="Activity Target"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
+
                     <View
                         android:layout_width="match_parent"
-                        android:background="@color/colorLine"
                         android:layout_height="@dimen/divider_height"
-                        android:layout_below="@id/activity_target_watch_text"/>
+                        android:layout_below="@id/activity_target_watch_text"
+                        android:background="@color/colorLine" />
 
                     <Button
                         android:id="@+id/steps_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_target_watch_text"
                         android:layout_marginStart="0dp"
                         android:layout_marginTop="0dp"
+                        android:background="@android:color/transparent"
                         android:text="Steps"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_below="@id/activity_target_watch_text"
                         android:textAlignment="textStart"
-                        android:onClick="toStepsSetActivity"
-                        android:background="@android:color/transparent"/>
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
                     <TextView
                         android:id="@+id/quantity_of_steps_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1200"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignBottom="@id/steps_watch_button"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="20dp"
                         android:layout_marginBottom="10dp"
+                        android:text="1200"
                         android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_marginEnd="20dp"/>
+                        android:textSize="20sp" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
                         android:layout_below="@id/steps_watch_button"
-                        android:background="@color/colorLine"/>
+                        android:background="@color/colorLine" />
+
                     <Button
                         android:id="@+id/waking_watch_button"
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Wake"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
                         android:layout_below="@id/steps_watch_button"
-                        android:textAlignment="textStart"
                         android:background="@android:color/transparent"
-                        android:onClick="toSleepSetActivity"/>
+                        android:onClick="toSleepSetActivity"
+                        android:text="Wake"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="27"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignBottom="@id/waking_watch_button"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="20dp"
                         android:layout_marginBottom="10dp"
+                        android:text="27"
                         android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_marginEnd="20dp"/>
+                        android:textSize="20sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -157,10 +161,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/menu_container_background"
-                    android:padding="@dimen/default_padding"
                     android:layout_marginBottom="8dp"
-                    android:elevation="7dp">
+                    android:background="@drawable/menu_container_background"
+                    android:elevation="7dp"
+                    android:padding="@dimen/default_padding">
 
                     <TextView
                         android:id="@+id/theme_watch_text"
@@ -176,7 +180,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
                         android:layout_below="@id/theme_watch_text"
-                        android:background="@color/colorLine"/>
+                        android:background="@color/colorLine" />
 
                     <Button
                         android:id="@+id/light_watch_button"
@@ -185,43 +189,35 @@
                         android:layout_below="@id/theme_watch_text"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="0dp"
+                        android:background="@android:color/transparent"
                         android:text="Light"
                         android:textAlignment="textStart"
                         android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:background="@android:color/transparent"/>
+                        android:textSize="20sp" />
 
-                    <!--<Switch
-                        android:id="@+id/light_theme_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignBottom="@id/light_watch_button"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:elevation="10dp"
-                        android:onClick="lightOrDarkSetter"/>-->
                     <RadioGroup
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignBottom="@id/light_watch_button"
-                        android:layout_marginBottom="-40dp"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="-40dp"
                         android:elevation="10dp">
+
                         <RadioButton
-                        android:id="@+id/light_theme_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignBottom="@id/light_watch_button"
-                        android:layout_marginBottom="10dp"    />
+                            android:id="@+id/light_theme_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignBottom="@id/light_watch_button"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginBottom="10dp" />
+
                         <RadioButton
                             android:id="@+id/dark_theme_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignBottom="@id/dark_watch_button" />
+                            android:layout_alignBottom="@id/dark_watch_button"
+                            android:layout_alignParentEnd="true" />
                     </RadioGroup>
 
 
@@ -229,102 +225,95 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
                         android:layout_below="@id/light_watch_button"
-                        android:background="@color/colorLine"/>
+                        android:background="@color/colorLine" />
 
                     <Button
                         android:id="@+id/dark_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/light_watch_button"
+                        android:layout_marginStart="10dp"
+                        android:background="@android:color/transparent"
                         android:text="Dark"
                         android:textAlignment="textStart"
                         android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_marginStart="10dp"
-                        android:background="@android:color/transparent"/>
+                        android:textSize="20sp" />
 
-                    <!--<Switch
-                        android:id="@+id/dark_theme_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignBottom="@id/dark_watch_button"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:elevation="10dp"
-                        android:onClick="lightOrDarkSetter"/>-->
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:background="@drawable/menu_container_background"
-                    android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/menu_container_background"
                     android:elevation="7dp"
-                    android:layout_marginBottom="8dp">
+                    android:padding="@dimen/default_padding">
 
                     <TextView
                         android:id="@+id/notification_watch_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:text="Notifications"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
                         android:layout_below="@id/notification_watch_text"
-                        android:background="@color/colorLine"/>
+                        android:background="@color/colorLine" />
 
                     <Button
                         android:id="@+id/goalAchievement_watch_button"
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/notification_watch_text"
                         android:layout_marginStart="0dp"
                         android:layout_marginTop="0dp"
+                        android:background="@android:color/transparent"
                         android:text="Goal Achievement"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:layout_below="@id/notification_watch_text"
                         android:textAlignment="textStart"
-                        android:background="@android:color/transparent"/>
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
                     <Switch
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignBottom="@id/goalAchievement_watch_button"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="20dp"/>
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
                         android:layout_below="@id/goalAchievement_watch_button"
-                        android:background="@color/colorLine"/>
+                        android:background="@color/colorLine" />
+
                     <Button
                         android:id="@+id/uponWaking_watch_button"
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Upon Waking"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
                         android:layout_below="@id/goalAchievement_watch_button"
+                        android:background="@android:color/transparent"
+                        android:text="Upon Waking"
                         android:textAlignment="textStart"
-                        android:background="@android:color/transparent"/>
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
 
                     <Switch
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignBottom="@id/uponWaking_watch_button"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="20dp"/>
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp" />
                 </RelativeLayout>
             </LinearLayout>
 

@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
     private Switch lightSwitch;
     private Switch darkSwitch;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private int steps = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         Drawer_Layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         logout = (Button) findViewById(R.id.log_out);
         secondActivity_steps_button = (Button) findViewById(R.id.steps_watch_button);
-
     }
 
     private void initBottomNavigationView(){
@@ -128,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
     private void initToolbar(){
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
                     email = (TextView) findViewById(R.id.user_email_google);
                     name.setText(mAuth.getCurrentUser().getDisplayName());
                     email.setText(mAuth.getCurrentUser().getEmail());
-                   // email.setText(LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email")));
                     RequestOptions cropOptions = new RequestOptions().centerCrop();
                     Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
             }
@@ -192,28 +191,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void toStepsSetActivity(View v) {
-        Intent stepsIntent = new Intent(MainActivity.this, StepsTargetActivity.class );
-        MainActivity.this.startActivity(stepsIntent);
-    }
 
-    public void toSleepSetActivity(View v){
-        Intent wakeIntent = new Intent(MainActivity.this, WakeActivity.class );
-        MainActivity.this.startActivity(wakeIntent);
-    }
-
-    public void toStepsInformation(View view){
-        Intent infStepsIntent = new Intent(MainActivity.this, InformationStepsActivity.class );
-        MainActivity.this.startActivity(infStepsIntent);
-    }
-
-    public void toSleepInformation(View view){
-        Intent infSleepIntent = new Intent(MainActivity.this, InformationSleepActivity.class );
-        MainActivity.this.startActivity(infSleepIntent);
-    }
-
-    public void toPulseInformation(View view){
-        Intent infPulseIntent = new Intent(MainActivity.this, InformationPulseActivity.class );
-        MainActivity.this.startActivity(infPulseIntent);
-    }
 }

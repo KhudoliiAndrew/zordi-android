@@ -19,5 +19,5 @@
         android:background="@drawable/menu_container_background"
         android:text="Ok"
         android:textSize="25sp"
-        android:onClick="onCLickStepsCuantityButton" />
+        android:onClick="onClickStepsCuantityButton" />
 </android.support.constraint.ConstraintLayout>

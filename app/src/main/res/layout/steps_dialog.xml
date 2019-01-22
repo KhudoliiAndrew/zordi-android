@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="500dp">
+
+    <NumberPicker
+        android:id="@+id/StepsPicker"
+        android:layout_width="fill_parent"
+        android:layout_height="225dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:theme="@style/DefaultNumberPickerTheme"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:descendantFocusability="blocksDescendants" />
+
+    <Button
+        android:id="@+id/ok_button_picker"
+        android:layout_width="146dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/StepsPicker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:background="@drawable/menu_container_background"
+        android:onClick="onClickStepsCuantityButton"
+        android:text="Ok"
+        android:textSize="25sp" />
+
+</RelativeLayout>
