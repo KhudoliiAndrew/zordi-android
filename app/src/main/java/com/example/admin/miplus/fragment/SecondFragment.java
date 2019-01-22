@@ -26,6 +26,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -80,6 +82,14 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
+
+        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .add(
+                        new LatLng(48.464827, 35.056259)));
+
+        mGoogleMap.addMarker(new MarkerOptions().position(
+                new LatLng(48.464827 , 35.056259)).title("Marker"));
     }
 
     private void goToLocation(double lat, double lng) {
@@ -133,7 +143,7 @@ if (location == null){
     LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
     CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
     mGoogleMap.animateCamera(update);
-}
+    }
     }
 }
 
