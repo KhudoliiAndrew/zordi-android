@@ -6,24 +6,26 @@
             <item
                 android:orderInCategory="1"
                 android:title="Notification"
-                android:icon="@drawable/ic_notifications_black_24dp"/>
+                android:icon="@drawable/ic_notifications_black_24dp" />
             <item
                 android:checkable="true"
                 android:orderInCategory="1"
                 android:title="Dynamic theme"
-                android:icon="@drawable/ic_center_focus_weak_black_24dp"/>
+                android:icon="@drawable/ic_center_focus_weak_black_24dp" />
         </menu>
     </item>
     <item android:title="Communicate">
         <menu>
             <item
-                android:title="Help to Developers"
                 android:icon="@drawable/ic_help_black_24dp"
-                android:orderInCategory="1"   />
+                android:orderInCategory="1"
+                android:title="Help to Developers"
+                android:onClick="developerHelpOnClick"/>
             <item
                 android:title="Feedback"
                 android:icon="@drawable/ic_feedback_black_24dp"
-                android:orderInCategory="1"   />
+                android:orderInCategory="1"
+                android:onClick="feedbackOnClick"/>
         </menu>
     </item>
 </menu>

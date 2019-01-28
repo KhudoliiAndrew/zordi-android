@@ -1,21 +1,14 @@
 package com.example.admin.miplus.activity.activity_in_main;
 
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorManager;
 import android.net.Uri;
-import android.os.Debug;
-import android.os.Parcel;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -24,48 +17,26 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
-import com.example.admin.miplus.activity.activivity_from_main.InformationPulseActivity;
-import com.example.admin.miplus.activity.activivity_from_main.InformationSleepActivity;
-import com.example.admin.miplus.activity.activivity_from_main.InformationStepsActivity;
-import com.example.admin.miplus.activity.activivity_from_main.StepsTargetActivity;
-import com.example.admin.miplus.activity.activivity_from_main.WakeActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
-import com.example.admin.miplus.fragment.FirstFragment;
-import com.facebook.FacebookAuthorizationException;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.firebase_auth.zzcz;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FacebookAuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.auth.UserInfo;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -108,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         TabsPagerFragmentAdapter adapter = new TabsPagerFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
+        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -191,5 +162,49 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void developerHelpOnClick(MenuItem item){
+        final Dialog dialog = new Dialog(this);
 
+        dialog.setContentView(R.layout.donate_dialog);
+        Button coppyButton = (Button) dialog.findViewById(R.id.coppy_button_donate_dialog);
+        dialog.show();
+        coppyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", "5168 7559 0373 9171");
+                clipboard.setPrimaryClip(clip);
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Copy", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
+    public void feedbackOnClick(MenuItem item){
+        final Dialog dialog = new Dialog(this);
+
+        dialog.setContentView(R.layout.feedback_dialog);
+        Button coppyButton = (Button) dialog.findViewById(R.id.copy_button_feedback_dialog);
+        dialog.show();
+        coppyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", "5168 7559 0373 9171");
+                clipboard.setPrimaryClip(clip);
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Copy", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
+    public void goToGmailOnClick(View v){
+        Intent toEmail = new Intent(Intent.ACTION_SEND);
+        toEmail.setData(Uri.parse("email"));
+        toEmail.putExtra(Intent.EXTRA_EMAIL, "penjuinj@gmail.com");
+        Intent launcherMail = Intent.createChooser(toEmail, "Launch Email");
+        startActivity(launcherMail);
+    }
 }
