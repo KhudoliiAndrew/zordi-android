@@ -3,6 +3,7 @@ package com.example.admin.miplus.fragment;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private LocationRequest locationRequest;
     private Double myLatitude;
     private Double myLongitude;
+    private ArrayList<LatLng> points; //added
+    Polyline line; //added
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     LocationRequest mLocationRequest;
     private static final long UPDATE_INTERVAL = 5000, FASTEST_INTERVAL = 5000; // = 5 seconds
@@ -79,6 +82,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         permissionsToRequest = permissionsToRequest(permissions);
+
+        points = new ArrayList<LatLng>(); //added
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (permissionsToRequest.size() > 0) {
@@ -261,12 +266,33 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
    // myLongitude = location.getLongitude();
    //         mGoogleMap.addMarker(new MarkerOptions().position(
    //                 new LatLng(myLatitude , myLongitude)).title("I'm here now"));
-            mGoogleMap.clear();
-            MarkerOptions mp = new MarkerOptions();
-            mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
-            mp.title("My position");
-            mGoogleMap.addMarker(mp);
+   //         mGoogleMap.clear();
+   //         MarkerOptions mp = new MarkerOptions();
+   //         mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
+   //         mp.title("My position");
+   //         mGoogleMap.addMarker(mp);}}
+
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            LatLng latLng = new LatLng(latitude, longitude); //you already have this
+
+            points.add(latLng); //added
+
+            redrawLine(latLng); //added
         }
+    }
+
+    private void redrawLine(LatLng latLng) {
+        mGoogleMap.clear();  //clears all Markers and Polylines
+
+        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+        for (int i = 0; i < points.size(); i++) {
+            LatLng point = points.get(i);
+            options.add(point);
+        }
+
+        mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("I'm here now"));
+        line = mGoogleMap.addPolyline(options); //add Polyline
     }
 
     @Override
@@ -306,5 +332,3 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         }
     }
 }
-
-
