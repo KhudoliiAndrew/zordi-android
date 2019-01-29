@@ -50,6 +50,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private Location location;
     private TextView locationTv;
     private LocationRequest locationRequest;
+    private Double myLatitude;
+    private Double myLongitude;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     LocationRequest mLocationRequest;
     private static final long UPDATE_INTERVAL = 5000, FASTEST_INTERVAL = 5000; // = 5 seconds
@@ -187,8 +189,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 .add(
                         new LatLng(48.464827, 35.056259)));
 
-        mGoogleMap.addMarker(new MarkerOptions().position(
-                new LatLng(48.464827 , 35.056259)).title("Marker"));
     }
 
     private void goToLocation(double lat, double lng) {
@@ -257,6 +257,15 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
     CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
     mGoogleMap.animateCamera(update);
+   // myLatitude = location.getLatitude();
+   // myLongitude = location.getLongitude();
+   //         mGoogleMap.addMarker(new MarkerOptions().position(
+   //                 new LatLng(myLatitude , myLongitude)).title("I'm here now"));
+            mGoogleMap.clear();
+            MarkerOptions mp = new MarkerOptions();
+            mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
+            mp.title("My position");
+            mGoogleMap.addMarker(mp);
         }
     }
 
