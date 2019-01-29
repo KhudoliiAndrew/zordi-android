@@ -159,12 +159,10 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.finish();
                     }
                 });
-
     }
 
     public void developerHelpOnClick(MenuItem item){
         final Dialog dialog = new Dialog(this);
-
         dialog.setContentView(R.layout.donate_dialog);
         Button coppyButton = (Button) dialog.findViewById(R.id.coppy_button_donate_dialog);
         dialog.show();
@@ -191,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", "5168 7559 0373 9171");
+                ClipData clip = ClipData.newPlainText("", "penjuinj@gmail.com");
                 clipboard.setPrimaryClip(clip);
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Copy", Toast.LENGTH_SHORT);
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     public void goToGmailOnClick(View v){
         Intent toEmail = new Intent(Intent.ACTION_SEND);
         toEmail.setData(Uri.parse("email"));
-        toEmail.putExtra(Intent.EXTRA_EMAIL, "penjuinj@gmail.com");
+        toEmail.setType("message/rfc822");
         Intent launcherMail = Intent.createChooser(toEmail, "Launch Email");
         startActivity(launcherMail);
     }

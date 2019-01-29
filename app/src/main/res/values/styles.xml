@@ -15,4 +15,8 @@
         <item name="colorControlNormal">@android:color/transparent</item>
     </style>
 
+    <style name="DialogTheme" parent="AlertDialog.AppCompat">
+        <item name="android:background">@drawable/menu_big_container_background</item>
+    </style>
+
 </resources>

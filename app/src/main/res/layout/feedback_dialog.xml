@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="290dp"
-    android:layout_height="180dp"
-    android:background="@color/colorBackgroundDialog">
+    android:layout_height="180dp">
     <TextView
         android:layout_width="260dp"
         android:layout_height="wrap_content"
@@ -20,7 +19,7 @@
         android:textSize="23sp"
         android:layout_below="@id/donate_text"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="25dp"
         android:id="@+id/mail_adress_text"
         android:elevation="10dp"/>
 
@@ -36,7 +35,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to Gmail"
+        android:text="Go to email"
         android:layout_below="@id/mail_adress_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"

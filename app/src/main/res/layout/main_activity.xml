@@ -47,6 +47,13 @@
         android:layout_gravity="start"
         app:menu="@menu/menu_navigation_view"
         app:headerLayout="@layout/menu_header" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:background="@color/colorLine"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"/>
         <Button
             android:id="@+id/log_out"
             android:layout_height="wrap_content"
