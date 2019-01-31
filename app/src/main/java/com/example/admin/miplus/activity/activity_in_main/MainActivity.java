@@ -4,16 +4,19 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +34,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -180,6 +184,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void feedbackOnClick(MenuItem item){
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.DialogTheme);
+        builder.setTitle("Важное сообщение!")
+                .setMessage("Покормите кота!")
+                .setIcon(R.drawable.ic_notifications_black_24dp)
+                .setCancelable(false)
+                .setNegativeButton("ОК, иду на кухню",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
         final Dialog dialog = new Dialog(this);
 
         dialog.setContentView(R.layout.feedback_dialog);
@@ -195,14 +212,9 @@ public class MainActivity extends AppCompatActivity {
                         "Copy", Toast.LENGTH_SHORT);
                 toast.show();
             }
-        });
-    }
-
-    public void goToGmailOnClick(View v){
-        Intent toEmail = new Intent(Intent.ACTION_SEND);
-        toEmail.setData(Uri.parse("email"));
-        toEmail.setType("message/rfc822");
-        Intent launcherMail = Intent.createChooser(toEmail, "Launch Email");
-        startActivity(launcherMail);
+        });*/
+        DialogFragment dlgf1;
+        dlgf1 = new FeedbackDialogFragment();
+        dlgf1.show(getSupportFragmentManager(), "dlgf1");
     }
 }
