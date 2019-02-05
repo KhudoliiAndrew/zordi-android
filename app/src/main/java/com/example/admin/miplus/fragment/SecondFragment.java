@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.activity.activity_in_main.SecondActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,6 +31,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -39,29 +39,26 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
-
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int LAYOUT = R.layout.second_activity;
-    private View view;
 
     private GoogleMap mGoogleMap;
-    GoogleApiClient mGoogleApiClient;
-
-    private GoogleApiClient googleApiClient;
+    private GoogleApiClient mGoogleApiClient;
     private Location location;
-    private TextView locationTv;
-    private LocationRequest locationRequest;
-    private Double myLatitude;
-    private Double myLongitude;
-    private ArrayList<LatLng> points; //added
-    Polyline line; //added
+    private TextView checkGoogleServices;
+    private LocationRequest mLocationRequest;
+    private ArrayList<LatLng> points;
+    public Polyline line;
+
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    LocationRequest mLocationRequest;
     private static final long UPDATE_INTERVAL = 5000, FASTEST_INTERVAL = 5000; // = 5 seconds
+    private static final float SMALLEST_DISPLACEMENT = 0.25F; //quarter of a meter
+
     // lists for permissions
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ArrayList<String> permissions = new ArrayList<>();
+    
     //integer for permissions result request
     private static final int ALL_PERMISSIONS_RESULT = 1011;
 
@@ -83,16 +80,22 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         permissionsToRequest = permissionsToRequest(permissions);
 
-        points = new ArrayList<LatLng>(); //added
+        points = new ArrayList<LatLng>();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (permissionsToRequest.size() > 0) {
                 requestPermissions(permissionsToRequest.
                         toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-            }
+                }
         }
         return view;
     }
+
+    /*private void setPoint(LatLng latLng){
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.google_icon)));
+    }*/
 
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions){
         ArrayList<String> result = new ArrayList<>();
@@ -126,7 +129,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         super.onResume();
 
         if(!checkPlayServices()){
-            locationTv.setText("You need to install Google Play Services to use the App properly");
+            checkGoogleServices.setText("You need to install Google Play Services to use the App properly");
         }
     }
 
@@ -153,7 +156,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             mGoogleApiClient.disconnect();
         }
     }
-
     private void finish() {
     }
 
@@ -168,32 +170,12 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-        //   goToLocationZoom(48.464834,35.056275, 15);
-
-        //if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        // TODO: Consider calling
-        //    ActivityCompat#requestPermissions
-        // here to request the missing permissions, and then overriding
-        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        //                                          int[] grantResults)
-        // to handle the case where the user grants the permission. See the documentation
-        // for ActivityCompat#requestPermissions for more details.
-        //    return;
-        //}
-        //mGoogleMap.setMyLocationEnabled(true);
-
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
-
-        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
-                .clickable(true)
-                .add(
-                        new LatLng(48.464827, 35.056259)));
-
     }
 
     private void goToLocation(double lat, double lng) {
@@ -222,21 +204,21 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location != null) {
-//            locationTv.setText("Latitude: " + location.getLatitude() + "\nLongtitude : " + location.getLongitude());
         }
         startLocationUpdates();
     }
 
     private void startLocationUpdates() {
-        locationRequest = new LocationRequest();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(UPDATE_INTERVAL);
-        locationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setSmallestDisplacement(SMALLEST_DISPLACEMENT);
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             Toast.makeText(getActivity(), "You need to enable permissions to display location!", Toast.LENGTH_SHORT).show();
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
     }
 
@@ -258,40 +240,32 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     }else{
 
-//    locationTv.setText("Latitude: " + location.getLatitude() + "\nLongtitude : " + location.getLongitude());
     LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
     CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
     mGoogleMap.animateCamera(update);
-   // myLatitude = location.getLatitude();
-   // myLongitude = location.getLongitude();
-   //         mGoogleMap.addMarker(new MarkerOptions().position(
-   //                 new LatLng(myLatitude , myLongitude)).title("I'm here now"));
-   //         mGoogleMap.clear();
-   //         MarkerOptions mp = new MarkerOptions();
-   //         mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
-   //         mp.title("My position");
-   //         mGoogleMap.addMarker(mp);}}
 
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
-            LatLng latLng = new LatLng(latitude, longitude); //you already have this
+            LatLng latLng = new LatLng(latitude, longitude);
 
-            points.add(latLng); //added
+            points.add(latLng);
 
-            redrawLine(latLng); //added
+            redrawLine(latLng);
         }
     }
 
     private void redrawLine(LatLng latLng) {
         mGoogleMap.clear();  //clears all Markers and Polylines
 
-        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+        PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
         for (int i = 0; i < points.size(); i++) {
             LatLng point = points.get(i);
             options.add(point);
         }
 
-        mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("I'm here now"));
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.google_icon)));
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
 
