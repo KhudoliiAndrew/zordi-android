@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -18,6 +19,9 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.SplashActivity;
+import com.example.admin.miplus.activity.activity_in_main.BluetoothConnectionActivity;
+import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 
 import java.lang.reflect.Field;
 
@@ -41,7 +45,16 @@ public class ThirdFragment extends Fragment {
         view = inflater.inflate(LAYOUT, container, false);
         Button stepsButton = (Button) view.findViewById(R.id.steps_watch_button);
         Button sleepButton = (Button) view.findViewById(R.id.waking_watch_button);
+        ConstraintLayout connectiionField = (ConstraintLayout) view.findViewById(R.id.connection_field);
 
+        connectiionField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent userIntent = new Intent(getActivity(), BluetoothConnectionActivity.class);
+                startActivity(userIntent);
+
+            }
+        });
         sleepButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -57,6 +70,7 @@ public class ThirdFragment extends Fragment {
                 showStepsDialog();
             }
         });
+
         return view;
     }
 
@@ -85,7 +99,7 @@ public class ThirdFragment extends Fragment {
         };
         numberPicker.setFormatter(formatter);
         numberPicker.setWrapSelectorWheel(false);
-        changeDividerColor(numberPicker, Color.TRANSPARENT);
+        changePickerColor(numberPicker, Color.TRANSPARENT);
 
         EditText numberPickerChild = (EditText) numberPicker.getChildAt(0);
         numberPickerChild.setFocusable(false);
@@ -119,7 +133,7 @@ public class ThirdFragment extends Fragment {
         dialog.show();
     }
 
-    private void changeDividerColor(NumberPicker picker, int color) {
+    private void changePickerColor(NumberPicker picker, int color) {
         try {
             Field mField = NumberPicker.class.getDeclaredField("mSelectionDivider");
             mField.setAccessible(true);
@@ -129,4 +143,5 @@ public class ThirdFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
 }

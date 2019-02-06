@@ -184,35 +184,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void feedbackOnClick(MenuItem item){
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.DialogTheme);
-        builder.setTitle("Важное сообщение!")
-                .setMessage("Покормите кота!")
-                .setIcon(R.drawable.ic_notifications_black_24dp)
-                .setCancelable(false)
-                .setNegativeButton("ОК, иду на кухню",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-        AlertDialog alert = builder.create();
-        alert.show();
-        final Dialog dialog = new Dialog(this);
-
-        dialog.setContentView(R.layout.feedback_dialog);
-        Button coppyButton = (Button) dialog.findViewById(R.id.copy_button_feedback_dialog);
-        dialog.show();
-        coppyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", "penjuinj@gmail.com");
-                clipboard.setPrimaryClip(clip);
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Copy", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });*/
         DialogFragment dlgf1;
         dlgf1 = new FeedbackDialogFragment();
         dlgf1.show(getSupportFragmentManager(), "dlgf1");
