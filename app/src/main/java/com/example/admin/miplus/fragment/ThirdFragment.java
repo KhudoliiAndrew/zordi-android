@@ -22,6 +22,8 @@ import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.activity.activity_in_main.BluetoothConnectionActivity;
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
+import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.Profile;
 
 import java.lang.reflect.Field;
 
@@ -43,6 +45,10 @@ public class ThirdFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(LAYOUT, container, false);
+        final Profile profile = new Profile();
+        profile.setSleepTarget(11111);
+        profile.setStepsTarget(22222);
+        final DataBaseRepository dataBaseRepository = new DataBaseRepository();
         Button stepsButton = (Button) view.findViewById(R.id.steps_watch_button);
         Button sleepButton = (Button) view.findViewById(R.id.waking_watch_button);
         ConstraintLayout connectiionField = (ConstraintLayout) view.findViewById(R.id.connection_field);
@@ -50,9 +56,9 @@ public class ThirdFragment extends Fragment {
         connectiionField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent userIntent = new Intent(getActivity(), BluetoothConnectionActivity.class);
-                startActivity(userIntent);
-
+              /*  Intent userIntent = new Intent(getActivity(), BluetoothConnectionActivity.class);
+                startActivity(userIntent);*/
+                dataBaseRepository.setProfile(profile);
             }
         });
         sleepButton.setOnClickListener(new View.OnClickListener()

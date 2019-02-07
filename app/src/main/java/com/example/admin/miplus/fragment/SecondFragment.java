@@ -178,19 +178,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleApiClient.connect();
     }
 
-    private void goToLocation(double lat, double lng) {
-        LatLng ll = new LatLng(lat, lng);
-        CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
-        mGoogleMap.moveCamera(update);
-    }
-
-    private void goToLocationZoom(double lat, double lng, float zoom) {
-        LatLng ll = new LatLng(lat, lng);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
-        mGoogleMap.moveCamera(update);
-    }
-
-    @Override
+      @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -263,8 +251,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         }
 
         mGoogleMap.addMarker(new MarkerOptions()
-                .position(latLng));
-                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.google_icon)));
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_circle_white_24)));
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
 
