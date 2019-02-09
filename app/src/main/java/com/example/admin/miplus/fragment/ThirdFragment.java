@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,12 @@ import com.example.admin.miplus.activity.activity_in_main.BluetoothConnectionAct
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Field;
 
@@ -31,7 +38,10 @@ public class ThirdFragment extends Fragment {
     private static final int LAYOUT = R.layout.third_activity;
     private View view;
     static Dialog dialog;
-
+    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
+    final Profile profile = new Profile();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public static ThirdFragment getInstance() {
         Bundle args = new Bundle();
@@ -45,10 +55,7 @@ public class ThirdFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(LAYOUT, container, false);
-        final Profile profile = new Profile();
-        profile.setSleepTarget(11111);
-        profile.setStepsTarget(22222);
-        final DataBaseRepository dataBaseRepository = new DataBaseRepository();
+
         Button stepsButton = (Button) view.findViewById(R.id.steps_watch_button);
         Button sleepButton = (Button) view.findViewById(R.id.waking_watch_button);
         ConstraintLayout connectiionField = (ConstraintLayout) view.findViewById(R.id.connection_field);
@@ -56,27 +63,33 @@ public class ThirdFragment extends Fragment {
         connectiionField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  Intent userIntent = new Intent(getActivity(), BluetoothConnectionActivity.class);
-                startActivity(userIntent);*/
-                dataBaseRepository.setProfile(profile);
+                Intent userIntent = new Intent(getActivity(), BluetoothConnectionActivity.class);
+                startActivity(userIntent);
             }
         });
-        sleepButton.setOnClickListener(new View.OnClickListener()
-        {
+        sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showSleepDialog();
             }
         });
 
-        stepsButton.setOnClickListener(new View.OnClickListener()
-        {
+        stepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showStepsDialog();
             }
         });
 
+        db.collection("profiles")
+                .document(mAuth.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
+                        stepsText.setText(String.valueOf(task.getResult().get("stepsTarget")));
+                    }
+                });
         return view;
     }
 
@@ -111,26 +124,26 @@ public class ThirdFragment extends Fragment {
         numberPickerChild.setFocusable(false);
         numberPickerChild.setInputType(InputType.TYPE_NULL);
 
-        confirmButton.setOnClickListener(new View.OnClickListener()
-        {
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                profile.setStepsTarget(numberPicker.getValue() * 1000);
+                dataBaseRepository.setProfile(profile);
                 TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-                stepsText.setText(String.valueOf(numberPicker.getValue() * 1000));
+                stepsText.setText(String.valueOf(profile.getStepsTarget()));
                 dialog.dismiss();
             }
         });
         dialog.show();
     }
 
-    private void showSleepDialog(){
+    private void showSleepDialog() {
         final Dialog dialog = new Dialog(getActivity());
 
         dialog.setContentView(R.layout.sleep_dialog);
         final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.StepsPicker);
         Button confirmButton = (Button) dialog.findViewById(R.id.ok_button_sleep_picker);
-        confirmButton.setOnClickListener(new View.OnClickListener()
-        {
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

@@ -251,8 +251,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         }
 
         mGoogleMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_circle_white_24)));
+                .position(latLng));
+                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_circle_white_24)));
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
 

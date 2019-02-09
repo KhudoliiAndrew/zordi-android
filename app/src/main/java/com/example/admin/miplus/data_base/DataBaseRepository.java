@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 public class DataBaseRepository {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -12,6 +13,6 @@ public class DataBaseRepository {
     final FirebaseUser currentUser = mAuth.getCurrentUser();
 
     public void setProfile(Profile profile){
-        db.collection("profiles").document("1234").set(profile);
+        db.collection("profiles").document(mAuth.getUid()).set(profile);
     }
 }
