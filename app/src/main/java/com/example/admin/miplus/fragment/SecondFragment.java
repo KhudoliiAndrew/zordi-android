@@ -2,11 +2,13 @@ package com.example.admin.miplus.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,14 +54,14 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public Polyline line;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final long UPDATE_INTERVAL = 5000, FASTEST_INTERVAL = 5000; // = 5 seconds
-    private static final float SMALLEST_DISPLACEMENT = 0.25F; //quarter of a meter
+    private static final long UPDATE_INTERVAL = 30000, FASTEST_INTERVAL = 30000; // = 30 seconds
+    private static final float SMALLEST_DISPLACEMENT = 10F; //10 meters
 
     // lists for permissions
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ArrayList<String> permissions = new ArrayList<>();
-    
+
     //integer for permissions result request
     private static final int ALL_PERMISSIONS_RESULT = 1011;
 
@@ -81,6 +84,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         permissionsToRequest = permissionsToRequest(permissions);
 
         points = new ArrayList<LatLng>();
+
+        //ToDO Button myButton = (Button) view.findViewById(R.id.location_settings);
+        //startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (permissionsToRequest.size() > 0) {
@@ -178,18 +184,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleApiClient.connect();
     }
 
-    private void goToLocation(double lat, double lng) {
-        LatLng ll = new LatLng(lat, lng);
-        CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
-        mGoogleMap.moveCamera(update);
-    }
-
-    private void goToLocationZoom(double lat, double lng, float zoom) {
-        LatLng ll = new LatLng(lat, lng);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
-        mGoogleMap.moveCamera(update);
-    }
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = LocationRequest.create();
@@ -265,7 +259,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         mGoogleMap.addMarker(new MarkerOptions()
                 .position(latLng)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.google_icon)));
+                .icon(BitmapDescriptorFactory
+                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
 
