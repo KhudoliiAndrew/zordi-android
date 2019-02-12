@@ -1,6 +1,7 @@
 package com.example.admin.miplus.fragment;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
@@ -25,6 +27,8 @@ import com.example.admin.miplus.activity.activity_in_main.BluetoothConnectionAct
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
+import com.example.admin.miplus.fragment.Dialogs.StepsTargetDialogFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +41,6 @@ import java.lang.reflect.Field;
 public class ThirdFragment extends Fragment {
     private static final int LAYOUT = R.layout.third_activity;
     private View view;
-    static Dialog dialog;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     final Profile profile = new Profile();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -77,12 +80,12 @@ public class ThirdFragment extends Fragment {
         stepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showStepsDialog();
+                DialogFragment dlgf1 = new StepsTargetDialogFragment();
+                dlgf1.show(getFragmentManager(), "dlgf1");
             }
         });
 
-        db.collection("profiles")
-                .document(mAuth.getUid()).get()
+        dataBaseRepository.getProfile()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -91,50 +94,6 @@ public class ThirdFragment extends Fragment {
                     }
                 });
         return view;
-    }
-
-    private void showStepsDialog() {
-        int step = 100;
-        int min = 1;
-        int max = 50;
-
-        final Dialog dialog = new Dialog(getActivity());
-
-        dialog.setContentView(R.layout.steps_dialog);
-        final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.StepsPicker);
-        Button confirmButton = (Button) dialog.findViewById(R.id.ok_button_picker);
-
-        numberPicker.setMaxValue(max);
-        numberPicker.setValue(8000);
-        numberPicker.setMinValue(min);
-
-        NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
-            @Override
-            public String format(int value) {
-                int temp = value * 1000;
-
-                return "" + temp;
-            }
-        };
-        numberPicker.setFormatter(formatter);
-        numberPicker.setWrapSelectorWheel(false);
-        changePickerColor(numberPicker, Color.TRANSPARENT);
-
-        EditText numberPickerChild = (EditText) numberPicker.getChildAt(0);
-        numberPickerChild.setFocusable(false);
-        numberPickerChild.setInputType(InputType.TYPE_NULL);
-
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profile.setStepsTarget(numberPicker.getValue() * 1000);
-                dataBaseRepository.setProfile(profile);
-                TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-                stepsText.setText(String.valueOf(profile.getStepsTarget()));
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
     private void showSleepDialog() {
@@ -151,16 +110,4 @@ public class ThirdFragment extends Fragment {
         });
         dialog.show();
     }
-
-    private void changePickerColor(NumberPicker picker, int color) {
-        try {
-            Field mField = NumberPicker.class.getDeclaredField("mSelectionDivider");
-            mField.setAccessible(true);
-            ColorDrawable colorDrawable = new ColorDrawable(color);
-            mField.set(picker, colorDrawable);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

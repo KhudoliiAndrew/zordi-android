@@ -47,8 +47,7 @@ public class FeedbackDialogFragment extends DialogFragment implements View.OnCli
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("", "penjuinj@gmail.com");
                 clipboard.setPrimaryClip(clip);
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Copy", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), "Copy", Toast.LENGTH_SHORT);
                 toast.show();
                 break;
         }

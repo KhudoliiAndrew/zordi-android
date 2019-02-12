@@ -122,7 +122,6 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="10dp"
-                        android:text="8000"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
