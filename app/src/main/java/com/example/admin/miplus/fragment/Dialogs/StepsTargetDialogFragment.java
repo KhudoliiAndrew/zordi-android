@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.miplus.CustomXML.ForFormatterPicker;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
@@ -37,14 +39,14 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
     private final int MULTIPLIER_RESULT = 1000;
     private int previsiourSteps;
     private PushStepsTarget pushStepsTarget;
+
     @SuppressLint("ValidFragment")
     public StepsTargetDialogFragment(int previsiourSteps, PushStepsTarget pushStepsTarget) {
         this.previsiourSteps = previsiourSteps;
         this.pushStepsTarget = pushStepsTarget;
     }
 
-    public StepsTargetDialogFragment() {
-    }
+    public StepsTargetDialogFragment() { }
 
     @Nullable
     @Override
@@ -53,12 +55,9 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
         view = inflater.inflate(R.layout.steps_dialog, null);
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
 
-        int step = 100;
         int min = 1;
         int max = 50;
-
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.StepsPicker);
-
         numberPicker.setMaxValue(max);
         numberPicker.setValue(previsiourSteps / MULTIPLIER_RESULT);
         numberPicker.setMinValue(min);
@@ -70,29 +69,26 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
                 return "" + temp;
             }
         };
-
         numberPicker.setFormatter(formatter);
         numberPicker.setWrapSelectorWheel(false);
         changePickerColor(numberPicker, Color.TRANSPARENT);
 
-        EditText numberPickerChild = (EditText) numberPicker.getChildAt(0);
-        numberPickerChild.setFocusable(false);
-        numberPickerChild.setInputType(InputType.TYPE_NULL);
-
-        return view;
+        View firstItem = (View) numberPicker.getChildAt(0);
+        if (firstItem != null) {
+            firstItem.setVisibility(View.INVISIBLE);
+        }
+         return view;
     }
 
     @Override
     public void onClick(View v) {
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.StepsPicker);
         int stepsTargetNumber = numberPicker.getValue() * MULTIPLIER_RESULT;
-        if(pushStepsTarget != null){
+        if (pushStepsTarget != null) {
             pushStepsTarget.stepsTarget(stepsTargetNumber);
         }
         dismiss();
     }
-
-
 
     private void changePickerColor(NumberPicker picker, int color) {
         try {
@@ -104,7 +100,6 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
             e.printStackTrace();
         }
     }
-
 
     public interface PushStepsTarget {
         void stepsTarget(int stepsTarget);

@@ -11,19 +11,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
-    private final int SPLASH_DISPLEY_LENGHT = 1000;
-    private FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        final FirebaseUser currentUser = mAuth.getCurrentUser();
-
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -37,6 +30,6 @@ public class SplashActivity extends AppCompatActivity {
                     SplashActivity.this.finish();
                 }
             }
-        }, SPLASH_DISPLEY_LENGHT);
+        }, 1000);
     }
 }

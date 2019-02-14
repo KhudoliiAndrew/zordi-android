@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/menu_container_background">
+    android:background="@drawable/dialog_fragment_background">
     <TextView
         android:layout_width="260dp"
         android:layout_height="wrap_content"
@@ -23,7 +23,6 @@
         android:layout_marginStart="25dp"
         android:id="@+id/mail_adress_text"
         android:elevation="10dp"/>
-
     <Button
         android:id="@+id/copy_button_feedback_dialog"
         android:layout_width="30dp"
@@ -41,8 +40,5 @@
         android:layout_below="@id/mail_adress_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:id="@+id/go_to_email_btn"
-        />
-
-
+        android:id="@+id/go_to_email_btn" />
 </RelativeLayout>

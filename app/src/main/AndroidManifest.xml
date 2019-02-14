@@ -28,8 +28,11 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activity.activity_in_main.MainActivity"
             android:screenOrientation="portrait">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
+
         <activity android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

@@ -10,6 +10,7 @@
     <color name="colorBackgroundCard">#ededed</color>
     <color name="colorBackgroundGray">#c4c4c4</color>
     <color name="textColor">#000000</color>
+    <color name="textColorWhite">#FFFFFF</color>
     <color name="green_connect_backround">#038b27</color>
     <color name="colorGrayToolbar">#d4d4d4</color>
     <color name="colorBackgroundDialog">#e7e7e7</color>
