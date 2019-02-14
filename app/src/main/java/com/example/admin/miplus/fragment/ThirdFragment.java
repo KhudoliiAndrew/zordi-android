@@ -27,7 +27,6 @@ import com.example.admin.miplus.activity.activity_in_main.BluetoothConnectionAct
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
-import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.StepsTargetDialogFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,11 +37,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Field;
 
-public class ThirdFragment extends Fragment {
+public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget {
     private static final int LAYOUT = R.layout.third_activity;
     private View view;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-    final Profile profile = new Profile();
+    private Profile profile;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -80,8 +79,11 @@ public class ThirdFragment extends Fragment {
         stepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment dlgf1 = new StepsTargetDialogFragment();
-                dlgf1.show(getFragmentManager(), "dlgf1");
+                if(profile != null){
+                    DialogFragment dlgf1 = new StepsTargetDialogFragment(profile.getStepsTarget(), ThirdFragment.this);
+                    dlgf1.show(getFragmentManager(), "dlgf1");
+                }
+
             }
         });
 
@@ -89,8 +91,9 @@ public class ThirdFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        profile = task.getResult().toObject(Profile.class);
                         TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-                        stepsText.setText(String.valueOf(task.getResult().get("stepsTarget")));
+                        stepsText.setText(String.valueOf(profile.getStepsTarget()));
                     }
                 });
         return view;
@@ -98,7 +101,6 @@ public class ThirdFragment extends Fragment {
 
     private void showSleepDialog() {
         final Dialog dialog = new Dialog(getActivity());
-
         dialog.setContentView(R.layout.sleep_dialog);
         final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.StepsPicker);
         Button confirmButton = (Button) dialog.findViewById(R.id.ok_button_sleep_picker);
@@ -109,5 +111,13 @@ public class ThirdFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public void stepsTarget(int stepsTarget) {
+        profile.setStepsTarget(stepsTarget);
+        dataBaseRepository.setProfile(profile);
+        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
+        stepsText.setText(String.valueOf(stepsTarget));
     }
 }

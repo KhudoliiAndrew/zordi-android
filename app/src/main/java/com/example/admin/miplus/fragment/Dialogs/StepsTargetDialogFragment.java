@@ -1,5 +1,6 @@
 package com.example.admin.miplus.fragment.Dialogs;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.fragment.ThirdFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Field;
@@ -32,6 +34,18 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class StepsTargetDialogFragment extends DialogFragment implements View.OnClickListener {
     View view;
+    private final int MULTIPLIER_RESULT = 1000;
+    private int previsiourSteps;
+    private PushStepsTarget pushStepsTarget;
+    @SuppressLint("ValidFragment")
+    public StepsTargetDialogFragment(int previsiourSteps, PushStepsTarget pushStepsTarget) {
+        this.previsiourSteps = previsiourSteps;
+        this.pushStepsTarget = pushStepsTarget;
+    }
+
+    public StepsTargetDialogFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,13 +60,13 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.StepsPicker);
 
         numberPicker.setMaxValue(max);
-        numberPicker.setValue(8000);
+        numberPicker.setValue(previsiourSteps / MULTIPLIER_RESULT);
         numberPicker.setMinValue(min);
 
         NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
             @Override
             public String format(int value) {
-                int temp = value * 1000;
+                int temp = value * MULTIPLIER_RESULT;
                 return "" + temp;
             }
         };
@@ -71,13 +85,14 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
     @Override
     public void onClick(View v) {
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.StepsPicker);
-        final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-        final Profile profile = new Profile();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        profile.setStepsTarget(numberPicker.getValue() * 1000);
-        dataBaseRepository.setProfile(profile);
+        int stepsTargetNumber = numberPicker.getValue() * MULTIPLIER_RESULT;
+        if(pushStepsTarget != null){
+            pushStepsTarget.stepsTarget(stepsTargetNumber);
+        }
         dismiss();
     }
+
+
 
     private void changePickerColor(NumberPicker picker, int color) {
         try {
@@ -88,5 +103,10 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public interface PushStepsTarget {
+        void stepsTarget(int stepsTarget);
     }
 }
