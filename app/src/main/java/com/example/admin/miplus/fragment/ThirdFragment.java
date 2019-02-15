@@ -27,6 +27,7 @@ import com.example.admin.miplus.activity.activity_in_main.BluetoothConnectionAct
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.fragment.Dialogs.SleepRangeDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.StepsTargetDialogFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -72,7 +73,10 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSleepDialog();
+                if(profile != null){
+                    DialogFragment dlgf2 = new SleepRangeDialogFragment(profile.getSleepTarget(), ThirdFragment.this);
+                    dlgf2.show(getFragmentManager(), "dlgf2");
+                }
             }
         });
 
@@ -97,20 +101,6 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                     }
                 });
         return view;
-    }
-
-    private void showSleepDialog() {
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.sleep_dialog);
-        final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.StepsPicker);
-        Button confirmButton = (Button) dialog.findViewById(R.id.ok_button_sleep_picker);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
     @Override

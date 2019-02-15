@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="-1dp"
                     android:gravity="center_horizontal"
-                    android:text="Connected"
+                    android:text="6777"
                     android:textColor="@color/colorPrimary"
                     android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="@+id/circle_watch"
@@ -112,7 +112,7 @@
                         android:layout_below="@id/activity_steps_text"
                         android:layout_marginStart="30dp"
                         android:layout_marginTop="10dp"
-                        android:text="12:43"
+                        android:text="1245"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
@@ -121,7 +121,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_steps_text"
                         android:layout_marginTop="40dp"
-                        android:text="Start of activity"
+                        android:layout_marginStart="15dp"
+                        android:text="Yesterday"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
@@ -131,7 +132,7 @@
                         android:layout_below="@id/activity_steps_text"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="30dp"
+                        android:layout_marginEnd="40dp"
                         android:text="1243"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -191,6 +192,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_sleep_text"
                         android:layout_marginTop="40dp"
+                        android:layout_marginStart="10dp"
                         android:text="Start sleep"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -201,7 +203,7 @@
                         android:layout_below="@id/activity_sleep_text"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="30dp"
+                        android:layout_marginEnd="40dp"
                         android:text="7:13"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -212,7 +214,7 @@
                         android:layout_below="@id/activity_sleep_text"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="40dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="17dp"
                         android:text="End sleep"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -252,6 +254,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_pulse_text"
                         android:layout_marginTop="5dp"
+                        android:layout_marginStart="10dp"
                         android:text="Today"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -272,6 +275,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/today_text"
                         android:layout_marginTop="5dp"
+                        android:layout_marginStart="10dp"
                         android:text="Yesterday"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />

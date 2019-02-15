@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="290dp"
-    android:layout_height="470dp"
-    android:background="@color/colorBackgroundDialog">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_fragment_background">
     <TextView
         android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:text="Set the number of steps you will take in a day."
-        android:textColor="@color/textColor"
-        android:textSize="20sp"
+        android:text="Set the number of steps you will take in a day"
+        android:textColor="@color/textColorWhite"
+        android:textSize="23sp"
         android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:id="@+id/text_steps_dialog"/>
 
-    <NumberPicker
-        android:id="@+id/StepsPicker"
-        android:layout_width="fill_parent"
-        android:layout_height="225dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:theme="@style/DefaultNumberPickerTheme"
-        android:focusable="false"
-        android:clickable="false"
-        android:focusableInTouchMode="false"
-        android:descendantFocusability="blocksDescendants" />
+    <com.example.admin.miplus.CustomXML.CircleAlarmTimerView
+        android:id="@+id/circle_timer_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_steps_dialog"
+        android:layout_marginTop="30dp"
+        android:elevation="20dp"/>
 
     <Button
-        android:id="@+id/ok_button_sleep_picker"
+        android:id="@+id/ok_button_picker"
         android:layout_width="246dp"
         android:layout_height="48dp"
-        android:layout_below="@+id/StepsPicker"
+        android:layout_below="@+id/circle_timer_picker"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="36dp"
         android:background="@drawable/menu_container_background"
         android:onClick="onClickStepsCuantityButton"
         android:text="Ok"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:elevation="20dp"/>
+
+
 
 </RelativeLayout>
