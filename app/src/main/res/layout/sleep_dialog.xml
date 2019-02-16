@@ -3,39 +3,76 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_fragment_background">
+
     <TextView
+        android:id="@+id/text_steps_dialog"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:text="Set the number of steps you will take in a day"
-        android:textColor="@color/textColorWhite"
-        android:textSize="23sp"
-        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:id="@+id/text_steps_dialog"/>
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:text="Set the number of steps you will take in a day"
+        android:textColor="@color/textColorWhite"
+        android:textSize="23sp" />
 
-    <com.example.admin.miplus.CustomXML.CircleAlarmTimerView
-        android:id="@+id/circle_timer_picker"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_steps_dialog"
-        android:layout_marginTop="30dp"
-        android:elevation="20dp"/>
+        android:id="@+id/circle_layout">
+
+        <com.example.admin.miplus.CustomXML.CircleAlarmTimerView
+            android:id="@+id/circle_timer_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:background="@drawable/steps_picker_background"
+            android:elevation="20dp" />
+
+        <TextView
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="30dp"
+            android:text="Start"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/textColor"
+            android:textSize="27sp" />
+
+        <TextView
+            android:id="@+id/end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/textColor"
+            android:textSize="27sp"
+            android:elevation="20dp"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:id="@+id/sleep_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4:32"
+            android:layout_centerInParent="true"
+            android:textColor="@color/textColor"
+            android:textSize="27sp"
+            android:elevation="20dp" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/ok_button_picker"
         android:layout_width="246dp"
         android:layout_height="48dp"
-        android:layout_below="@+id/circle_timer_picker"
+        android:layout_below="@+id/circle_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/menu_container_background"
-        android:onClick="onClickStepsCuantityButton"
+        android:elevation="25dp"
         android:text="Ok"
-        android:textSize="25sp"
-        android:elevation="20dp"/>
-
+        android:textSize="25sp" />
 
 
 </RelativeLayout>

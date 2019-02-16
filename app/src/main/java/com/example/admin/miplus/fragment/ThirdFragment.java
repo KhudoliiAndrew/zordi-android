@@ -38,8 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Field;
 
-public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget {
-    private static final int LAYOUT = R.layout.third_activity;
+public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget {
     private View view;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile;
@@ -51,30 +50,33 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         ThirdFragment fragment = new ThirdFragment();
         fragment.setArguments(args);
         return fragment;
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(LAYOUT, container, false);
+        view = inflater.inflate(R.layout.third_activity, container, false);
+
+        dataBaseRepository.getProfile()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        profile = task.getResult().toObject(Profile.class);
+                        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
+                        stepsText.setText(String.valueOf(profile.getStepsTarget()));
+                        TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
+                        sleepText.setText(String.valueOf(profile.getSleepTarget()));
+                    }
+                });
 
         Button stepsButton = (Button) view.findViewById(R.id.steps_watch_button);
         Button sleepButton = (Button) view.findViewById(R.id.waking_watch_button);
-        ConstraintLayout connectiionField = (ConstraintLayout) view.findViewById(R.id.connection_field);
 
-        connectiionField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent userIntent = new Intent(getActivity(), BluetoothConnectionActivity.class);
-                startActivity(userIntent);
-            }
-        });
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(profile != null){
-                    DialogFragment dlgf2 = new SleepRangeDialogFragment(profile.getSleepTarget(), ThirdFragment.this);
+                    DialogFragment dlgf2 = new SleepRangeDialogFragment(profile.getSleepTarget(), profile.getStartSleep(), profile.getEndSleep(), ThirdFragment.this);
                     dlgf2.show(getFragmentManager(), "dlgf2");
                 }
             }
@@ -90,16 +92,6 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
 
             }
         });
-
-        dataBaseRepository.getProfile()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        profile = task.getResult().toObject(Profile.class);
-                        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-                        stepsText.setText(String.valueOf(profile.getStepsTarget()));
-                    }
-                });
         return view;
     }
 
@@ -109,5 +101,25 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         dataBaseRepository.setProfile(profile);
         TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
         stepsText.setText(String.valueOf(stepsTarget));
+    }
+
+    @Override
+    public void sleepTarget(String sleepTarget) {
+        profile.setSleepTarget(sleepTarget);
+        dataBaseRepository.setProfile(profile);
+        TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
+        sleepText.setText(String.valueOf(sleepTarget));
+    }
+
+    @Override
+    public void startSleep(String startSleep) {
+        profile.setStartSleep(startSleep);
+        dataBaseRepository.setProfile(profile);
+    }
+
+    @Override
+    public void endSleep(String endSleep) {
+        profile.setEndSleep(endSleep);
+        dataBaseRepository.setProfile(profile);
     }
 }

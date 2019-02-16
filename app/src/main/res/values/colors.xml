@@ -14,4 +14,7 @@
     <color name="green_connect_backround">#038b27</color>
     <color name="colorGrayToolbar">#d4d4d4</color>
     <color name="colorBackgroundDialog">#e7e7e7</color>
+
+    <color name="colorBackgroundCircleSleepPicker">#6AAFB2BE</color>
+    <color name="colorCheckCircleSleepPicker">#002069</color>
 </resources>

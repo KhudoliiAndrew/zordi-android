@@ -2,6 +2,7 @@ package com.example.admin.miplus.CustomXML;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -13,6 +14,8 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.admin.miplus.R;
+
 
 public class CircleAlarmTimerView extends View {
     private static final String TAG = "CircleTimerView";
@@ -22,23 +25,23 @@ public class CircleAlarmTimerView extends View {
     private static final String STATUS_RADIAN = "status_radian";
 
     // Default dimension in dp/pt
-    private static final float DEFAULT_GAP_BETWEEN_CIRCLE_AND_LINE = 30;
+    private static final float DEFAULT_GAP_BETWEEN_CIRCLE_AND_LINE = 60;
     private static final float DEFAULT_NUMBER_SIZE = 10;
     private static final float DEFAULT_LINE_WIDTH = 0.5f;
-    private static final float DEFAULT_CIRCLE_BUTTON_RADIUS = 15;
+    private static final float DEFAULT_CIRCLE_BUTTON_RADIUS = 13;
     private static final float DEFAULT_CIRCLE_STROKE_WIDTH = 1;
     private static final float DEFAULT_TIMER_NUMBER_SIZE = 38;
     private static final float DEFAULT_TIMER_TEXT_SIZE = 18;
 
     // Default color
-    private static final int DEFAULT_CIRCLE_COLOR = 0xFFE9E2D9;
-    private static final int DEFAULT_CIRCLE_BUTTON_COLOR = 0xFFFFFFFF;
-    private static final int DEFAULT_LINE_COLOR = 0xFFFECE02;
-    private static final int DEFAULT_HIGHLIGHT_LINE_COLOR = 0xFF68C5D7;
-    private static final int DEFAULT_NUMBER_COLOR = 0xFF181318;
-    private static final int DEFAULT_TIMER_NUMBER_COLOR = 0xFFFFFFFF;
-    private static final int DEFAULT_TIMER_COLON_COLOR = 0xFFFA7777;
-    private static final int DEFAULT_TIMER_TEXT_COLOR = 0x99F0F9FF;
+    private final int DEFAULT_CIRCLE_COLOR = getResources().getColor(R.color.colorPrimaryDark);
+    private static final int DEFAULT_CIRCLE_BUTTON_COLOR = Color.TRANSPARENT; // end of sleep circle
+    private final int DEFAULT_LINE_COLOR = getResources().getColor(R.color.colorPrimary); //Part of circle
+    private final int DEFAULT_HIGHLIGHT_LINE_COLOR = getResources().getColor(R.color.colorPrimaryDark); //nothing
+    private final int DEFAULT_NUMBER_COLOR = getResources().getColor(R.color.colorBackgroundCircleSleepPicker); //CircleBackground
+    private final int DEFAULT_TIMER_NUMBER_COLOR = getResources().getColor(R.color.colorPrimaryDark); //mid number color
+    private static final int DEFAULT_TIMER_COLON_COLOR = Color.TRANSPARENT; // start of sleep circle
+    private final int DEFAULT_TIMER_TEXT_COLOR = getResources().getColor(R.color.colorPrimaryDark);
 
     // Paint
     private Paint mCirclePaint;
@@ -78,7 +81,7 @@ public class CircleAlarmTimerView extends View {
     private boolean mInCircleButton;
     private boolean mInCircleButton1;
     private boolean ismInCircleButton;
-    private int mCurrentTime; // seconds
+    private int mCurrentTime = 0; // seconds
 
     private OnTimeChangedListener mListener;
 
@@ -164,7 +167,7 @@ public class CircleAlarmTimerView extends View {
         mTimerNumberPaint.setTextAlign(Paint.Align.CENTER);
 
         // TimerTextPaint
-        mTimerTextPaint.setColor(mTimerTextColor);
+        mTimerTextPaint.setColor(DEFAULT_TIMER_TEXT_COLOR);
         mTimerTextPaint.setTextSize(mTimerTextSize);
         mTimerTextPaint.setTextAlign(Paint.Align.CENTER);
 
@@ -237,9 +240,9 @@ public class CircleAlarmTimerView extends View {
             canvas.save();
         }
         int i = mCurrentTime / 150;
-        canvas.drawText((i < 10 ? "0" + i : i) + " " + ((mCurrentTime - 150 * i) * 10 / 25 < 10 ?
+        /*canvas.drawText((i < 10 ? "0" + i : i) + " " + ((mCurrentTime - 150 * i) * 10 / 25 < 10 ?
                 "0" + ((mCurrentTime - 150 * i) * 10 / 25) : ((mCurrentTime - 150 * i) * 10 / 25)), mCx, mCy + getFontHeight(mTimerNumberPaint) / 2, mTimerNumberPaint);
-        canvas.drawText(":", mCx, mCy + getFontHeight(mTimerNumberPaint) / 2, mTimerColonPaint);
+        canvas.drawText(":", mCx, mCy + getFontHeight(mTimerNumberPaint) / 2, mTimerColonPaint);*/
 
         if (null != mListener) {
             if (ismInCircleButton) {
@@ -370,7 +373,7 @@ public class CircleAlarmTimerView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.d(TAG, "onMeasure");
+        //Log.d(TAG, "onMeasure");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         // Ensure width = height
         int height = MeasureSpec.getSize(heightMeasureSpec);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,25 +19,27 @@ import com.example.admin.miplus.fragment.ThirdFragment;
 
 public class SleepRangeDialogFragment extends DialogFragment implements View.OnClickListener {
     View view;
-    private int previsiourSleepStart;
-    private int previsiourSleepEnd;
+    private String sleepTarget;
+    private String startSleep;
+    private String endSleep;
     private PushSleepTarget pushSleepTarget;
+    private String previsiourStartSleep;
+    private String previsiourEndSleep;
     private TextView textView1;
     private TextView textView2;
+    private TextView sleepDistance;
     private CircleAlarmTimerView circleAlarmTimerView;
 
-    @SuppressLint("ValidFragment")
-    public SleepRangeDialogFragment(int previsiourSleepStart, int previsiourSleepEnd, PushSleepTarget pushSleepTarget) {
-        this.previsiourSleepStart = previsiourSleepStart;
-        this.previsiourSleepEnd = previsiourSleepEnd;
 
+    @SuppressLint("ValidFragment")
+    public SleepRangeDialogFragment(String sleepTarget, String startSleep, String endSleep, PushSleepTarget pushSleepTarget) {
+        this.sleepTarget = sleepTarget;
+        this.startSleep = startSleep;
+        this.endSleep = endSleep;
         this.pushSleepTarget = pushSleepTarget;
     }
 
     public SleepRangeDialogFragment() {
-    }
-
-    public SleepRangeDialogFragment(int sleepTarget, ThirdFragment thirdFragment) {
     }
 
     @Nullable
@@ -52,34 +55,93 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     @Override
     public void onClick(View v) {
         if (pushSleepTarget != null) {
-            // pushSleepTarget.stepsTarget();
+            pushSleepTarget.startSleep(startSleep);
+            pushSleepTarget.endSleep(endSleep);
+            pushSleepTarget.sleepTarget(sleepLong(startSleep, endSleep));
         }
         dismiss();
     }
 
     private void initView() {
-       // textView1 = (TextView) view.findViewById(R.id.start);
-       // textView2 = (TextView) view.findViewById(R.id.end);
-
+        textView1 = (TextView) view.findViewById(R.id.start);
+        textView2 = (TextView) view.findViewById(R.id.end);
+        sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
+        textView1.setText(startSleep);
+        textView2.setText(endSleep);
         circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
         circleAlarmTimerView.setOnTimeChangedListener(new CircleAlarmTimerView.OnTimeChangedListener() {
             @Override
             public void start(String starting) {
-              //  textView1.setText(starting);
+                sleepDistance.setText(sleepLong(startSleep, endSleep));
+                //startSleep = starting;
+                textView1.setText(startSleep);
             }
 
             @Override
             public void end(String ending) {
-               // textView2.setText(ending);
+                sleepDistance.setText(sleepLong(startSleep, endSleep));
+               // endSleep = ending;
+                textView2.setText(endSleep);
             }
         });
     }
 
+    private String sleepLong(String startSleep, String endSleep) {
+        String[] partStartSleep = startSleep.split(":");
+        String[] partEndSleep = endSleep.split(":");
+        if (Integer.parseInt(partEndSleep[0]) > Integer.parseInt(partStartSleep[0])) {
+            int differenceTime = Integer.parseInt(partEndSleep[0]) - Integer.parseInt(partStartSleep[0]);
+            if (differenceTime < 10) {
+                sleepTarget = String.valueOf(differenceTime);
+            } else {
+                sleepTarget = String.valueOf(differenceTime);
+            }
+        } else {
+            int differenceTime = 24 - (Integer.parseInt(partStartSleep[0]) - Integer.parseInt(partEndSleep[0]));
+            if (differenceTime < 10) {
+                sleepTarget = String.valueOf(differenceTime);
+            } else {
+                sleepTarget = String.valueOf(differenceTime);
+            }
+        }
+        if(Integer.parseInt(partEndSleep[0]) == Integer.parseInt(partStartSleep[0])) {
+            int differenceTime = Integer.parseInt(partEndSleep[0]) - Integer.parseInt(partStartSleep[0]);
+            if (differenceTime < 10) {
+                sleepTarget = String.valueOf(differenceTime);
+            } else {
+                sleepTarget = String.valueOf(differenceTime);
+            }
+        }
+
+        if (Integer.parseInt(partEndSleep[1]) > Integer.parseInt(partStartSleep[1])) {
+            int differenceTime = Integer.parseInt(partEndSleep[1]) - Integer.parseInt(partStartSleep[1]);
+            if (differenceTime < 10) {
+                sleepTarget = sleepTarget + ":0" + differenceTime;
+            } else {
+                sleepTarget = sleepTarget + ":" + differenceTime;
+            }
+        } else {
+            int differenceTime = 60 - (Integer.parseInt(partStartSleep[1]) - Integer.parseInt(partEndSleep[1]));
+            if (differenceTime < 10) {
+                sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
+            } else {
+                if(Integer.parseInt(sleepTarget) - 1!= -1){
+                    sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
+                } else {
+                    sleepTarget = "23:" + differenceTime;
+                }
+
+            }
+        }
+
+        return sleepTarget;
+    }
+
     public interface PushSleepTarget {
-        void sleepTarget(int sleepTarget);
+        void sleepTarget(String sleepTarget);
 
-        void previsiourSleepStart(int sleepTarget);
+        void startSleep(String startSleep);
 
-        void previsiourSleepEnd(int sleepTarget);
+        void endSleep(String endSleep);
     }
 }
