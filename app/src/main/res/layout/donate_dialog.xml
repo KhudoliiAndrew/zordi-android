@@ -1,38 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="290dp"
-    android:layout_height="180dp"
-    android:background="@color/colorBackgroundDialog">
-    <TextView
-        android:layout_width="260dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_fragment_background">
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="This application is free, but if you liked it, you can thank the developers. Thank"
-        android:textColor="@color/textColor"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:id="@+id/donate_text"/>
-    <TextView
+        android:id="@+id/donate_text"
+        android:elevation="20dp"
+        android:background="@drawable/steps_picker_background">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="This application is free, but if you liked it, you can thank the developers"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5168 7559 0373 9171"
-        android:textSize="23sp"
         android:layout_below="@id/donate_text"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:id="@+id/mail_adress_text"
-        android:elevation="10dp"/>
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true">
 
-    <Button
-        android:id="@+id/coppy_button_donate_dialog"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@id/mail_adress_text"
-        android:layout_below="@id/donate_text"
-        android:background="@drawable/ic_content_copy_black_24dp"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5168 7559 0373 9171"
+            android:textSize="23sp"
+            android:textColor="@color/textColorWhite"
+            android:id="@+id/mail_adress_text" />
+
+        <Button
+            android:id="@+id/coppy_button_donate_dialog"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/mail_adress_text"
+            android:background="@drawable/ic_content_copy_white_24dp" />
+    </RelativeLayout>
+
 
 </RelativeLayout>

@@ -28,7 +28,6 @@ public class BluetoothConnectionActivity extends AppCompatActivity {
                 return false;
             }
         });
-        toolbar.inflateMenu(R.menu.menu);
 
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();

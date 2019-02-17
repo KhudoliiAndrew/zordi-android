@@ -30,7 +30,6 @@ public class StepsInformationActivity extends AppCompatActivity {
                 return false;
             }
         });
-        toolbar.inflateMenu(R.menu.menu);
 
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();

@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
         initBottomNavigationView();
         initToolbar();
         setContentNavigationView();
+
+        Button signoutButton = (Button) findViewById(R.id.log_out);
+        signoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signoutOnclick();
+            }
+        });
     }
 
     private void initBottomNavigationView() {
@@ -77,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.inflateMenu(R.menu.menu);
 
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -113,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
-    public void signoutOnclick(View view) {
+    public void signoutOnclick() {
         GoogleSignInClient mGoogleSignInClient;
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(getBaseContext(), gso);
@@ -130,27 +139,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void developerHelpOnClick(MenuItem item) {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.donate_dialog);
-        Button coppyButton = (Button) dialog.findViewById(R.id.coppy_button_donate_dialog);
-        dialog.show();
-        coppyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", "5168 7559 0373 9171");
-                clipboard.setPrimaryClip(clip);
-                Toast toast = Toast.makeText(getApplicationContext(), "Copy", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+        DialogFragment dlgf2 = new DonateDialogFragment();
+        dlgf2.show(getSupportFragmentManager(), "dlgf2");
     }
 
     public void feedbackOnClick(MenuItem item) {
-        DialogFragment dlgf1;
-        dlgf1 = new FeedbackDialogFragment();
+        DialogFragment dlgf1 = new FeedbackDialogFragment();
         dlgf1.show(getSupportFragmentManager(), "dlgf1");
     }
 
-
+    @Override
+    public void onBackPressed(){
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawerLayout.closeDrawer(GravityCompat.START);
+    }
 }

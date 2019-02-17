@@ -1,6 +1,6 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -202,7 +202,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="-40dp"
-                        android:elevation="10dp">
+                        android:elevation="10dp"
+                        android:theme="@style/SwitchStyle">
 
                         <RadioButton
                             android:id="@+id/light_theme_switch"
@@ -210,14 +211,16 @@
                             android:layout_height="match_parent"
                             android:layout_alignBottom="@id/light_watch_button"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginBottom="10dp" />
+                            android:layout_marginBottom="10dp"
+                            android:theme="@style/SwitchStyle"/>
 
                         <RadioButton
                             android:id="@+id/dark_theme_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignBottom="@id/dark_watch_button"
-                            android:layout_alignParentEnd="true" />
+                            android:layout_alignParentEnd="true"
+                            android:theme="@style/SwitchStyle"/>
                     </RadioGroup>
 
 
@@ -287,7 +290,8 @@
                         android:layout_alignBottom="@id/goalAchievement_watch_button"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_marginBottom="10dp"
+                        android:theme="@style/SwitchStyle"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -313,7 +317,8 @@
                         android:layout_alignBottom="@id/uponWaking_watch_button"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_marginBottom="10dp"
+                        android:theme="@style/SwitchStyle" />
                 </RelativeLayout>
             </LinearLayout>
 

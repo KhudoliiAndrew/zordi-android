@@ -3,42 +3,73 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_fragment_background">
-    <TextView
-        android:layout_width="260dp"
+
+    <RelativeLayout
+        android:id="@+id/view_feedback"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="You can contact us by mail"
-        android:textColor="@color/textColor"
-        android:textSize="20sp"
-        android:gravity="center"
+        android:background="@drawable/steps_picker_background"
+        android:elevation="20dp">
+
+        <TextView
+            android:id="@+id/donate_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:elevation="21dp"
+            android:gravity="center"
+            android:text="You can contact us by mail"
+            android:textColor="@color/textColor"
+            android:textSize="23sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:layout_below="@id/donate_text"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20sp"
+            android:layout_marginTop="2dp"
+            android:background="@color/textColor" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/donate_text"
+            android:layout_marginTop="12dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/mail_adress_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="penjuinj@gmail.com"
+                android:textColor="@color/textColor"
+                android:textSize="23sp" />
+
+            <Button
+                android:id="@+id/copy_button_feedback_dialog"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@id/mail_adress_text"
+                android:background="@drawable/ic_content_copy_black_24dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/go_to_email_btn"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_feedback"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:id="@+id/donate_text"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="penjuinj@gmail.com"
-        android:textSize="23sp"
-        android:layout_below="@id/donate_text"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="25dp"
-        android:id="@+id/mail_adress_text"
-        android:elevation="10dp"/>
-    <Button
-        android:id="@+id/copy_button_feedback_dialog"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@id/mail_adress_text"
-        android:layout_below="@id/donate_text"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/ic_content_copy_black_24dp" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button_white_background"
+        android:elevation="300dp"
         android:text="Go to email"
-        android:layout_below="@id/mail_adress_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:id="@+id/go_to_email_btn" />
+        android:textSize="20sp"/>
 </RelativeLayout>
