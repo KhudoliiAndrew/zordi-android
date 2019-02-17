@@ -73,14 +73,14 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
             @Override
             public void start(String starting) {
                 sleepDistance.setText(sleepLong(startSleep, endSleep));
-                //startSleep = starting;
+                startSleep = starting;
                 textView1.setText(startSleep);
             }
 
             @Override
             public void end(String ending) {
                 sleepDistance.setText(sleepLong(startSleep, endSleep));
-               // endSleep = ending;
+                endSleep = ending;
                 textView2.setText(endSleep);
             }
         });
@@ -89,31 +89,23 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private String sleepLong(String startSleep, String endSleep) {
         String[] partStartSleep = startSleep.split(":");
         String[] partEndSleep = endSleep.split(":");
-        if (Integer.parseInt(partEndSleep[0]) > Integer.parseInt(partStartSleep[0])) {
+        if (Integer.parseInt(partEndSleep[0]) >= Integer.parseInt(partStartSleep[0])) {
             int differenceTime = Integer.parseInt(partEndSleep[0]) - Integer.parseInt(partStartSleep[0]);
             if (differenceTime < 10) {
-                sleepTarget = String.valueOf(differenceTime);
+                sleepTarget = "0" + String.valueOf(differenceTime);
             } else {
                 sleepTarget = String.valueOf(differenceTime);
             }
         } else {
             int differenceTime = 24 - (Integer.parseInt(partStartSleep[0]) - Integer.parseInt(partEndSleep[0]));
             if (differenceTime < 10) {
-                sleepTarget = String.valueOf(differenceTime);
-            } else {
-                sleepTarget = String.valueOf(differenceTime);
-            }
-        }
-        if(Integer.parseInt(partEndSleep[0]) == Integer.parseInt(partStartSleep[0])) {
-            int differenceTime = Integer.parseInt(partEndSleep[0]) - Integer.parseInt(partStartSleep[0]);
-            if (differenceTime < 10) {
-                sleepTarget = String.valueOf(differenceTime);
+                sleepTarget = "0" + String.valueOf(differenceTime);
             } else {
                 sleepTarget = String.valueOf(differenceTime);
             }
         }
 
-        if (Integer.parseInt(partEndSleep[1]) > Integer.parseInt(partStartSleep[1])) {
+        if (Integer.parseInt(partEndSleep[1]) >= Integer.parseInt(partStartSleep[1])) {
             int differenceTime = Integer.parseInt(partEndSleep[1]) - Integer.parseInt(partStartSleep[1]);
             if (differenceTime < 10) {
                 sleepTarget = sleepTarget + ":0" + differenceTime;
@@ -121,19 +113,26 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
                 sleepTarget = sleepTarget + ":" + differenceTime;
             }
         } else {
-            int differenceTime = 60 - (Integer.parseInt(partStartSleep[1]) - Integer.parseInt(partEndSleep[1]));
+            int differenceTime = 60 - (Integer.parseInt(partStartSleep[1]) + 1 - Integer.parseInt(partEndSleep[1]));
             if (differenceTime < 10) {
-                sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
+                if(Integer.parseInt(sleepTarget) - 1 < 10){
+                    sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
+                } else {
+                    sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
+                }
             } else {
-                if(Integer.parseInt(sleepTarget) - 1!= -1){
-                    sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
+                if(Integer.parseInt(sleepTarget) - 1 != -1){
+                    if(Integer.parseInt(sleepTarget) - 1 < 10){
+                        sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
+                    } else{
+                        sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
+                    }
                 } else {
                     sleepTarget = "23:" + differenceTime;
                 }
 
             }
         }
-
         return sleepTarget;
     }
 
