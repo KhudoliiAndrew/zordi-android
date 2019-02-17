@@ -51,7 +51,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider_height"
-            android:background="@color/colorLine"
+            android:background="@color/colorNavigationViewLine"
             android:layout_gravity="bottom"
             android:layout_marginBottom="50dp"/>
         <Button
