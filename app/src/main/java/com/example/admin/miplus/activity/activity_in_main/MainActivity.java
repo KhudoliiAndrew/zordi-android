@@ -1,5 +1,7 @@
 package com.example.admin.miplus.activity.activity_in_main;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -8,6 +10,7 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -46,6 +49,7 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 public class MainActivity extends AppCompatActivity {
 
     private static final int LAYOUT = R.layout.main_activity;
+    private static final String CHANNEL_ID = "exampleServiceChannel";
     private DrawerLayout Drawer_Layout;
     private ViewPager viewPager;
     private Toolbar toolbar;
@@ -72,7 +76,21 @@ public class MainActivity extends AppCompatActivity {
         setView();
         setContentNavigationView();
         pedometr();
+        //createNotificationChannel();
     }
+
+    /*ToDo private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Example Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
+    }*/
 
     private void  setView(){
         Drawer_Layout = (DrawerLayout) findViewById(R.id.drawer_layout);

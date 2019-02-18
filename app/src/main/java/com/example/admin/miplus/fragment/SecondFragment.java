@@ -44,6 +44,7 @@ import java.util.ArrayList;
 
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int LAYOUT = R.layout.second_activity;
+    private static final String CHANNEL_ID = "exampleServiceChannel";
 
     private GoogleMap mGoogleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -76,6 +77,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(">>>>>>", "OnCreateView");
         View view = inflater.inflate(LAYOUT, container, false);
         //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -145,6 +147,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private boolean checkPlayServices(){
+        Log.d(">>>>>>", "CheckPlayServices");
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(getActivity());
 
@@ -180,6 +183,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     @Nullable
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d(">>>>>>", "MapReady");
         mGoogleMap = googleMap;
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -191,6 +195,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d(">>>>>>", "Connected");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000);
@@ -254,6 +259,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void redrawLine(LatLng latLng) {
+        Log.d(">>>>>>", "Drawing Line");
         mGoogleMap.clear();  //clears all Markers and Polylines
 
         PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
@@ -271,6 +277,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d(">>>>>>", "Permissions");
         switch(requestCode){
             case ALL_PERMISSIONS_RESULT:
             for (String perm : permissionsToRequest){
@@ -306,4 +313,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             break;
         }
     }
+
+
+
 }
