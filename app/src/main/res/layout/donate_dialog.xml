@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="This application is free, but if you liked it, you can thank the developers"
+            android:text="If you liked it, you can thank the developers"
             android:textColor="@color/textColor"
             android:textSize="20sp"
             android:gravity="center"
@@ -35,15 +35,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5168 7559 0373 9171"
-            android:textSize="23sp"
+            android:textSize="25sp"
+            android:layout_marginTop="3dp"
             android:textColor="@color/textColorWhite"
             android:id="@+id/mail_adress_text" />
 
         <Button
             android:id="@+id/coppy_button_donate_dialog"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
             android:layout_toEndOf="@id/mail_adress_text"
             android:background="@drawable/ic_content_copy_white_24dp" />
     </RelativeLayout>
