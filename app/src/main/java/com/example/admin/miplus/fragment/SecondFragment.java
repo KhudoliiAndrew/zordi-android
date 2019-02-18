@@ -85,8 +85,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         points = new ArrayList<LatLng>();
 
-        //ToDO Button myButton = (Button) view.findViewById(R.id.location_settings);
-        //startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+        Button myButton = (Button) view.findViewById(R.id.location_settings);
+        myButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+            }
+        });
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (permissionsToRequest.size() > 0) {
@@ -289,6 +294,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                                     }
                                 })
                                 .setNegativeButton("Cancel", null).create().show();
+                        Toast.makeText(getActivity(), "Please, enable permissions to display location", Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
