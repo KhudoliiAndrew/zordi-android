@@ -37,4 +37,11 @@ public class Profile {
     public void setEndSleep(String endSleep) {
         this.endSleep = endSleep;
     }
+
+    public void setDefaultInstance(){
+        setStepsTarget(8000);
+        setEndSleep("6:00");
+        setStartSleep("23:00");
+        setSleepTarget("7:00");
+    }
 }

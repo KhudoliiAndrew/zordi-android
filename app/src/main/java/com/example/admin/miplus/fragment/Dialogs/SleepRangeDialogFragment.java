@@ -48,10 +48,10 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.sleep_dialog, null);
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
-        textView1 = (TextView) view.findViewById(R.id.start);
-        textView2 = (TextView) view.findViewById(R.id.end);
-        textView1.setText(startSleep);
-        textView2.setText(endSleep);
+//        textView1 = (TextView) view.findViewById(R.id.start);
+//        textView2 = (TextView) view.findViewById(R.id.end);
+//        textView1.setText(startSleep);
+//        textView2.setText(endSleep);
         initView();
         return view;
     }
@@ -69,9 +69,9 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private void initView() {
         textView1 = (TextView) view.findViewById(R.id.start);
         textView2 = (TextView) view.findViewById(R.id.end);
-        sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
-        textView1.setText(startSleep);
-        textView2.setText(endSleep);
+       // sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
+       /* textView1.setText(startSleep);
+        textView2.setText(endSleep);*/
         circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
         circleAlarmTimerView.setOnTimeChangedListener(new CircleAlarmTimerView.OnTimeChangedListener() {
             @Override

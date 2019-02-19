@@ -284,7 +284,7 @@
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
-                    <Switch
+                    <android.support.v7.widget.SwitchCompat
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@id/goalAchievement_watch_button"
@@ -311,7 +311,7 @@
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
-                    <Switch
+                    <android.support.v7.widget.SwitchCompat
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@id/uponWaking_watch_button"

@@ -30,6 +30,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -38,11 +40,32 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class MainActivity extends AppCompatActivity {
+
+    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
+    private Profile profile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        dataBaseRepository.getProfile()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.getResult() != null && task.getResult().exists()) {
+                            profile = task.getResult().toObject(Profile.class);
+                        }else
+                        {
+                            profile = new Profile();
+                            profile.setDefaultInstance();
+                            dataBaseRepository.setProfile(profile);
+                        }
+                    }
+                });
 
         setTheme(R.style.AppTheme);
         setContentView(R.layout.main_activity);
@@ -149,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawerLayout.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 }
