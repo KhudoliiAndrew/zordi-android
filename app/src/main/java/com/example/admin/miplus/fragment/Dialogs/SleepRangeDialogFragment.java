@@ -53,6 +53,7 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
 //        textView1.setText(startSleep);
 //        textView2.setText(endSleep);
         initView();
+        circleAlarmTimerView.setStartRadian(startSleep, endSleep);
         return view;
     }
 

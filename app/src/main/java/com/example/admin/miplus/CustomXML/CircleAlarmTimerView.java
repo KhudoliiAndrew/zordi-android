@@ -183,6 +183,8 @@ public class CircleAlarmTimerView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        Log.d(">>>>>>", String.valueOf(mCurrentTime));
+        Log.d(">>>>>>11111111", String.valueOf(mCurrentRadian));
         canvas.save();
 
         canvas.drawCircle(mCx, mCy, mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine, mNumberPaint);
@@ -424,6 +426,22 @@ public class CircleAlarmTimerView extends View {
     public void setStartRadian(String startTime, String endTime){
         String[] partStartSleep = startTime.split(":");
         String[] partEndSleep = endTime.split(":");
+        int position = 1;
+        switch (position){
+            case 1:
+                mCurrentTime = ((25 * Integer.parseInt(partStartSleep[1])) /10 +(150 * Integer.parseInt(partStartSleep[0])));
+                mCurrentRadian1 = (float) ((mCurrentTime * 2 * Math.PI) / 120);
+                position = 2;
+            break;
+            case 2:
+                mCurrentTime = ((25 * Integer.parseInt(partEndSleep[1])) /10 +(150 * Integer.parseInt(partEndSleep[0])));
+                mCurrentRadian = (float) ((mCurrentTime * 2 * Math.PI) / 120);
+                break;
+
+        }
+
+        //mCurrentRadian - endSleep
+        //mCurrentRadian1 - startSleep
     }
 
     public interface OnTimeChangedListener {
