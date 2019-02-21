@@ -75,6 +75,7 @@ public class CircleAlarmTimerView extends View {
     private float mCx;
     private float mCy;
     private float mRadius;
+
     private float mCurrentRadian;
     private float mCurrentRadian1;
     private float mPreRadian;
@@ -182,7 +183,6 @@ public class CircleAlarmTimerView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         canvas.save();
 
         canvas.drawCircle(mCx, mCy, mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine, mNumberPaint);
@@ -419,6 +419,11 @@ public class CircleAlarmTimerView extends View {
         if (null != listener) {
             this.mListener = listener;
         }
+    }
+
+    public void setStartRadian(String startTime, String endTime){
+        String[] partStartSleep = startTime.split(":");
+        String[] partEndSleep = endTime.split(":");
     }
 
     public interface OnTimeChangedListener {

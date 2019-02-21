@@ -69,7 +69,7 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private void initView() {
         textView1 = (TextView) view.findViewById(R.id.start);
         textView2 = (TextView) view.findViewById(R.id.end);
-       // sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
+        sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
        /* textView1.setText(startSleep);
         textView2.setText(endSleep);*/
         circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
