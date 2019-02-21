@@ -63,6 +63,34 @@
                     app:layout_constraintStart_toStartOf="@+id/circle_watch"
                     app:layout_constraintTop_toTopOf="@+id/circle_watch"
                     app:layout_constraintVertical_bias="0.59000003" />
+
+                <Button
+                    android:id="@+id/foreground_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Start"
+                    android:onClick="startService"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/circle_watch"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/foreground_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Stop"
+                    android:onClick="stopService"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/circle_watch"
+                    app:layout_constraintTop_toTopOf="@+id/foreground_start" />
             </android.support.constraint.ConstraintLayout>
 
             <LinearLayout

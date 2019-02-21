@@ -243,4 +243,14 @@ public class MainActivity extends AppCompatActivity {
             pedometr();
         }
     }
+
+    public void startService(View view){
+        Intent intent = new Intent(this, MyService.class);
+        startService(intent);
+    }
+
+    public void stopService (View view){
+        Intent intent = new Intent(this, MyService.class);
+        stopService(intent);
+    }
 }
