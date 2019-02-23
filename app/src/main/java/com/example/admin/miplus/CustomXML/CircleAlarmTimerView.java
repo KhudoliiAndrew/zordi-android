@@ -75,7 +75,6 @@ public class CircleAlarmTimerView extends View {
     private float mCx;
     private float mCy;
     private float mRadius;
-
     private float mCurrentRadian;
     private float mCurrentRadian1;
     private float mPreRadian;
@@ -85,6 +84,22 @@ public class CircleAlarmTimerView extends View {
     private int mCurrentTime = 0; // seconds
 
     private OnTimeChangedListener mListener;
+
+    public float getmCurrentRadian() {
+        return mCurrentRadian;
+    }
+
+    public void setmCurrentRadian(float mCurrentRadian) {
+        this.mCurrentRadian = mCurrentRadian;
+    }
+
+    public float getmCurrentRadian1() {
+        return mCurrentRadian1;
+    }
+
+    public void setmCurrentRadian1(float mCurrentRadian1) {
+        this.mCurrentRadian1 = mCurrentRadian1;
+    }
 
     public CircleAlarmTimerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -183,8 +198,8 @@ public class CircleAlarmTimerView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d(">>>>>>", String.valueOf(mCurrentTime));
-        Log.d(">>>>>>11111111", String.valueOf(mCurrentRadian));
+       /* Log.d(">>>>>>", String.valueOf(mCurrentTime));
+        Log.d(">>>>>>11111111", String.valueOf(mCurrentRadian1));*/
         canvas.save();
 
         canvas.drawCircle(mCx, mCy, mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine, mNumberPaint);
@@ -423,26 +438,18 @@ public class CircleAlarmTimerView extends View {
         }
     }
 
-    public void setStartRadian(String startTime, String endTime){
+   /* public void setStartRadian(String startTime, String endTime){
         String[] partStartSleep = startTime.split(":");
         String[] partEndSleep = endTime.split(":");
-        int position = 1;
-        switch (position){
-            case 1:
-                mCurrentTime = ((25 * Integer.parseInt(partStartSleep[1])) /10 +(150 * Integer.parseInt(partStartSleep[0])));
-                mCurrentRadian1 = (float) ((mCurrentTime * 2 * Math.PI) / 120);
-                position = 2;
-            break;
-            case 2:
-                mCurrentTime = ((25 * Integer.parseInt(partEndSleep[1])) /10 +(150 * Integer.parseInt(partEndSleep[0])));
-                mCurrentRadian = (float) ((mCurrentTime * 2 * Math.PI) / 120);
-                break;
+                mCurrentTime = (Integer.parseInt(partStartSleep[1]) / 10 * 25 +(150 * Integer.parseInt(partStartSleep[0])));
+                mCurrentRadian1 = (float) ((mCurrentTime * 2 / Math.PI) / 120);
 
-        }
+                mCurrentTime = (Integer.parseInt(partEndSleep[1]) /10 * 25 +(150 * Integer.parseInt(partEndSleep[0])));
+                mCurrentRadian = (float) ((mCurrentTime * 2 / Math.PI) / 120);
 
         //mCurrentRadian - endSleep
         //mCurrentRadian1 - startSleep
-    }
+    }*/
 
     public interface OnTimeChangedListener {
         void start(String starting);

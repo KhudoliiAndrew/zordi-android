@@ -1,14 +1,13 @@
 package com.example.admin.miplus.activity.activity_in_main;
 
-import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -17,13 +16,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -50,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setNotification();
 
         dataBaseRepository.getProfile()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -58,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.getResult() != null && task.getResult().exists()) {
                             profile = task.getResult().toObject(Profile.class);
-                        }else
-                        {
+                        }else {
                             profile = new Profile();
                             profile.setDefaultInstance();
                             dataBaseRepository.setProfile(profile);
@@ -175,5 +171,19 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    private void setNotification(){
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Title")
+                        .setContentText("Notification text");
+
+        Notification notification = builder.build();
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notification);
     }
 }

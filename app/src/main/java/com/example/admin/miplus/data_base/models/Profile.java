@@ -5,6 +5,8 @@ public class Profile {
     private String sleepTarget;
     private String startSleep;
     private String endSleep;
+    private float startRadian;
+    private float endRadian;
 
     public int getStepsTarget() {
         return stepsTarget;
@@ -38,10 +40,28 @@ public class Profile {
         this.endSleep = endSleep;
     }
 
+    public float getStartRadian() {
+        return startRadian;
+    }
+
+    public void setStartRadian(float startRadian) {
+        this.startRadian = startRadian;
+    }
+
+    public float getEndRadian() {
+        return endRadian;
+    }
+
+    public void setEndRadian(float endRadian) {
+        this.endRadian = endRadian;
+    }
+
     public void setDefaultInstance(){
         setStepsTarget(8000);
         setEndSleep("6:00");
         setStartSleep("23:00");
         setSleepTarget("7:00");
+        setStartRadian(5.763731f);
+        setEndRadian(2.096111f);
     }
 }

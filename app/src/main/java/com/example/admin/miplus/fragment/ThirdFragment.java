@@ -76,7 +76,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
             @Override
             public void onClick(View v) {
                 if(profile != null){
-                    DialogFragment dlgf2 = new SleepRangeDialogFragment(profile.getSleepTarget(), profile.getStartSleep(), profile.getEndSleep(), ThirdFragment.this);
+                    DialogFragment dlgf2 = new SleepRangeDialogFragment(profile.getSleepTarget(), profile.getStartSleep(), profile.getEndSleep(), profile.getStartRadian(), profile.getEndRadian(), ThirdFragment.this);
                     dlgf2.show(getFragmentManager(), "dlgf2");
                 }
             }
@@ -101,6 +101,18 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         dataBaseRepository.setProfile(profile);
         TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
         stepsText.setText(String.valueOf(stepsTarget));
+    }
+
+    @Override
+    public void startRadian(float startRadian) {
+        profile.setStartRadian(startRadian);
+        dataBaseRepository.setProfile(profile);
+    }
+
+    @Override
+    public void endRadian(float endRadian) {
+        profile.setEndRadian(endRadian);
+        dataBaseRepository.setProfile(profile);
     }
 
     @Override

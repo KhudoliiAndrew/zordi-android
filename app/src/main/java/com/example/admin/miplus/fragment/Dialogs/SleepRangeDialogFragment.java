@@ -23,24 +23,25 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private String startSleep;
     private String endSleep;
     private PushSleepTarget pushSleepTarget;
-    private String previsiourStartSleep;
-    private String previsiourEndSleep;
     private TextView textView1;
     private TextView textView2;
     private TextView sleepDistance;
     private CircleAlarmTimerView circleAlarmTimerView;
+    private float startRadian;
+    private float endRadian;
 
 
     @SuppressLint("ValidFragment")
-    public SleepRangeDialogFragment(String sleepTarget, String startSleep, String endSleep, PushSleepTarget pushSleepTarget) {
+    public SleepRangeDialogFragment(String sleepTarget, String startSleep, String endSleep,  float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
         this.sleepTarget = sleepTarget;
         this.startSleep = startSleep;
         this.endSleep = endSleep;
         this.pushSleepTarget = pushSleepTarget;
+        this.startRadian = startRadian;
+        this.endRadian = endRadian;
     }
 
-    public SleepRangeDialogFragment() {
-    }
+    public SleepRangeDialogFragment() { }
 
     @Nullable
     @Override
@@ -48,18 +49,26 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.sleep_dialog, null);
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
-//        textView1 = (TextView) view.findViewById(R.id.start);
-//        textView2 = (TextView) view.findViewById(R.id.end);
+        textView1 = (TextView) view.findViewById(R.id.start);
+        textView2 = (TextView) view.findViewById(R.id.end);
 //        textView1.setText(startSleep);
 //        textView2.setText(endSleep);
+
+        textView1.setText(startSleep);
+        textView2.setText(endSleep);
         initView();
-        circleAlarmTimerView.setStartRadian(startSleep, endSleep);
+      //  circleAlarmTimerView.setStartRadian(startSleep, endSleep);
+
         return view;
     }
 
     @Override
     public void onClick(View v) {
         if (pushSleepTarget != null) {
+            startRadian = circleAlarmTimerView.getmCurrentRadian1();
+            endRadian = circleAlarmTimerView.getmCurrentRadian();
+            pushSleepTarget.startRadian(startRadian);
+            pushSleepTarget.endRadian(endRadian);
             pushSleepTarget.startSleep(startSleep);
             pushSleepTarget.endSleep(endSleep);
             pushSleepTarget.sleepTarget(sleepLong(startSleep, endSleep));
@@ -68,25 +77,25 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void initView() {
-        textView1 = (TextView) view.findViewById(R.id.start);
-        textView2 = (TextView) view.findViewById(R.id.end);
         sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
-       /* textView1.setText(startSleep);
-        textView2.setText(endSleep);*/
         circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
+        circleAlarmTimerView.setmCurrentRadian1(startRadian);
+        circleAlarmTimerView.setmCurrentRadian(endRadian);
         circleAlarmTimerView.setOnTimeChangedListener(new CircleAlarmTimerView.OnTimeChangedListener() {
             @Override
             public void start(String starting) {
                 sleepDistance.setText(sleepLong(startSleep, endSleep));
-                startSleep = starting;
                 textView1.setText(startSleep);
+                textView2.setText(endSleep);
+                startSleep = starting;
             }
 
             @Override
             public void end(String ending) {
+                Log.d(">>>>>>", String.valueOf(endSleep) + "::" + String.valueOf(ending));
                 sleepDistance.setText(sleepLong(startSleep, endSleep));
-                endSleep = ending;
                 textView2.setText(endSleep);
+                endSleep = ending;
             }
         });
     }
@@ -147,5 +156,9 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         void startSleep(String startSleep);
 
         void endSleep(String endSleep);
+
+        void startRadian(float startRadian);
+
+        void endRadian(float endRadian);
     }
 }
