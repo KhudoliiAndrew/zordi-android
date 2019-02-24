@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.util.Util;
 import com.example.admin.miplus.BuildConfig;
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.facebook.internal.Logger;
 
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ public class FirstFragment extends Fragment {
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                toStepsInformation();
             }
         });
 
@@ -65,5 +68,13 @@ public class FirstFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void toStepsInformation() {
+        StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(android.R.id.content, stepsInformationFragment);
+        fragmentTransaction.commit();
     }
 }
