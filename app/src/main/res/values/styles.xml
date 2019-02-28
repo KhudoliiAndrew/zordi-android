@@ -14,21 +14,11 @@
 
     <style name="DefaultNumberPickerTheme" parent="AppTheme">
         <item name="colorControlNormal">@android:color/transparent</item>
-        <item name="android:textColorPrimary">@color/textColor</item>
-        <item name="android:editTextColor">@color/textColor</item>
-        <item name="android:keyTextColor">@color/textColor</item>
-        <item name="android:autoText">@color/textColor</item>
-        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="SwitchStyle" >
-        <!-- active thumb & track color (30% transparency) -->
         <item name="colorControlActivated">@color/colorPrimaryLight</item>
-
-        <!-- inactive thumb color -->
         <item name="colorSwitchThumbNormal"> @color/colorPrimaryDark</item>
-
-        <!-- inactive track color (30% transparency) -->
         <item name="android:colorForeground">@color/colorPrimaryLight </item>
     </style>
 </resources>

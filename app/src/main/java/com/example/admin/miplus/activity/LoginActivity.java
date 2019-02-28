@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
+import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.Profile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -21,8 +24,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -30,11 +35,15 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
-    private static int LAYOUT = R.layout.login_activity;
+
+    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
+    private Profile profile;
+
     private FirebaseAuth mAuth;
 
     private static final String TAG = "GoogleActivity";
@@ -48,7 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(LAYOUT);
+        setContentView(R.layout.login_activity);
+        checking();
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.google_signIn_button);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
@@ -63,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI(FacebookUser);
             }
         });
+
         mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -80,7 +91,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-
+                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                Log.d(">>>>>>", error.toString());
             }
         });
 
@@ -103,20 +115,42 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth
+                .signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(">>>>>>", "fgsdfgsdgsg     " + task.toString());
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Done");
                             FirebaseUser GoogleUser = mAuth.getCurrentUser();
                             updateUI(GoogleUser);
                         }
                     }
-                });
-    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(">>>>>>", "fgsdfgsdgsg     " + e.toString());
+            }
+        });
+        }
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            dataBaseRepository.getProfile()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.getResult() != null && task.getResult().exists()) {
+                                profile = task.getResult().toObject(Profile.class);
+                            }else {
+                                profile = new Profile();
+                                profile.setDefaultInstance();
+                                dataBaseRepository.setProfile(profile);
+                            }
+                        }
+                    });
             Intent GoToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
             LoginActivity.this.startActivity(GoToMainActivity);
             LoginActivity.this.finish();
@@ -141,5 +175,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void checking(){
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        Log.d(">>>>>>", "somethin g good" + apiAvailability.getErrorString(resultCode));
     }
 }

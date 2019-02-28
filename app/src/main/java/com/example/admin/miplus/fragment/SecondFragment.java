@@ -74,7 +74,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(LAYOUT, container, false);
-        //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
@@ -90,12 +89,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         }
         return view;
     }
-
-    /*private void setPoint(LatLng latLng){
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.google_icon)));
-    }*/
 
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions){
         ArrayList<String> result = new ArrayList<>();

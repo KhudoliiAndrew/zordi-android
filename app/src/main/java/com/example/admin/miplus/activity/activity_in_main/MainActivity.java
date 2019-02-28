@@ -42,27 +42,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
-    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNotification();
 
-        dataBaseRepository.getProfile()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.getResult() != null && task.getResult().exists()) {
-                            profile = task.getResult().toObject(Profile.class);
-                        }else {
-                            profile = new Profile();
-                            profile.setDefaultInstance();
-                            dataBaseRepository.setProfile(profile);
-                        }
-                    }
-                });
+
 
         setTheme(R.style.AppTheme);
         setContentView(R.layout.main_activity);
