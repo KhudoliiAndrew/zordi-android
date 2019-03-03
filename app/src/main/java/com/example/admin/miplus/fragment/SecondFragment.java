@@ -34,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -53,6 +54,12 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private LocationRequest mLocationRequest;
     private ArrayList<LatLng> points;
     public Polyline line;
+
+    String a = "#3f51b5";
+    String a1 = "#3f51b5";
+    String b = "#FF0000";
+    String c = "#00CC00";
+    String d = "#000000";
 
     private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 10 seconds
@@ -99,6 +106,42 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+            }
+        });
+
+        Button myButton2 = (Button) view.findViewById(R.id.color_change_to_blue);
+        myButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a = a1;
+                Toast.makeText(getActivity(), "Color Changed to Blue", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Button myButton3 = (Button) view.findViewById(R.id.color_change_to_red);
+        myButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a = b;
+                Toast.makeText(getActivity(), "Color Changed to Red", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Button myButton4 = (Button) view.findViewById(R.id.color_change_to_green);
+        myButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a = c;
+                Toast.makeText(getActivity(), "Color Changed to Green", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Button myButton5 = (Button) view.findViewById(R.id.color_change_to_black);
+        myButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a = d;
+                Toast.makeText(getActivity(), "Color Changed to Black", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -220,6 +263,10 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setSmallestDisplacement(SMALLEST_DISPLACEMENT);
 
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
     }
@@ -256,7 +303,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         Log.d(">>>>>>", "Drawing Line");
         mGoogleMap.clear();  //clears all Markers and Polylines
 
-        PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
+        PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor(a)).geodesic(true);
         for (int i = 0; i < points.size(); i++) {
             LatLng point = points.get(i);
             options.add(point);
@@ -264,10 +311,17 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         mGoogleMap.addMarker(new MarkerOptions()
                 .position(latLng)
-                .icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                .icon(getMarkerIcon("#00CC00")));
+
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
+
+    public BitmapDescriptor getMarkerIcon(String color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(Color.parseColor(color), hsv);
+        return BitmapDescriptorFactory.defaultMarker(hsv[0]);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
