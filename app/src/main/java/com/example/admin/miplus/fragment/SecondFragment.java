@@ -311,7 +311,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         mGoogleMap.addMarker(new MarkerOptions()
                 .position(latLng)
-                .icon(getMarkerIcon("#00CC00")));
+                .icon(getMarkerIcon("#3f51b5")));
 
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
