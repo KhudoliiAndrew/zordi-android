@@ -27,35 +27,32 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+                dataBaseRepository.getProfileTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.getResult() != null && task.getResult().exists()) {
+                                profile = task.getResult().toObject(Profile.class);
+                                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                                SplashActivity.this.startActivity(mainIntent);
+                                SplashActivity.this.finish();
+                            } else {
+                                profile = new Profile();
+                                profile.setDefaultInstance();
+                                dataBaseRepository.setProfile(profile);Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                                SplashActivity.this.startActivity(mainIntent);
+                                SplashActivity.this.finish();
+                            }
+                        }
+                    });
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (currentUser != null) {
-                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-                    SplashActivity.this.startActivity(mainIntent);
-                    SplashActivity.this.finish();
-                    dataBaseRepository.getProfile()
-                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.getResult() != null && task.getResult().exists()) {
-                                        profile = task.getResult().toObject(Profile.class);
-                                    } else {
-                                        profile = new Profile();
-                                        profile.setDefaultInstance();
-                                        dataBaseRepository.setProfile(profile);
-                                    }
-                                }
-                            });
 
-                } else {
-                    Intent userIntent = new Intent(SplashActivity.this, LoginActivity.class);
-                    SplashActivity.this.startActivity(userIntent);
-                    SplashActivity.this.finish();
-                }
+        } else {
+            Intent userIntent = new Intent(SplashActivity.this, LoginActivity.class);
+            SplashActivity.this.startActivity(userIntent);
+            SplashActivity.this.finish();
+        }
 
-            }
-        }, 0);
     }
 }

@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            dataBaseRepository.getProfile()
+            dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {

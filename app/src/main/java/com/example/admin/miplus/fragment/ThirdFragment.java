@@ -41,7 +41,7 @@ import java.lang.reflect.Field;
 public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget {
     private View view;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-    private Profile profile;
+    private Profile profile = new Profile();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -57,17 +57,21 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.third_activity, container, false);
 
-        dataBaseRepository.getProfile()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        profile = task.getResult().toObject(Profile.class);
-                        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-                        stepsText.setText(String.valueOf(profile.getStepsTarget()));
-                        TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
-                        sleepText.setText(String.valueOf(profile.getSleepTarget()));
-                    }
-                });
+        if (dataBaseRepository.getProfile() != null) {
+            profile = dataBaseRepository.getProfile();
+            viewSetter(view);
+        } else {
+            dataBaseRepository.getProfileTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            profile = task.getResult().toObject(Profile.class);
+                            viewSetter(view);
+                        }
+                    });
+
+        }
+
 
         Button stepsButton = (Button) view.findViewById(R.id.steps_watch_button);
         Button sleepButton = (Button) view.findViewById(R.id.waking_watch_button);
@@ -75,7 +79,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(profile != null){
+                if (profile != null) {
                     DialogFragment dlgf2 = new SleepRangeDialogFragment(profile.getSleepTarget(), profile.getStartSleep(), profile.getEndSleep(), profile.getStartRadian(), profile.getEndRadian(), ThirdFragment.this);
                     dlgf2.show(getFragmentManager(), "dlgf2");
                 }
@@ -85,7 +89,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         stepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(profile != null){
+                if (profile != null) {
                     DialogFragment dlgf1 = new StepsTargetDialogFragment(profile.getStepsTarget(), ThirdFragment.this);
                     dlgf1.show(getFragmentManager(), "dlgf1");
                 }
@@ -93,6 +97,13 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
             }
         });
         return view;
+    }
+
+    private void viewSetter(View view){
+        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
+        stepsText.setText(String.valueOf(profile.getStepsTarget()));
+        TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
+        sleepText.setText(String.valueOf(profile.getSleepTarget()));
     }
 
     @Override

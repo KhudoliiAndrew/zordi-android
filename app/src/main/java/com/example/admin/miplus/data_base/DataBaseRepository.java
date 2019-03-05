@@ -13,8 +13,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class DataBaseRepository {
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Profile profile;
 
     final FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -22,7 +23,21 @@ public class DataBaseRepository {
         db.collection("profiles").document(mAuth.getUid()).set(profile);
     }
 
-    public Task<DocumentSnapshot> getProfile() {
-        return db.collection("profiles").document(mAuth.getUid()).get();
+    public Task<DocumentSnapshot> getProfileTask() {
+        final Task<DocumentSnapshot> task = db.collection("profiles").document(mAuth.getUid()).get();
+        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, Profile>(){
+
+            @NonNull
+            @Override
+            public Task<Profile> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                profile = documentSnapshot.toObject(Profile.class);
+                return null;
+            }
+        });
+        return task;
+    }
+
+    public Profile getProfile(){
+        return profile;
     }
 }
