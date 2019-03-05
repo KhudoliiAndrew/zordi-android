@@ -31,6 +31,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -50,18 +51,16 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private ArrayList<LatLng> points;
     public Polyline line;
 
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 5 seconds
-    private static final float SMALLEST_DISPLACEMENT = 0.5F; //quarter of a meter
+    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 10 seconds
+    private final float SMALLEST_DISPLACEMENT = 10F; //10 meters
 
     // lists for permissions
     private ArrayList<String> permissionsToRequest;
-    private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ArrayList<String> permissions = new ArrayList<>();
 
     //integer for permissions result request
     private static final int ALL_PERMISSIONS_RESULT = 1011;
-
 
     public static SecondFragment getInstance() {
         Bundle args = new Bundle();
@@ -73,28 +72,33 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //creates and returns the view hierarchy associated with the fragment, call to create components inside fragment
+        Log.d(">>>>>>", "OnCreateView");
         View view = inflater.inflate(LAYOUT, container, false);
+
+        points = new ArrayList<LatLng>();
+
+        //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         permissionsToRequest = permissionsToRequest(permissions);
 
-        points = new ArrayList<LatLng>();
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (permissionsToRequest.size() > 0) {
                 requestPermissions(permissionsToRequest.
                         toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
             }
         }
+
         return view;
     }
 
-    private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions){
+    private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions) {
         ArrayList<String> result = new ArrayList<>();
 
-        for (String perm: wantedPermissions) {
-            if(!hasPermission(perm)) {
+        for (String perm : wantedPermissions) {
+            if (!hasPermission(perm)) {
                 result.add(perm);
             }
         }
@@ -102,67 +106,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private boolean hasPermission(String permission) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return getActivity().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if(mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(!checkPlayServices()){
-            checkGoogleServices.setText("You need to install Google Play Services to use the App properly");
-        }
-    }
-
-    private boolean checkPlayServices(){
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(getActivity());
-
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(getActivity(), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST);
-            } else {
-                finish();
-            }return false;
-        } return true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        //stop location updates
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()){
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
-    }
-    private void finish() {
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
-    @Nullable
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
+    public void onGoogleApiClientConnected(){
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -171,21 +121,79 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleApiClient.connect();
     }
 
-      @Override
+    @Override
+    public void onStart() {
+        // makes the fragment visible to the user
+        super.onStart();
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        //makes the fragment begin interacting with the user, calls after onStart
+        super.onResume();
+
+        if (!checkPlayServices()) {
+            checkGoogleServices.setText("You need to install Google Play Services to use the App properly");
+        }
+    }
+
+    private boolean checkPlayServices() {
+        Log.d(">>>>>>", "CheckPlayServices");
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(getActivity());
+
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(getActivity(), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onPause() {
+        //fragment is no longer interacting with the user either because its activity is being paused
+        super.onPause();
+
+        //stop location updates
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //Called immediately after onCreateView has returned, but before any saved state has been restored in to the view
+        super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Nullable
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d(">>>>>>", "MapReady");
+        mGoogleMap = googleMap;
+        onGoogleApiClientConnected();
+    }
+
+    @Override
     public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000);
+        Log.d(">>>>>>", "Connected");
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getActivity(), "You need to enable permissions to display location!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         //permission ok, we get last location
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        if (location != null) {
-        }
         startLocationUpdates();
     }
 
@@ -196,9 +204,10 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setSmallestDisplacement(SMALLEST_DISPLACEMENT);
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(getActivity(), "You need to enable permissions to display location!", Toast.LENGTH_SHORT).show();
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
     }
@@ -215,26 +224,24 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onLocationChanged(Location location) {
-    //    Log.d(">>>>>>", "Location Zordi");
-        if (location == null){
+        Log.d(">>>>>>", "Location Zordi");
+        if (location == null) {
             Toast.makeText(getActivity(), "Can't get current location", Toast.LENGTH_LONG).show();
-        }else{
+
+        } else {
 
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
             mGoogleMap.animateCamera(update);
 
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            LatLng latLng = new LatLng(latitude, longitude);
+            points.add(ll);
 
-            points.add(latLng);
-
-            redrawLine(latLng);
+            redrawLine(ll);
         }
     }
 
     private void redrawLine(LatLng latLng) {
+        Log.d(">>>>>>", "Drawing Line");
         mGoogleMap.clear();  //clears all Markers and Polylines
 
         PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
@@ -244,41 +251,51 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         }
 
         mGoogleMap.addMarker(new MarkerOptions()
-                .position(latLng));
-                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_circle_white_24)));
+                .position(latLng)
+                .icon(getMarkerIcon("#3f51b5")));
+
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
 
+    public BitmapDescriptor getMarkerIcon(String color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(Color.parseColor(color), hsv);
+        return BitmapDescriptorFactory.defaultMarker(hsv[0]);
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode){
+        Log.d(">>>>>>", "Permissions");
+        final ArrayList<String> permissionsRejected = new ArrayList<>();
+        switch (requestCode) {
             case ALL_PERMISSIONS_RESULT:
-                for (String perm : permissionsToRequest){
-                    if(!hasPermission(perm)){
+                for (String perm : permissionsToRequest) {
+                    if (!hasPermission(perm)) {
                         permissionsRejected.add(perm);
                     }
                 }
-
-                if (permissionsRejected.size()> 0){
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))){
+                if (permissionsRejected.size() > 0) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
                             new AlertDialog.Builder(getActivity())
                                     .setMessage("These permissions are mandatory to get your location. You need to allow them.")
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                                 requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]),
                                                         ALL_PERMISSIONS_RESULT);
                                             }
                                         }
                                     })
                                     .setNegativeButton("Cancel", null).create().show();
+                            Toast.makeText(getActivity(), "Please, enable permissions to display location", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }
                 } else {
-                    if (mGoogleApiClient != null){
+                    if (mGoogleApiClient != null) {
                         mGoogleApiClient.connect();
                     }
                 }
