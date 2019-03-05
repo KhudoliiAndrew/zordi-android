@@ -2,6 +2,7 @@ package com.example.admin.miplus.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -20,6 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.SplashActivity;
+import com.example.admin.miplus.activity.activity_in_main.MainActivity;
+import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.GeoPoint;
+import com.example.admin.miplus.data_base.models.Profile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -37,11 +43,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int LAYOUT = R.layout.second_activity;
+
+    private GeoPoint geoPoint;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
 
     private GoogleMap mGoogleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -74,9 +90,10 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //creates and returns the view hierarchy associated with the fragment, call to create components inside fragment
         Log.d(">>>>>>", "OnCreateView");
-        View view = inflater.inflate(LAYOUT, container, false);
+        final View view = inflater.inflate(LAYOUT, container, false);
 
         points = new ArrayList<LatLng>();
+
 
         //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -91,7 +108,25 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             }
         }
 
+
         return view;
+    }
+
+    private void getTask(){
+        dataBaseRepository.getGeopointTask()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.getResult() != null && task.getResult().exists()) {
+                            geoPoint = task.getResult().toObject(GeoPoint.class);
+
+                        } else {
+                            geoPoint = new GeoPoint();
+
+
+                        }
+                    }
+                });
     }
 
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions) {
@@ -112,7 +147,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         return true;
     }
 
-    public void onGoogleApiClientConnected(){
+    public void onGoogleApiClientConnected() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -230,14 +265,23 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         } else {
 
-            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
+
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             mGoogleMap.animateCamera(update);
+            points.add(latLng);
+            redrawLine(latLng);
 
-            points.add(ll);
 
-            redrawLine(ll);
+            com.google.firebase.firestore.GeoPoint gP = new com.google.firebase.firestore.GeoPoint(location.getLatitude(), location.getLongitude());
+            if (gP != null) {
+                geoPoint.setGeoPoint(gP);
+            }
+            Log.d(">>>>>>>>>>", String.valueOf(gP));
         }
+    }
+
+    private void setPositionStart() {
     }
 
     private void redrawLine(LatLng latLng) {

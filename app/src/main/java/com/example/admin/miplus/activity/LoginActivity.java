@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.GeoPoint;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile;
+    private GeoPoint geoPoint;
 
     private FirebaseAuth mAuth;
 
@@ -148,6 +150,15 @@ public class LoginActivity extends AppCompatActivity {
                                 profile = new Profile();
                                 profile.setDefaultInstance();
                                 dataBaseRepository.setProfile(profile);
+                            }
+                        }
+                    });
+            dataBaseRepository.getGeopointTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.getResult() != null && task.getResult().exists()) {
+                                geoPoint = task.getResult().toObject(GeoPoint.class);
                             }
                         }
                     });
