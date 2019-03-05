@@ -2,13 +2,11 @@ package com.example.admin.miplus.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -18,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +42,6 @@ import java.util.ArrayList;
 
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int LAYOUT = R.layout.second_activity;
-    private static final String CHANNEL_ID = "exampleServiceChannel";
 
     private GoogleMap mGoogleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -54,12 +50,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private LocationRequest mLocationRequest;
     private ArrayList<LatLng> points;
     public Polyline line;
-
-    String a = "#3f51b5";
-    String a1 = "#3f51b5";
-    String b = "#FF0000";
-    String c = "#00CC00";
-    String d = "#000000";
 
     private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 10 seconds
@@ -100,50 +90,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                         toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
             }
         }
-
-        Button myButton = (Button) view.findViewById(R.id.location_settings);
-        myButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
-            }
-        });
-
-        Button myButton2 = (Button) view.findViewById(R.id.color_change_to_blue);
-        myButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                a = a1;
-                Toast.makeText(getActivity(), "Color Changed to Blue", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        Button myButton3 = (Button) view.findViewById(R.id.color_change_to_red);
-        myButton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                a = b;
-                Toast.makeText(getActivity(), "Color Changed to Red", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        Button myButton4 = (Button) view.findViewById(R.id.color_change_to_green);
-        myButton4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                a = c;
-                Toast.makeText(getActivity(), "Color Changed to Green", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        Button myButton5 = (Button) view.findViewById(R.id.color_change_to_black);
-        myButton5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                a = d;
-                Toast.makeText(getActivity(), "Color Changed to Black", Toast.LENGTH_LONG).show();
-            }
-        });
 
         return view;
     }
@@ -203,8 +149,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
                 apiAvailability.getErrorDialog(getActivity(), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST);
-            } else {
-                finish();
             }
             return false;
         }
@@ -221,9 +165,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
-    }
-
-    private void finish() {
     }
 
     @Override
@@ -303,7 +244,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         Log.d(">>>>>>", "Drawing Line");
         mGoogleMap.clear();  //clears all Markers and Polylines
 
-        PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor(a)).geodesic(true);
+        PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
         for (int i = 0; i < points.size(); i++) {
             LatLng point = points.get(i);
             options.add(point);
@@ -334,8 +275,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                         permissionsRejected.add(perm);
                     }
                 }
-
-
                 if (permissionsRejected.size() > 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
@@ -358,7 +297,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 } else {
                     if (mGoogleApiClient != null) {
                         mGoogleApiClient.connect();
-
                     }
                 }
                 break;
