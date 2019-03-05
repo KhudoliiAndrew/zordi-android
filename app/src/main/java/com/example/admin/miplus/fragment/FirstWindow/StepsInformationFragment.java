@@ -32,12 +32,12 @@ public class StepsInformationFragment extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbarSteps);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ActionBar actionbar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-       // actionbar.setDisplayHomeAsUpEnabled(true);
-       // actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        //actionbar.setDisplayHomeAsUpEnabled(true);
+        //actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
 
 
 
-     //   actionbar.setDisplayShowHomeEnabled(true);
+        //actionbar.setDisplayShowHomeEnabled(true);
       /*  toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
