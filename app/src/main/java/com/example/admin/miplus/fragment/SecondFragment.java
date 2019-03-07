@@ -94,7 +94,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         points = new ArrayList<LatLng>();
 
-
+        getTask();
         //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
