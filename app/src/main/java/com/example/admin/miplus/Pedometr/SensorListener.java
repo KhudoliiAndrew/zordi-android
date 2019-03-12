@@ -16,9 +16,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.example.admin.miplus.BuildConfig;
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -35,8 +37,8 @@ public class SensorListener extends Service implements SensorEventListener {
 
     public final static int NOTIFICATION_ID = 1;
     private final static long MICROSECONDS_IN_ONE_MINUTE = 60000000;
-    private final static long SAVE_OFFSET_TIME = AlarmManager.INTERVAL_HOUR;
-    private final static int SAVE_OFFSET_STEPS = 500;
+    private final static long SAVE_OFFSET_TIME = 5 * 1000 * 60; //5 minutes
+    private final static int SAVE_OFFSET_STEPS = 5;
 
     private static int steps;
     private static int lastSaveSteps;
@@ -66,6 +68,7 @@ public class SensorListener extends Service implements SensorEventListener {
      * @return true, if notification was updated
      */
     private boolean updateIfNecessary() {
+        Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
         if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
                 (steps > 0 && System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME)) {
             if (BuildConfig.DEBUG) Logger.log(
@@ -88,7 +91,6 @@ public class SensorListener extends Service implements SensorEventListener {
             lastSaveSteps = steps;
             lastSaveTime = System.currentTimeMillis();
             showNotification(); // update notification
-            startService(new Intent(this, WidgetUpdateService.class));
             return true;
         } else {
             return false;
@@ -193,8 +195,8 @@ public class SensorListener extends Service implements SensorEventListener {
         }
         notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
                 .setContentTitle(context.getString(R.string.notification_title)).setContentIntent(
-                PendingIntent.getActivity(context, 0, new Intent(context, Activity_Main.class),
-                        PendingIntent.FLAG_UPDATE_CURRENT)).setSmallIcon(R.drawable.ic_notification)
+                PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT)).setSmallIcon(R.drawable.ic_account_circle_black_24dp)
                 .setOngoing(true);
         return notificationBuilder.build();
     }

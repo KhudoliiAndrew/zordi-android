@@ -67,9 +67,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private ArrayList<LatLng> points;
     public Polyline line;
 
-    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 10 seconds
-    private final float SMALLEST_DISPLACEMENT = 10F; //10 meters
+    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 0;
+    private final long UPDATE_INTERVAL = 0, FASTEST_INTERVAL = 0; // = 10 seconds
+    private final float SMALLEST_DISPLACEMENT = 0F; //10 meters
 
     // lists for permissions
     private ArrayList<String> permissionsToRequest;
@@ -94,7 +94,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         points = new ArrayList<LatLng>();
 
-        getTask();
+      //  getTask();
         //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -273,11 +273,11 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             redrawLine(latLng);
 
 
-            com.google.firebase.firestore.GeoPoint gP = new com.google.firebase.firestore.GeoPoint(location.getLatitude(), location.getLongitude());
-            if (gP != null) {
-                geoPoint.setGeoPoint(gP);
-            }
-            Log.d(">>>>>>>>>>", String.valueOf(gP));
+        //    com.google.firebase.firestore.GeoPoint gP = new com.google.firebase.firestore.GeoPoint(location.getLatitude(), location.getLongitude());
+         //   if (gP != null) {
+          //      geoPoint.setGeoPoint(gP);
+          //  }
+         //   Log.d(">>>>>>>>>>", String.valueOf(gP));
         }
     }
 

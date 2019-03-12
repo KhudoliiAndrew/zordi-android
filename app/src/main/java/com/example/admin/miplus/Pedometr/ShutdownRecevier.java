@@ -14,10 +14,6 @@ public class ShutdownRecevier extends BroadcastReceiver {
 
         context.startService(new Intent(context, SensorListener.class));
 
-        // if the user used a root script for shutdown, the DEVICE_SHUTDOWN
-        // broadcast might not be send. Therefore, the app will check this
-        // setting on the next boot and displays an error message if it's not
-        // set to true
         context.getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
                 .putBoolean("correctShutdown", true).commit();
 
