@@ -37,7 +37,7 @@ public class SensorListener extends Service implements SensorEventListener {
 
     public final static int NOTIFICATION_ID = 1;
     private final static long MICROSECONDS_IN_ONE_MINUTE = 60000000;
-    private final static long SAVE_OFFSET_TIME = 5 * 1000 * 60; //5 minutes
+    private final static long SAVE_OFFSET_TIME = 1; //5 minutes
     private final static int SAVE_OFFSET_STEPS = 5;
 
     private static int steps;
@@ -48,9 +48,8 @@ public class SensorListener extends Service implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(final Sensor sensor, int accuracy) {
-        // nobody knows what happens here: step value might magically decrease
-        // when this method is called...
         if (BuildConfig.DEBUG) Logger.log(sensor.getName() + " accuracy changed: " + accuracy);
+        Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -60,6 +59,7 @@ public class SensorListener extends Service implements SensorEventListener {
             return;
         } else {
             steps = (int) event.values[0];
+            Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
             updateIfNecessary();
         }
     }
@@ -74,6 +74,7 @@ public class SensorListener extends Service implements SensorEventListener {
             if (BuildConfig.DEBUG) Logger.log(
                     "saving steps: steps=" + steps + " lastSave=" + lastSaveSteps +
                             " lastSaveTime=" + new Date(lastSaveTime));
+            Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
             Database db = Database.getInstance(this);
             if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
                 int pauseDifference = steps -
@@ -81,7 +82,6 @@ public class SensorListener extends Service implements SensorEventListener {
                                 .getInt("pauseCount", steps);
                 db.insertNewDay(Util.getToday(), steps - pauseDifference);
                 if (pauseDifference > 0) {
-                    // update pauseCount for the new day
                     getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
                             .putInt("pauseCount", steps).commit();
                 }

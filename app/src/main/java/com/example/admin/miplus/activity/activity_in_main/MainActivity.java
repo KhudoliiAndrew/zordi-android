@@ -5,8 +5,13 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -27,11 +32,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.BuildConfig;
 import com.example.admin.miplus.Pedometr.SensorListener;
+import com.example.admin.miplus.Pedometr.StepListener;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
@@ -44,15 +51,36 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
+
+    private long steps = 0;
+
+    private final static String TAG = "StepDetector";
+    private float mLimit = 10;
+    private float mLastValues[] = new float[3 * 2];
+    private float mScale[] = new float[2];
+    private float mYOffset;
+
+    private float mLastDirections[] = new float[3 * 2];
+    private float mLastExtremes[][] = {new float[3 * 2], new float[3 * 2]};
+    private float mLastDiff[] = new float[3 * 2];
+    private int mLastMatch = -1;
+
+    private ArrayList<StepListener> mStepListeners = new ArrayList<StepListener>();
+
+    public MainActivity() {
+        int h = 480;
+        mYOffset = h * 0.5f;
+        mScale[0] = -(h * 0.5f * (1.0f / (SensorManager.STANDARD_GRAVITY * 2)));
+        mScale[1] = -(h * 0.5f * (1.0f / (SensorManager.MAGNETIC_FIELD_EARTH_MAX)));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNotification();
-
-        startService(new Intent(this, SensorListener.class));
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -175,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    private void setNotification(){
+    private void setNotification() {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
@@ -187,5 +215,88 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+
+        if (sSensor == null) {
+            Sensor sensor = event.sensor;
+            synchronized (this) {
+                if (sensor.getType() == Sensor.TYPE_ORIENTATION) {
+                } else {
+                    int j = (sensor.getType() == Sensor.TYPE_ACCELEROMETER) ? 1 : 0;
+                    if (j == 1) {
+                        float vSum = 0;
+                        for (int i = 0; i < 3; i++) {
+                            final float v = mYOffset + event.values[i] * mScale[j];
+                            vSum += v;
+                        }
+                        int k = 0;
+                        float v = vSum / 3;
+
+                        float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
+                        if (direction == -mLastDirections[k]) {
+                            // Direction changed
+                            int extType = (direction > 0 ? 0 : 1); // minumum or maximum?
+                            mLastExtremes[extType][k] = mLastValues[k];
+                            float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
+
+                            if (diff > mLimit) {
+
+                                boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
+                                boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
+                                boolean isNotContra = (mLastMatch != 1 - extType);
+
+                                if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
+                                    steps++;
+                                    Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
+                                    for (StepListener stepListener : mStepListeners) {
+                                        stepListener.onStep();
+                                    }
+                                    mLastMatch = extType;
+                                } else {
+                                    mLastMatch = -1;
+                                }
+                            }
+                            mLastDiff[k] = diff;
+                        }
+                        mLastDirections[k] = direction;
+                        mLastValues[k] = v;
+                    }
+                }
+            }
+        } else {
+            Sensor sensor = event.sensor;
+            float[] values = event.values;
+            int value = -1;
+
+            if (values.length > 0) {
+                value = (int) values[0];
+            }
+            steps++;
+            Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        if (sSensor != null) {
+            sensorManager.registerListener(this, sSensor, SensorManager.SENSOR_DELAY_UI);
+        } else {
+            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
+        }
+
     }
 }
