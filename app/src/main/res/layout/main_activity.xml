@@ -64,10 +64,4 @@
             />
     </android.support.design.widget.NavigationView>
 
-    <!--<fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment"
-        android:id="@+id/steps_information_fragment"/>-->
-
 </android.support.v4.widget.DrawerLayout>

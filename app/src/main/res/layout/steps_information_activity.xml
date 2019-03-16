@@ -9,12 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"/>
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <com.example.admin.miplus.CustomXML.CircleProgressBar
+        android:layout_marginTop="300dp"
+        android:id="@+id/circle_timer_picker"
+        android:layout_width="330dp"
+        android:layout_height="260dp"
+        android:elevation="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Switch" />
+        android:layout_marginBottom="20dp"
+        />
 
 </RelativeLayout>

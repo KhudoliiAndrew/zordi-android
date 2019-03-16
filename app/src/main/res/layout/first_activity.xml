@@ -20,55 +20,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.constraint.ConstraintLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/image_watch"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="50dp"
-                    android:background="@drawable/ic_check_24dp"
-                    android:elevation="1dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/circle_watch"
-                    app:layout_constraintEnd_toEndOf="@+id/circle_watch"
-                    app:layout_constraintStart_toStartOf="@+id/circle_watch"
-                    app:layout_constraintTop_toTopOf="@+id/circle_watch"
-                    app:layout_constraintVertical_bias="0.6" />
-
-                <ImageView
-                    android:id="@+id/circle_watch"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="30dp"
-                    android:background="@drawable/ic_circle_white_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                <com.example.admin.miplus.CustomXML.CircleProgressBar
+                    android:id="@+id/circle_timer_picker"
+                    android:layout_width="300dp"
+                    android:layout_height="200dp"
+                    android:elevation="20dp"
+                    android:layout_centerHorizontal="true" />
                 <TextView
-                    android:id="@+id/how_many_steps_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="-1dp"
-                    android:gravity="center_horizontal"
-                    android:text="6777"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/circle_watch"
-                    app:layout_constraintEnd_toEndOf="@+id/circle_watch"
-                    app:layout_constraintStart_toStartOf="@+id/circle_watch"
-                    app:layout_constraintTop_toTopOf="@+id/circle_watch"
-                    app:layout_constraintVertical_bias="0.59000003" />
+                    android:layout_centerInParent="true"
+                    android:text="dassdsadasdd"
+                    android:textColor="@color/textColorWhite"
+                    android:textSize="20sp"/>
 
-            </android.support.constraint.ConstraintLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,8 +90,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_steps_text"
-                        android:layout_marginTop="40dp"
                         android:layout_marginStart="15dp"
+                        android:layout_marginTop="40dp"
                         android:text="Yesterday"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />

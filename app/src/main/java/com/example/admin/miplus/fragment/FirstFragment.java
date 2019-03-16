@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.util.Util;
 import com.example.admin.miplus.BuildConfig;
+import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.facebook.internal.Logger;
@@ -42,6 +43,7 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.first_activity, container, false);
+
 
         RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
