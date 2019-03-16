@@ -207,7 +207,7 @@ public class CircleProgressBar extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         setmCurrentRadian1(4);
-        setmCurrentRadian(6);
+        setmCurrentRadian(1);
         canvas.save();
         canvas.rotate(-90, mCx, mCy);
         RectF rect = new RectF(mCx - (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCy - (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCx + (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCy + (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine));

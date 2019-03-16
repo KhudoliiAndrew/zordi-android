@@ -31,6 +31,7 @@
                     android:elevation="20dp"
                     android:layout_centerHorizontal="true" />
                 <TextView
+                    android:id="@+id/steps_cuantity_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"

@@ -2,6 +2,7 @@ package com.example.admin.miplus.data_base.models;
 
 public class Profile {
     private int stepsTarget;
+    private int steps;
     private String sleepTarget;
     private String startSleep;
     private String endSleep;
@@ -63,5 +64,14 @@ public class Profile {
         setSleepTarget("7:00");
         setStartRadian(5.763731f);
         setEndRadian(2.096111f);
+        setSteps(0);
+    }
+
+    public int getSteps() {
+        return steps;
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
     }
 }

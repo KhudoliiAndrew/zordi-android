@@ -42,6 +42,8 @@ import com.example.admin.miplus.Pedometr.StepListener;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -50,12 +52,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    private long steps = 0;
+    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
+    private Profile profile = new Profile();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private int steps = 0;
 
     private final static String TAG = "StepDetector";
     private float mLimit = 10;
@@ -106,6 +115,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 signoutOnclick();
             }
         });
+
+        if (dataBaseRepository.getProfile() != null) {
+            profile = dataBaseRepository.getProfile();
+            viewSetter();
+        } else {
+            dataBaseRepository.getProfileTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            profile = task.getResult().toObject(Profile.class);
+                            viewSetter();
+                        }
+                    });
+
+        }
+    }
+
+    private void viewSetter(){
+        TextView stepsText = (TextView) findViewById(R.id.steps_cuantity_text);
+        if(stepsText != null) stepsText.setText(String.valueOf(profile.getSteps()));
     }
 
     private void initBottomNavigationView() {
@@ -252,7 +281,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                                 if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
                                     steps++;
-                                    Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
+                                    profile.setSteps(steps);
+                                    TextView stepsText = (TextView) findViewById(R.id.steps_cuantity_text);
+                                    if(stepsText != null) stepsText.setText(String.valueOf(profile.getSteps()));
                                     for (StepListener stepListener : mStepListeners) {
                                         stepListener.onStep();
                                     }
@@ -277,7 +308,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 value = (int) values[0];
             }
             steps++;
-            Toast.makeText(getBaseContext(), "Steps: " + steps, Toast.LENGTH_LONG).show();
+            profile.setSteps(steps);
+            TextView stepsText = (TextView) findViewById(R.id.steps_cuantity_text);
+            if(stepsText != null) stepsText.setText(String.valueOf(profile.getSteps()));
         }
     }
 
