@@ -1,22 +1,15 @@
 package com.example.admin.miplus.activity.activity_in_main;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.GravityCompat;
@@ -32,31 +25,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.BuildConfig;
-import com.example.admin.miplus.Pedometr.SensorListener;
-import com.example.admin.miplus.Pedometr.StepListener;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
-import com.example.admin.miplus.data_base.DataBaseRepository;
-import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
-import com.example.admin.miplus.fragment.FirstFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 

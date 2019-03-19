@@ -48,8 +48,7 @@
             android:name=".activity.activity_in_main.BluetoothConnectionActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name=".Pedometr.SensorListener"/>
+        <service android:name=".pedometr.SensorListener"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data

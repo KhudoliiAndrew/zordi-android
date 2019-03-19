@@ -43,7 +43,7 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-    private Profile profile;
+    private Profile profile  = new Profile();
     private GeoPoint geoPoint;
 
     private FirebaseAuth mAuth;
@@ -146,14 +146,15 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.getResult() != null && task.getResult().exists()) {
                                 profile = task.getResult().toObject(Profile.class);
+                                Log.d(">>>>>>",  "3333333333");
                             }else {
-                                profile = new Profile();
                                 profile.setDefaultInstance();
                                 dataBaseRepository.setProfile(profile);
+                                Log.d(">>>>>>",  "44444444444");
                             }
                         }
                     });
-            dataBaseRepository.getGeopointTask()
+           /* dataBaseRepository.getGeopointTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -161,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                                 geoPoint = task.getResult().toObject(GeoPoint.class);
                             }
                         }
-                    });
+                    });*/
             Intent GoToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
             LoginActivity.this.startActivity(GoToMainActivity);
             LoginActivity.this.finish();

@@ -27,7 +27,6 @@ public class DataBaseRepository {
     public Task<DocumentSnapshot> getProfileTask() {
         final Task<DocumentSnapshot> task = db.collection("profiles").document(mAuth.getUid()).get();
         task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, Profile>(){
-
             @NonNull
             @Override
             public Task<Profile> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {

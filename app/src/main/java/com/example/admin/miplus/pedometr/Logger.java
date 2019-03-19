@@ -1,4 +1,4 @@
-package com.example.admin.miplus.Pedometr;
+package com.example.admin.miplus.pedometr;
 
 import android.database.Cursor;
 import android.os.Environment;

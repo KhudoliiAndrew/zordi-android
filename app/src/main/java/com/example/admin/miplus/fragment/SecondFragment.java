@@ -259,7 +259,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(">>>>>>", "Location Zordi");
+        //Log.d(">>>>>>", "Location Zordi");
         if (location == null) {
             Toast.makeText(getActivity(), "Can't get current location", Toast.LENGTH_LONG).show();
 
@@ -285,7 +285,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void redrawLine(LatLng latLng) {
-        Log.d(">>>>>>", "Drawing Line");
+      //  Log.d(">>>>>>", "Drawing Line");
         mGoogleMap.clear();  //clears all Markers and Polylines
 
         PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);

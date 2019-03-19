@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.activity_in_main.MainActivity;
@@ -32,11 +33,13 @@ public class SplashActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.getResult() != null && task.getResult().exists()) {
+                                Log.d(">>>>>>",  "11111111111111 ");
                                 profile = task.getResult().toObject(Profile.class);
                                 Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
                                 SplashActivity.this.startActivity(mainIntent);
                                 SplashActivity.this.finish();
                             } else {
+                                Log.d(">>>>>>",  "222222222222");
                                 profile = new Profile();
                                 profile.setDefaultInstance();
                                 dataBaseRepository.setProfile(profile);Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
