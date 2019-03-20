@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.pedometr.StepListener;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
@@ -37,7 +38,7 @@ public class FirstFragment extends Fragment implements SensorEventListener {
     private Profile profile = new Profile();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
+    private CircleProgressBar circleProgressBar;
     private int steps;
 
     private final static String TAG = "StepDetector";
@@ -159,6 +160,9 @@ public class FirstFragment extends Fragment implements SensorEventListener {
                                 //steps++;
                                 profile.setSteps(steps);
                                 dataBaseRepository.setProfile(profile);
+
+                                circleProgressBar = (CircleProgressBar) findViewById(R.id.circle_timer_picker);
+                                circleProgressBar.progressChange(steps, profile.getStepsTarget());
                                 TextView stepsText = (TextView) getActivity().findViewById(R.id.steps_cuantity_text);
                                 if (stepsText != null)
                                     stepsText.setText(String.valueOf(profile.getSteps()));
@@ -210,4 +214,6 @@ public class FirstFragment extends Fragment implements SensorEventListener {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
+
+
 }

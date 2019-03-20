@@ -17,7 +17,7 @@ import com.example.admin.miplus.R;
 
 
 public class CircleProgressBar extends View {
-    private static final String TAG = "CircleTimerView";
+    private static final String TAG = "CircleProgressBar";
 
     private float progress = 0;
     private int max;
@@ -307,5 +307,9 @@ public class CircleProgressBar extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+    }
+
+    public void progressChange(int steps, int maxSteps){
+        setmCurrentRadian((2.28f * steps) / maxSteps);
     }
 }
