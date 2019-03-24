@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.fragment.FirstFragment;
 
 
 public class CircleProgressBar extends View {
@@ -81,7 +82,7 @@ public class CircleProgressBar extends View {
     private float mCx;
     private float mCy;
     private float mRadius;
-    private float mCurrentRadian;
+    private float mCurrentRadian = 4;
     private float mCurrentRadian1;
     private float staticRadian = 2.28f;
     private float staticRadian1 = 4;
@@ -207,7 +208,6 @@ public class CircleProgressBar extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         setmCurrentRadian1(4);
-        setmCurrentRadian(1);
         canvas.save();
         canvas.rotate(-90, mCx, mCy);
         RectF rect = new RectF(mCx - (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCy - (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCx + (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCy + (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine));
@@ -226,12 +226,12 @@ public class CircleProgressBar extends View {
         canvas.restore();
         canvas.save();
         canvas.rotate((float) Math.toDegrees(staticRadian), mCx, mCy);
-        canvas.drawCircle(mCx, getMeasuredHeight() / 2 - mRadius + mCircleStrokeWidth / 2 + mGapBetweenCircleAndLine, 0.01f, mLinePaint);
+        if(getmCurrentRadian() != 2.28f) canvas.drawCircle(mCx, getMeasuredHeight() / 2 - mRadius + mCircleStrokeWidth / 2 + mGapBetweenCircleAndLine, 0.01f, mLinePaint);
 
         canvas.restore();
         canvas.save();
         canvas.rotate((float) Math.toDegrees(staticRadian1), mCx, mCy);
-        canvas.drawCircle(mCx, getMeasuredHeight() / 2 - mRadius + mCircleStrokeWidth / 2 + mGapBetweenCircleAndLine, 0.01f, mLinePaint);
+        //canvas.drawCircle(mCx, getMeasuredHeight() / 2 - mRadius + mCircleStrokeWidth / 2 + mGapBetweenCircleAndLine, 0.01f, mLinePaint);
         canvas.drawCircle(mCx, getMeasuredHeight() / 2 - mRadius + mCircleStrokeWidth / 2 + mGapBetweenCircleAndLine, 0.01f, mProgressLinePaint);
         canvas.restore();
         canvas.save();
@@ -309,7 +309,11 @@ public class CircleProgressBar extends View {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-    public void progressChange(int steps, int maxSteps){
-        setmCurrentRadian((2.28f * steps) / maxSteps);
+    public void progressChange(int steps, int maxSteps) {
+        setmCurrentRadian(((4.56f / maxSteps) * steps) + 4f);
+        if (steps >= maxSteps) {
+            setmCurrentRadian(2.28f);
+        }
+        invalidate();
     }
 }

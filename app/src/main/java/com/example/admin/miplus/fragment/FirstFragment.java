@@ -39,14 +39,12 @@ public class FirstFragment extends Fragment implements SensorEventListener {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private CircleProgressBar circleProgressBar;
-    private int steps;
-
+    private int steps = 0;
     private final static String TAG = "StepDetector";
     private float mLimit = 10;
     private float mLastValues[] = new float[3 * 2];
     private float mScale[] = new float[2];
     private float mYOffset;
-
     private float mLastDirections[] = new float[3 * 2];
     private float mLastExtremes[][] = {new float[3 * 2], new float[3 * 2]};
     private float mLastDiff[] = new float[3 * 2];
@@ -82,11 +80,12 @@ public class FirstFragment extends Fragment implements SensorEventListener {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
-                            viewSetter(view);
+                             viewSetter(view);
                         }
                     });
 
         }
+
 
         RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -124,9 +123,13 @@ public class FirstFragment extends Fragment implements SensorEventListener {
     }
 
     private void viewSetter(View view) {
+        /*View completeCircle = (View) getView().findViewById(R.id.complete_circle);
+        completeCircle.setActivated(false);*/
         steps = profile.getSteps();
         TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_text);
         if (stepsText != null) stepsText.setText(String.valueOf(profile.getSteps()));
+        circleProgressBar = (CircleProgressBar) getActivity().findViewById(R.id.circle_progress_bar);
+        circleProgressBar.progressChange(steps, profile.getStepsTarget());
     }
 
     @Override
@@ -157,15 +160,13 @@ public class FirstFragment extends Fragment implements SensorEventListener {
                             boolean isNotContra = (mLastMatch != 1 - extType);
 
                             if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                                //steps++;
+                                steps++;
                                 profile.setSteps(steps);
                                 dataBaseRepository.setProfile(profile);
-
-                                circleProgressBar = (CircleProgressBar) findViewById(R.id.circle_timer_picker);
+                                circleProgressBar = (CircleProgressBar) getActivity().findViewById(R.id.circle_progress_bar);
                                 circleProgressBar.progressChange(steps, profile.getStepsTarget());
                                 TextView stepsText = (TextView) getActivity().findViewById(R.id.steps_cuantity_text);
-                                if (stepsText != null)
-                                    stepsText.setText(String.valueOf(profile.getSteps()));
+                                if (stepsText != null) stepsText.setText(String.valueOf(steps) + "steps");
                                 for (StepListener stepListener : mStepListeners) {
                                     stepListener.onStep();
                                 }
@@ -185,8 +186,8 @@ public class FirstFragment extends Fragment implements SensorEventListener {
                 if (values.length > 0) {
                     value = (int) values[0];
                 }
-                profile.setSteps(steps);
-                dataBaseRepository.setProfile(profile);
+                //  profile.setSteps(steps);
+                //   dataBaseRepository.setProfile(profile);
                 TextView stepsText = (TextView) getActivity().findViewById(R.id.steps_cuantity_text);
                 if (stepsText != null) stepsText.setText(String.valueOf(profile.getSteps()));
             }
@@ -205,7 +206,7 @@ public class FirstFragment extends Fragment implements SensorEventListener {
         super.onResume();
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        Log.d(">>>>>>", String.valueOf(sensorManager.getSensorList(Sensor.TYPE_ALL)));
+
         if (sSensor != null) {
             sensorManager.registerListener(this, sSensor, SensorManager.SENSOR_DELAY_UI);
 
@@ -214,6 +215,4 @@ public class FirstFragment extends Fragment implements SensorEventListener {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
-
-
 }

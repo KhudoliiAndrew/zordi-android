@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content">
 
                 <com.example.admin.miplus.CustomXML.CircleProgressBar
-                    android:id="@+id/circle_timer_picker"
+                    android:id="@+id/circle_progress_bar"
                     android:layout_width="300dp"
                     android:layout_height="200dp"
                     android:elevation="20dp"
@@ -35,9 +35,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="dassdsadasdd"
                     android:textColor="@color/textColorWhite"
-                    android:textSize="20sp"/>
+                    android:textSize="30sp"/>
+
+             <!--   <View
+                    android:id="@+id/complete_circle"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/ic_circle_white_24"/>-->
 
             </RelativeLayout>
 

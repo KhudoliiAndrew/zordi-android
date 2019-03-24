@@ -195,6 +195,7 @@ public class CircleAlarmTimerView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        Log.d("NNNNNN", String.valueOf(+ getmCurrentRadian()));
         canvas.save();
         canvas.drawCircle(mCx, mCy, mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine, mNumberPaint);
         canvas.save();
