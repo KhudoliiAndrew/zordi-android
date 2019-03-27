@@ -19,11 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.admin.miplus.CustomXML.CircleProgressBar;
-import com.example.admin.miplus.pedometr.StepListener;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
+import com.example.admin.miplus.pedometr.StepCounterService;
+import com.example.admin.miplus.pedometr.StepListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,31 +33,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class FirstFragment extends Fragment implements SensorEventListener {
+public class FirstFragment extends Fragment  {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private CircleProgressBar circleProgressBar;
-    private int steps = 0;
-    private final static String TAG = "StepDetector";
-    private float mLimit = 10;
-    private float mLastValues[] = new float[3 * 2];
-    private float mScale[] = new float[2];
-    private float mYOffset;
-    private float mLastDirections[] = new float[3 * 2];
-    private float mLastExtremes[][] = {new float[3 * 2], new float[3 * 2]};
-    private float mLastDiff[] = new float[3 * 2];
-    private int mLastMatch = -1;
 
-    private ArrayList<StepListener> mStepListeners = new ArrayList<StepListener>();
+    private StepCounterService stepCounterService = new StepCounterService();
 
+    public void setSteps(int steps) {
+        this.steps = steps;
+    }
+
+    private int steps;
     public FirstFragment() {
-        int h = 480;
-        mYOffset = h * 0.5f;
-        mScale[0] = -(h * 0.5f * (1.0f / (SensorManager.STANDARD_GRAVITY * 2)));
-        mScale[1] = -(h * 0.5f * (1.0f / (SensorManager.MAGNETIC_FIELD_EARTH_MAX)));
+
     }
 
     public static FirstFragment getInstance() {
@@ -73,17 +66,16 @@ public class FirstFragment extends Fragment implements SensorEventListener {
 
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
-            viewSetter(view);
+            viewSetter();
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
-                             viewSetter(view);
+                            viewSetter();
                         }
                     });
-
         }
 
 
@@ -122,97 +114,15 @@ public class FirstFragment extends Fragment implements SensorEventListener {
         fragmentTransaction.commit();
     }
 
-    private void viewSetter(View view) {
+    public void viewSetter() {
         /*View completeCircle = (View) getView().findViewById(R.id.complete_circle);
         completeCircle.setActivated(false);*/
-        steps = profile.getSteps();
-        TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_text);
-        if (stepsText != null) stepsText.setText(String.valueOf(profile.getSteps()));
-        circleProgressBar = (CircleProgressBar) getActivity().findViewById(R.id.circle_progress_bar);
-        circleProgressBar.progressChange(steps, profile.getStepsTarget());
+        steps = stepCounterService.getSteps();
+      //  TextView stepsText = (TextView) getView().findViewById(R.id.steps_cuantity_text);
+      //  stepsText.setText(String.valueOf(steps));
+      ///  circleProgressBar = (CircleProgressBar) getView().findViewById(R.id.circle_progress_bar);
+      //  circleProgressBar.progressChange(steps, profile.getStepsTarget());
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (getActivity() != null) {
-            Sensor sensor = event.sensor;
-            if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                synchronized (this) {
-                    float vSum = 0;
-                    for (int i = 0; i < 3; i++) {
-                        final float v = mYOffset + event.values[i] * mScale[1];
-                        vSum += v;
-                    }
-                    int k = 0;
-                    float v = vSum / 3;
 
-                    float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
-                    if (direction == -mLastDirections[k]) {
-                        // Direction changed
-                        int extType = (direction > 0 ? 0 : 1); // minumum or maximum?
-                        mLastExtremes[extType][k] = mLastValues[k];
-                        float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
-
-                        if (diff > mLimit) {
-
-                            boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
-                            boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
-                            boolean isNotContra = (mLastMatch != 1 - extType);
-
-                            if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                                steps++;
-                                profile.setSteps(steps);
-                                dataBaseRepository.setProfile(profile);
-                                circleProgressBar = (CircleProgressBar) getActivity().findViewById(R.id.circle_progress_bar);
-                                circleProgressBar.progressChange(steps, profile.getStepsTarget());
-                                TextView stepsText = (TextView) getActivity().findViewById(R.id.steps_cuantity_text);
-                                if (stepsText != null) stepsText.setText(String.valueOf(steps) + "steps");
-                                for (StepListener stepListener : mStepListeners) {
-                                    stepListener.onStep();
-                                }
-                                mLastMatch = extType;
-                            } else {
-                                mLastMatch = -1;
-                            }
-                        }
-                        mLastDiff[k] = diff;
-                    }
-                    mLastDirections[k] = direction;
-                    mLastValues[k] = v;
-                }
-            } else {
-                float[] values = event.values;
-                int value = -1;
-                if (values.length > 0) {
-                    value = (int) values[0];
-                }
-                //  profile.setSteps(steps);
-                //   dataBaseRepository.setProfile(profile);
-                TextView stepsText = (TextView) getActivity().findViewById(R.id.steps_cuantity_text);
-                if (stepsText != null) stepsText.setText(String.valueOf(profile.getSteps()));
-            }
-        } else {
-            return;
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        SensorManager sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-
-        if (sSensor != null) {
-            sensorManager.registerListener(this, sSensor, SensorManager.SENSOR_DELAY_UI);
-
-        } else {
-            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
-        }
-    }
 }

@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-    private Profile profile;
+    private Profile profile = new Profile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +33,14 @@ public class SplashActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.getResult() != null && task.getResult().exists()) {
-                                Log.d(">>>>>>",  "11111111111111 ");
                                 profile = task.getResult().toObject(Profile.class);
                                 Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
                                 SplashActivity.this.startActivity(mainIntent);
                                 SplashActivity.this.finish();
                             } else {
-                                Log.d(">>>>>>",  "222222222222");
-                                profile = new Profile();
                                 profile.setDefaultInstance();
-                                dataBaseRepository.setProfile(profile);Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                                dataBaseRepository.setProfile(profile);
+                                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
                                 SplashActivity.this.startActivity(mainIntent);
                                 SplashActivity.this.finish();
                             }

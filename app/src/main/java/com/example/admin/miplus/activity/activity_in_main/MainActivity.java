@@ -34,6 +34,7 @@ import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
+import com.example.admin.miplus.pedometr.StepCounterService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNotification();
+        startService(new Intent(this, StepCounterService.class));
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

@@ -18,7 +18,6 @@ public class DataBaseRepository {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Profile profile;
     private GeoPoint geoPoint;
-    final FirebaseUser currentUser = mAuth.getCurrentUser();
 
     public void setProfile(Profile profile){
         db.collection("profiles").document(mAuth.getUid()).set(profile);
