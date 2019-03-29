@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setContentNavigationView() {
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                setHeaderContent();
             }
 
             @Override
@@ -130,15 +131,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                final TextView name = (TextView) findViewById(R.id.user_name_google);
-                final TextView email = (TextView) findViewById(R.id.user_email_google);
-                final ImageView logo = (ImageView) findViewById(R.id.user_logo_google);
-                name.setText(mAuth.getCurrentUser().getDisplayName());
-                email.setText(mAuth.getCurrentUser().getEmail());
-                Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
+                setHeaderContent();
             }
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+    }
+
+    private void setHeaderContent(){
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final TextView name = (TextView) findViewById(R.id.user_name_google);
+        final TextView email = (TextView) findViewById(R.id.user_email_google);
+        final ImageView logo = (ImageView) findViewById(R.id.user_logo_google);
+        name.setText(mAuth.getCurrentUser().getDisplayName());
+        email.setText(mAuth.getCurrentUser().getEmail());
+        Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
     }
 
     public void signoutOnclick() {
@@ -171,6 +177,16 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
+
+            int count = getSupportFragmentManager().getBackStackEntryCount();
+
+            if (count == 0) {
+                super.onBackPressed();
+                //additional code
+            } else {
+                getSupportFragmentManager().popBackStack();
+            }
+
     }
 
     private void setNotification() {

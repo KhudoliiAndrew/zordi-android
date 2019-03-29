@@ -23,17 +23,17 @@ public class StepsInformationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        initToolbar();
-
-        return inflater.inflate(R.layout.steps_information_activity, container,false);
+        final View view = inflater.inflate(R.layout.steps_information_activity, container, false);
+        initToolbar(view);
+        return view;
     }
 
-    private void initToolbar(){
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbarSteps);
+    private void initToolbar(View view){
+        /*Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarSteps);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ActionBar actionbar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        //actionbar.setDisplayHomeAsUpEnabled(true);
-        //actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);*/
 
 
 
@@ -51,7 +51,8 @@ public class StepsInformationFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-
+        //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
+
+
 }

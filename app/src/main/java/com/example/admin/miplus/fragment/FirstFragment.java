@@ -40,14 +40,14 @@ public class FirstFragment extends Fragment  {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private CircleProgressBar circleProgressBar;
-
+    private int steps;
     private StepCounterService stepCounterService = new StepCounterService();
 
     public void setSteps(int steps) {
         this.steps = steps;
     }
 
-    private int steps;
+
     public FirstFragment() {
 
     }
@@ -109,9 +109,7 @@ public class FirstFragment extends Fragment  {
     private void toStepsInformation() {
         StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
         FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(android.R.id.content, stepsInformationFragment);
-        fragmentTransaction.commit();
+        fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).commit();
     }
 
     public void viewSetter() {
