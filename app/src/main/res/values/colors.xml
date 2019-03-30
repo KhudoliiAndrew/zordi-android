@@ -16,6 +16,7 @@
     <color name="colorBackgroundDialog">#e7e7e7</color>
     <color name="colorNavigationViewLine">#D3D3D3</color>
 
+    <color name="colorGrayBackground">#E9E9E9</color>
     <color name="colorBackgroundCircleSleepPicker">#6AAFB2BE</color>
     <color name="colorCheckCircleSleepPicker">#002069</color>
 </resources>
