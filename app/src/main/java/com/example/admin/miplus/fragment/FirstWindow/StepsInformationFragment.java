@@ -24,34 +24,36 @@ public class StepsInformationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.steps_information_activity, container, false);
-        initToolbar(view);
+        initToolbar();
         return view;
     }
 
-    private void initToolbar(View view){
-        /*Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarSteps);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ActionBar actionbar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);*/
-
-
-
-        //actionbar.setDisplayShowHomeEnabled(true);
-      /*  toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
-            }
-        });*/
-
-
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+        actionbar.setDisplayShowHomeEnabled(true);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+    }
+
+    private void closefragment() {
+        int count = getActivity().getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count != 0) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
     }
 
 

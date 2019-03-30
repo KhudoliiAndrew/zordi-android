@@ -113,6 +113,17 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home && getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawerLayout.openDrawer(GravityCompat.START);
+        } else {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setContentNavigationView() {
 
 
@@ -137,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
-    private void setHeaderContent(){
+    private void setHeaderContent() {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final TextView name = (TextView) findViewById(R.id.user_name_google);
         final TextView email = (TextView) findViewById(R.id.user_email_google);
@@ -177,16 +188,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
-
-            int count = getSupportFragmentManager().getBackStackEntryCount();
-
-            if (count == 0) {
-                super.onBackPressed();
-                //additional code
-            } else {
-                getSupportFragmentManager().popBackStack();
-            }
-
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0)
+            getSupportFragmentManager().popBackStack();
     }
 
     private void setNotification() {

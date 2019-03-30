@@ -109,7 +109,7 @@ public class FirstFragment extends Fragment  {
     private void toStepsInformation() {
         StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
     }
 
     public void viewSetter() {

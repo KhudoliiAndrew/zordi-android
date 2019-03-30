@@ -42,6 +42,11 @@
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragments_container"/>
+
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
@@ -66,10 +71,6 @@
             android:text="Log Out" />
     </android.support.design.widget.NavigationView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
-        android:id="@+id/fragments_container"/>
+
 
 </android.support.v4.widget.DrawerLayout>
