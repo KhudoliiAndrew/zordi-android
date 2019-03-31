@@ -51,8 +51,11 @@ public class StepsInformationFragment extends Fragment {
         List<PointValue> values = new ArrayList<PointValue>();
         values.add(new PointValue(0.2f, 0.4f));
         values.add(new PointValue(1, 2.5f));
-        values.add(new PointValue(2, 0));
+        values.add(new PointValue(2, 1));
         values.add(new PointValue(3, 4));
+        values.add(new PointValue(4, 4));
+        values.add(new PointValue(5, 4));
+        values.add(new PointValue(6, 20));
 
         //In most cased you can call data model methods in builder-pattern-like manner.
         Line line = new Line(values).setColor(getResources().getColor(R.color.colorPrimary)).setCubic(true).setHasPoints(false);
