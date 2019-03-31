@@ -6,7 +6,7 @@
     android:layout_marginTop="56dp"
     android:background="@color/colorBackground"
     android:orientation="vertical"
-    android:theme="@style/AppTheme">
+    android:theme="@style/AppThemeWithTransparentStatusBAr">
 
     <RelativeLayout
         android:id="@+id/main_information_container"

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
-        setTheme(R.style.AppTheme);
+        setTheme(R.style.AppThemeWithTransparentStatusBAr);
         setContentView(R.layout.main_activity);
         initBottomNavigationView();
         initToolbar();
