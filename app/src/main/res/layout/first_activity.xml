@@ -112,15 +112,17 @@
                         android:layout_marginEnd="40dp"
                         android:text="1243"
                         android:textColor="@color/textColor"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:id="@+id/steps_cuantity_card_text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_steps_text"
                         android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="35dp"
                         android:layout_marginTop="40dp"
-                        android:text="Steps quantity"
+                        android:text="Steps"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 

@@ -22,6 +22,7 @@ import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.data_base.models.StepsData;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.example.admin.miplus.pedometr.StepCounterService;
 import com.example.admin.miplus.pedometr.StepListener;
@@ -37,6 +38,7 @@ public class FirstFragment extends Fragment  {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
+    private StepsData stepsData = new StepsData();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private CircleProgressBar circleProgressBar;
@@ -66,14 +68,14 @@ public class FirstFragment extends Fragment  {
 
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
-            viewSetter();
+            viewSetter(view);
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
-                            viewSetter();
+                            viewSetter(view);
                         }
                     });
         }
@@ -112,14 +114,17 @@ public class FirstFragment extends Fragment  {
         fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
     }
 
-    public void viewSetter() {
+    public void viewSetter(View view) {
+        dataBaseRepository.setStepsData(stepsData);
         /*View completeCircle = (View) getView().findViewById(R.id.complete_circle);
         completeCircle.setActivated(false);*/
-        steps = stepCounterService.getSteps();
+        //steps = stepCounterService.getSteps();
       //  TextView stepsText = (TextView) getView().findViewById(R.id.steps_cuantity_text);
       //  stepsText.setText(String.valueOf(steps));
       ///  circleProgressBar = (CircleProgressBar) getView().findViewById(R.id.circle_progress_bar);
       //  circleProgressBar.progressChange(steps, profile.getStepsTarget());
+        TextView cardStepsText = (TextView) view.findViewById(R.id.steps_cuantity_card_text);
+        cardStepsText.setText(String.valueOf(steps));
     }
 
 

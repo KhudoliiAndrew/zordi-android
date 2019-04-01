@@ -121,7 +121,6 @@ public class StepCounterService extends Service implements SensorEventListener {
                                 steps++;
                                 FirstFragment firstFragment = new FirstFragment();
                                 firstFragment.setSteps(steps);
-                                firstFragment.viewSetter();
                                 if (profile != null && steps % 30 == 0) {
                                     profile.setSteps(steps);
                                     dataBaseRepository.setProfile(profile);
