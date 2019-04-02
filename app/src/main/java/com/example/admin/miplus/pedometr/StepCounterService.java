@@ -1,5 +1,6 @@
 package com.example.admin.miplus.pedometr;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +8,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.admin.miplus.CustomXML.CircleProgressBar;
@@ -21,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -44,9 +50,9 @@ public class StepCounterService extends Service implements SensorEventListener {
 
     private ArrayList<StepListener> mStepListeners = new ArrayList<StepListener>();
 
-    public int getSteps() {
-        return steps;
-    }
+    private MyBinder mLocalbinder = new MyBinder();
+    private CallBack mCallBack;
+
 
     public StepCounterService() {
         int h = 480;
@@ -56,16 +62,11 @@ public class StepCounterService extends Service implements SensorEventListener {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             steps = profile.getSteps();
+            if(mCallBack != null) mCallBack.setSteps(steps);
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -73,9 +74,12 @@ public class StepCounterService extends Service implements SensorEventListener {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
                             steps = profile.getSteps();
+                            if(mCallBack != null) mCallBack.setSteps(steps);
                         }
                     });
         }
+
+
 
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -119,8 +123,7 @@ public class StepCounterService extends Service implements SensorEventListener {
 
                             if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
                                 steps++;
-                                FirstFragment firstFragment = new FirstFragment();
-                                firstFragment.setSteps(steps);
+                                if(mCallBack != null) mCallBack.setSteps(steps);
                                 if (profile != null && steps % 30 == 0) {
                                     profile.setSteps(steps);
                                     dataBaseRepository.setProfile(profile);
@@ -147,29 +150,34 @@ public class StepCounterService extends Service implements SensorEventListener {
 
     }
 
-  /*  @Override
-    public void onResume() {
-        super.onResume();
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-
-        if (sSensor != null) {
-            sensorManager.registerListener(this, sSensor, SensorManager.SENSOR_DELAY_UI);
-
-        } else {
-            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
-        }
-    }*/
-
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         if (profile != null) {
             profile.setSteps(steps);
             dataBaseRepository.setProfile(profile);
         }
         startService(new Intent(this, StepCounterService.class));
+        super.onDestroy();
+    }
+
+    @Nullable
+    public IBinder onBind(Intent intent) {
+        return mLocalbinder;
+    }
+
+    public class MyBinder extends Binder {
+        public StepCounterService getService() {
+            return StepCounterService.this;
+        }
+    }
+
+    public void setCallBack(CallBack callBack) {
+        mCallBack = callBack;
+    }
+
+    public interface CallBack {
+        void setSteps(int steps);
     }
 }
+
+

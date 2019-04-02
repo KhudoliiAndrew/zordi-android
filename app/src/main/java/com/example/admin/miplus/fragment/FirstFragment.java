@@ -1,17 +1,15 @@
 package com.example.admin.miplus.fragment;
 
+import android.content.ComponentName;
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,16 +23,13 @@ import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.StepsData;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.example.admin.miplus.pedometr.StepCounterService;
-import com.example.admin.miplus.pedometr.StepListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-
-public class FirstFragment extends Fragment  {
+public class FirstFragment extends Fragment implements StepCounterService.CallBack {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
@@ -43,15 +38,18 @@ public class FirstFragment extends Fragment  {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private CircleProgressBar circleProgressBar;
     private int steps;
-    private StepCounterService stepCounterService = new StepCounterService();
+    private StepCounterService stepCounterService;
 
     public void setSteps(int steps) {
         this.steps = steps;
-    }
-
-
-    public FirstFragment() {
-
+        if (getView() != null) {
+            TextView stepsText = (TextView) getView().findViewById(R.id.steps_cuantity_text);
+            stepsText.setText(String.valueOf(steps));
+            circleProgressBar = (CircleProgressBar) getView().findViewById(R.id.circle_progress_bar);
+            circleProgressBar.progressChange(steps, profile.getStepsTarget());
+            TextView cardStepsText = (TextView) getView().findViewById(R.id.steps_cuantity_card_text);
+            cardStepsText.setText(String.valueOf(steps));
+        }
     }
 
     public static FirstFragment getInstance() {
@@ -65,7 +63,6 @@ public class FirstFragment extends Fragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.first_activity, container, false);
-
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             viewSetter(view);
@@ -80,6 +77,7 @@ public class FirstFragment extends Fragment  {
                     });
         }
 
+        bindService();
 
         RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -115,17 +113,45 @@ public class FirstFragment extends Fragment  {
     }
 
     public void viewSetter(View view) {
-        dataBaseRepository.setStepsData(stepsData);
-        /*View completeCircle = (View) getView().findViewById(R.id.complete_circle);
-        completeCircle.setActivated(false);*/
-        //steps = stepCounterService.getSteps();
-      //  TextView stepsText = (TextView) getView().findViewById(R.id.steps_cuantity_text);
-      //  stepsText.setText(String.valueOf(steps));
-      ///  circleProgressBar = (CircleProgressBar) getView().findViewById(R.id.circle_progress_bar);
-      //  circleProgressBar.progressChange(steps, profile.getStepsTarget());
+        steps = profile.getSteps();
+        TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_text);
+        circleProgressBar = (CircleProgressBar) view.findViewById(R.id.circle_progress_bar);
         TextView cardStepsText = (TextView) view.findViewById(R.id.steps_cuantity_card_text);
+
+        stepsText.setText(String.valueOf(steps));
+        circleProgressBar.progressChange(steps, profile.getStepsTarget());
         cardStepsText.setText(String.valueOf(steps));
     }
 
+    private ServiceConnection connection = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            StepCounterService.MyBinder binder = (StepCounterService.MyBinder) service;
+            stepCounterService = binder.getService();
+            stepCounterService.setCallBack(FirstFragment.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            if (stepCounterService != null) stepCounterService.setCallBack(null);
+        }
+    };
+
+    private void bindService() {
+        Intent intent = new Intent(getActivity(), StepCounterService.class);
+        getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onDestroy() {
+        // stepCounterService.unbindService(connection);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        //stepCounterService.unbindService(connection);
+        super.onDetach();
+    }
 }

@@ -73,7 +73,7 @@ public class DataBaseRepository {
     public void setStepsData(StepsData stepsData){
         Date currentDate = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = df.format(Calendar.getInstance().getTime());
+        String formattedDate = df.format(currentDate);
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         db.collection("stepsInformation").document(mAuth.getUid()).collection(String.valueOf(formattedDate)).document(timeFormat.format(currentDate)).set(stepsData);
         Log.d("TIMETIMETIMETIMETIME",  "DATA: " + String.valueOf(formattedDate) + "Time: "  + timeFormat.format(currentDate));
