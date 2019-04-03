@@ -190,13 +190,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
 
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START);
         } else{
             if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 getSupportFragmentManager().popBackStack();
+            } else {
+                if(viewPager.getCurrentItem() != 0){
+                    viewPager.setCurrentItem(0);
+                    bottomNavigationView.getMenu().findItem(R.id.item_main).setChecked(true);
+                }
             }
+
         }
     }
 
