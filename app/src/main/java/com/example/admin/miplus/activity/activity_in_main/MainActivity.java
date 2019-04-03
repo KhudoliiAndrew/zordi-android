@@ -1,9 +1,11 @@
 package com.example.admin.miplus.activity.activity_in_main;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -30,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.BuildConfig;
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.Services.NotificationReceiver;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
@@ -43,6 +46,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final int NOTIFICATION_REMINDER_NIGHT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (item.getItemId() == android.R.id.home && getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawerLayout.openDrawer(GravityCompat.START);
         } else {
             onBackPressed();
@@ -125,8 +130,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setContentNavigationView() {
-
-
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar, GravityCompat.START, GravityCompat.END) {
@@ -187,24 +190,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerLayout.closeDrawer(GravityCompat.START);
-        if (getSupportFragmentManager().getBackStackEntryCount() != 0)
-            getSupportFragmentManager().popBackStack();
+
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else{
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                getSupportFragmentManager().popBackStack();
+            }
+        }
     }
 
     private void setNotification() {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Title")
-                        .setContentText("Notification text");
-
-        Notification notification = builder.build();
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
+        Intent notifyIntent = new Intent(this, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast
+                (this, NOTIFICATION_REMINDER_NIGHT, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(this.ALARM_SERVICE);
     }
+
 
 
 }

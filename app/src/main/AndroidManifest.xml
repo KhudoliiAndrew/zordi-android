@@ -36,6 +36,10 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".Services.NotificationService"
+            android:exported="false" />
+
         <activity
             android:name=".activity.activity_in_main.MainActivity"
             android:screenOrientation="portrait" />
@@ -71,6 +75,14 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".Services.NotificationReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
+
+        <receiver android:name=".Services.AlarmReceiver" />
     </application>
 
 

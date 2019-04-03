@@ -1,5 +1,9 @@
 package com.example.admin.miplus.fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.Services.AlarmReceiver;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.Dialogs.SleepRangeDialogFragment;
@@ -88,6 +93,13 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         stepsText.setText(String.valueOf(profile.getStepsTarget()));
         TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
         sleepText.setText(String.valueOf(profile.getSleepTarget()));
+    }
+
+    private void setAlarm(){
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, Integer.parseInt(profile.getEndSleep()), pendingIntent);
     }
 
     @Override
