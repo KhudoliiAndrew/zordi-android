@@ -35,8 +35,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:text="0"
                     android:textColor="@color/textColorWhite"
                     android:textSize="30sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/steps_cuantity_text"
+                    android:text="steps"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/textColorWhite"
+                    android:textSize="15sp"/>
 
              <!--   <View
                     android:id="@+id/complete_circle"
