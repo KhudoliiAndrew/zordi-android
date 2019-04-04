@@ -46,7 +46,8 @@
                     android:text="steps"
                     android:layout_centerVertical="true"
                     android:textColor="@color/textColorWhite"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp"
+                    android:paddingTop="8dp"/>
 
              <!--   <View
                     android:id="@+id/complete_circle"

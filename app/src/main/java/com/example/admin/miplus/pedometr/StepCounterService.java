@@ -156,7 +156,6 @@ public class StepCounterService extends Service implements SensorEventListener {
             profile.setSteps(steps);
             dataBaseRepository.setProfile(profile);
         }
-        startService(new Intent(this, StepCounterService.class));
         super.onDestroy();
     }
 

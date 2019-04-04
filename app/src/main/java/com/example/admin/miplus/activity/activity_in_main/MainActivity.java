@@ -22,6 +22,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -53,7 +54,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNotification();
-        startService(new Intent(this, StepCounterService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(this, StepCounterService.class));
+        } else {
+            startService(new Intent(this, StepCounterService.class));
+            Log.d(">>>>>>", "sdadfasdsadsa");
+        }
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -79,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 signoutOnclick();
             }
         });
-
-
     }
 
     private void initBottomNavigationView() {
