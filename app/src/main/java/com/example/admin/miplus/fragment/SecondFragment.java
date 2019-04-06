@@ -1,25 +1,34 @@
 package com.example.admin.miplus.fragment;
 
 import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.GeoData;
+import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,16 +40,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
     private static final int LAYOUT = R.layout.second_activity;
 
     private GoogleMap mGoogleMap;
@@ -49,6 +61,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private TextView checkGoogleServices;
     private LocationRequest mLocationRequest;
     private ArrayList<LatLng> points;
+    private GeoData geoData = new GeoData();
+    private DataBaseRepository dataBaseRepository = new DataBaseRepository();
     public Polyline line;
 
     private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -84,6 +98,10 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         permissionsToRequest = permissionsToRequest(permissions);
 
+        Button btn;
+        btn = (Button) view.findViewById(R.id.myLocationButton);
+        btn.setOnClickListener(this);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (permissionsToRequest.size() > 0) {
                 requestPermissions(permissionsToRequest.
@@ -93,6 +111,15 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         return view;
     }
+
+    @Override
+    public void onClick(View v) {
+        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
+        mGoogleMap.animateCamera(update);
+    }
+
 
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions) {
         ArrayList<String> result = new ArrayList<>();
@@ -119,6 +146,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
+
     }
 
     @Override
@@ -195,6 +223,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         //permission ok, we get last location
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         startLocationUpdates();
+
     }
 
     private void startLocationUpdates() {
@@ -234,6 +263,10 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
             mGoogleMap.animateCamera(update);
 
+            geoData.setUserPosition(location.getLatitude(), location.getLongitude());
+            geoData.setDate(new Date());
+            dataBaseRepository.setGeoData(geoData);
+
             points.add(ll);
 
             redrawLine(ll);
@@ -257,12 +290,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
 
+
+
     public BitmapDescriptor getMarkerIcon(String color) {
         float[] hsv = new float[3];
         Color.colorToHSV(Color.parseColor(color), hsv);
         return BitmapDescriptorFactory.defaultMarker(hsv[0]);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -297,6 +331,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 } else {
                     if (mGoogleApiClient != null) {
                         mGoogleApiClient.connect();
+                        //permission ok, we get last location
+                        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        startLocationUpdates();
                     }
                 }
                 break;

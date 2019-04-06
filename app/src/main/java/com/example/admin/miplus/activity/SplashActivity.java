@@ -37,10 +37,11 @@ public class SplashActivity extends AppCompatActivity {
                                 Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
                                 SplashActivity.this.startActivity(mainIntent);
                                 SplashActivity.this.finish();
-                            } else {
                                 profile = new Profile();
                                 profile.setDefaultInstance();
-                                dataBaseRepository.setProfile(profile);Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                                dataBaseRepository.setProfile(profile);
+                            } else {
+                                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
                                 SplashActivity.this.startActivity(mainIntent);
                                 SplashActivity.this.finish();
                             }

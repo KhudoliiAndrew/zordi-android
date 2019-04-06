@@ -69,7 +69,6 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                             viewSetter(view);
                         }
                     });
-
         }
 
 
