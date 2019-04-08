@@ -62,8 +62,8 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         }
 
 
-        Button stepsButton = (Button) view.findViewById(R.id.steps_watch_button);
-        Button sleepButton = (Button) view.findViewById(R.id.waking_watch_button);
+        TextView stepsButton = (TextView) view.findViewById(R.id.steps_watch_button);
+        TextView sleepButton = (TextView) view.findViewById(R.id.waking_watch_button);
 
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override

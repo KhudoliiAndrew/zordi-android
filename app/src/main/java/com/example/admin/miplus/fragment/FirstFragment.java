@@ -83,7 +83,7 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //toStepsInformation();
+                toStepsInformation();
             }
         });
 
