@@ -13,21 +13,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.Services.AlarmReceiver;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.fragment.Dialogs.HeightDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.SleepRangeDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.StepsTargetDialogFragment;
+import com.example.admin.miplus.fragment.Dialogs.WeightDialogFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget {
+public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget, HeightDialogFragment.PushHeight, WeightDialogFragment.PushWeight {
     private View view;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
@@ -64,6 +67,8 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
 
         TextView stepsButton = (TextView) view.findViewById(R.id.steps_watch_button);
         TextView sleepButton = (TextView) view.findViewById(R.id.waking_watch_button);
+        RelativeLayout heightbutton = (RelativeLayout) view.findViewById(R.id.height_container);
+        RelativeLayout weigthbutton = (RelativeLayout) view.findViewById(R.id.weight_container);
 
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,14 +90,39 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
 
             }
         });
+
+        heightbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (profile != null) {
+                    DialogFragment dlgf3 = new HeightDialogFragment(profile.getHeight(), ThirdFragment.this);
+                    dlgf3.show(getFragmentManager(), "dlgf3");
+                }
+            }
+        });
+
+        weigthbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (profile != null) {
+                    DialogFragment dlgf4 = new WeightDialogFragment(profile.getWeight(), ThirdFragment.this);
+                    dlgf4.show(getFragmentManager(), "dlgf4");
+                }
+            }
+        });
         return view;
     }
 
     private void viewSetter(View view){
         TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-        stepsText.setText(String.valueOf(profile.getStepsTarget()));
         TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
+        TextView heightText = (TextView) view.findViewById(R.id.height_text);
+        TextView weightText = (TextView) view.findViewById(R.id.weight_text);
+        stepsText.setText(String.valueOf(profile.getStepsTarget()));
         sleepText.setText(String.valueOf(profile.getSleepTarget()));
+        heightText.setText(String.valueOf(profile.getHeight() + " cm"));
+        weightText.setText(String.valueOf(profile.getWeight() + " kg"));
+
     }
 
     private void setAlarm(){
@@ -140,5 +170,21 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public void endSleep(String endSleep) {
         profile.setEndSleep(endSleep);
         dataBaseRepository.setProfile(profile);
+    }
+
+    @Override
+    public void height(int height) {
+        profile.setHeight(height);
+        dataBaseRepository.setProfile(profile);
+        TextView heightText = (TextView) view.findViewById(R.id.height_text);
+        heightText.setText(String.valueOf(profile.getHeight() + " cm"));
+    }
+
+    @Override
+    public void weight(int weight) {
+        profile.setWeight(weight);
+        dataBaseRepository.setProfile(profile);
+        TextView weightText = (TextView) view.findViewById(R.id.weight_text);
+        weightText.setText(String.valueOf(profile.getWeight() + " kg"));
     }
 }

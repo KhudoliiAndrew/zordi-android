@@ -1,5 +1,4 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,11 +18,54 @@
             android:orientation="vertical">
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/connection_field"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/connection_field">
+                android:layout_height="wrap_content">
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/water_counter_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/water_counter_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/textColorWhite"
+                        android:textSize="40sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/ic_add_white_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/water_counter_text"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/ic_remove_white_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/water_counter_text"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
 
                 <RelativeLayout
+                    android:id="@+id/height_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -31,9 +73,9 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/primary_background_card"
                     android:elevation="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/water_counter_container">
 
                     <TextView
                         android:id="@+id/height_title"
@@ -46,6 +88,7 @@
                         android:textSize="10sp" />
 
                     <TextView
+                        android:id="@+id/height_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@id/height_title"
@@ -60,17 +103,18 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/weight_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
                     android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/primary_background_card"
                     android:elevation="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/water_counter_container">
 
                     <TextView
                         android:id="@+id/weight_title"
@@ -83,6 +127,7 @@
                         android:textSize="10sp" />
 
                     <TextView
+                        android:id="@+id/weight_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@id/weight_title"
@@ -137,9 +182,9 @@
                         android:id="@+id/steps_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:gravity="center_vertical"
                         android:layout_below="@id/activity_target_watch_text"
                         android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
                         android:text="Steps"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -165,22 +210,22 @@
                         android:id="@+id/waking_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:gravity="center_vertical"
                         android:layout_below="@id/steps_watch_button"
                         android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
                         android:onClick="toSleepSetActivity"
                         android:text="Wake"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/sleep_length_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@id/waking_watch_button"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="10dp"
-                        android:id="@+id/sleep_length_text"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
                 </RelativeLayout>
@@ -215,10 +260,10 @@
                         android:id="@+id/light_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:gravity="center_vertical"
                         android:layout_below="@id/theme_watch_text"
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
                         android:text="Light"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -240,7 +285,7 @@
                             android:layout_alignBottom="@id/light_watch_button"
                             android:layout_alignParentEnd="true"
                             android:layout_marginBottom="15dp"
-                            android:theme="@style/SwitchStyle"/>
+                            android:theme="@style/SwitchStyle" />
 
                         <RadioButton
                             android:id="@+id/dark_theme_switch"
@@ -248,7 +293,7 @@
                             android:layout_height="match_parent"
                             android:layout_alignBottom="@id/dark_watch_button"
                             android:layout_alignParentEnd="true"
-                            android:theme="@style/SwitchStyle"/>
+                            android:theme="@style/SwitchStyle" />
                     </RadioGroup>
 
 
@@ -262,9 +307,9 @@
                         android:id="@+id/dark_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:gravity="center_vertical"
                         android:layout_below="@id/light_watch_button"
                         android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
                         android:text="Dark"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -301,11 +346,11 @@
                         android:id="@+id/goalAchievement_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:gravity="center_vertical"
                         android:layout_below="@id/notification_watch_text"
                         android:layout_marginStart="0dp"
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
                         android:text="Goal Achievement"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -317,7 +362,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="10dp"
-                        android:theme="@style/SwitchStyle"/>
+                        android:theme="@style/SwitchStyle" />
 
                     <View
                         android:layout_width="match_parent"
@@ -329,9 +374,9 @@
                         android:id="@+id/uponWaking_watch_button"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:gravity="center_vertical"
                         android:layout_below="@id/goalAchievement_watch_button"
                         android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
                         android:text="Upon Waking"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />

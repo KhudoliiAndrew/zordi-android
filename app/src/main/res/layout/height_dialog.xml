@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_fragment_background">
+
+    <TextView
+        android:id="@+id/text_height_dialog"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:text="Set your height, please"
+        android:textColor="@color/textColorWhite"
+        android:textSize="23sp" />
+
+    <RelativeLayout
+        android:id="@+id/height_picker_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_height_dialog">
+
+        <com.example.admin.miplus.CustomXML.ForFormatterPicker
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/height_picker"
+            android:background="@drawable/steps_picker_background"/>
+
+    <!--    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cm"
+            android:textColor="@color/textColor"
+            android:textSize="27dp"
+            android:/>-->
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/ok_button_picker"
+        android:layout_width="246dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/height_picker_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/menu_container_background"
+        android:elevation="25dp"
+        android:text="Ok"
+        android:textSize="25sp" />
+
+
+</RelativeLayout>

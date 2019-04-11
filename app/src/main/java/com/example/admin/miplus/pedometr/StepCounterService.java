@@ -29,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class StepCounterService extends Service implements SensorEventListener {
 
@@ -53,6 +55,7 @@ public class StepCounterService extends Service implements SensorEventListener {
     private MyBinder mLocalbinder = new MyBinder();
     private CallBack mCallBack;
 
+    private Date currentTime;
 
     public StepCounterService() {
         int h = 480;
@@ -92,6 +95,8 @@ public class StepCounterService extends Service implements SensorEventListener {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
         }
 
+
+
         return Service.START_STICKY;
     }
 
@@ -124,6 +129,7 @@ public class StepCounterService extends Service implements SensorEventListener {
                             if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
                                 steps++;
                                 if(mCallBack != null) mCallBack.setSteps(steps);
+                                currentTime = Calendar.getInstance().getTime();
                                 if (profile != null && steps % 30 == 0) {
                                     profile.setSteps(steps);
                                     dataBaseRepository.setProfile(profile);
