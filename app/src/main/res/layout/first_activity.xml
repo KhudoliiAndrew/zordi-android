@@ -56,9 +56,9 @@
                     android:layout_centerVertical="true"
                     android:textColor="@color/textColorWhite"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/steps_cuantity_text"
-                    app:layout_constraintStart_toEndOf="@id/steps_cuantity_text"
-                    android:layout_marginBottom="5dp"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/steps_cuantity_text" />
 
              <!--   <View
                     android:id="@+id/complete_circle"
@@ -86,7 +86,6 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/menu_container_background"
                     android:elevation="7dp"
-                    android:onClick="toStepsSetActivity"
                     android:padding="@dimen/default_padding">
 
                     <TextView
@@ -131,11 +130,10 @@
                         android:layout_below="@id/activity_steps_text"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="40dp"
-                        android:text="1243"
+                        android:layout_marginEnd="20dp"
                         android:textColor="@color/textColor"
                         android:textSize="20sp"
-                        android:id="@+id/steps_cuantity_card_text"/>
+                        android:id="@+id/distance_card_text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -159,7 +157,6 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/menu_container_background"
                     android:elevation="7dp"
-                    android:onClick="toSleepInformation"
                     android:padding="@dimen/default_padding">
 
                     <TextView
@@ -230,7 +227,6 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/menu_container_background"
                     android:elevation="7dp"
-                    android:onClick="toPulseInformation"
                     android:padding="@dimen/default_padding">
 
                     <TextView

@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DecimalFormat;
+
 public class FirstFragment extends Fragment implements StepCounterService.CallBack {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
@@ -47,8 +49,10 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
             stepsText.setText(String.valueOf(steps));
             circleProgressBar = (CircleProgressBar) getView().findViewById(R.id.circle_progress_bar);
             circleProgressBar.progressChange(steps, profile.getStepsTarget());
-            TextView cardStepsText = (TextView) getView().findViewById(R.id.steps_cuantity_card_text);
-            cardStepsText.setText(String.valueOf(steps));
+            TextView cardDistanceText = (TextView) getView().findViewById(R.id.distance_card_text);
+            float distance = ((((profile.getHeight() * 0.01f)/ 4) + 0.37f) * steps) * 0.001f;
+            String formattedDouble = new DecimalFormat("#0.00").format(distance);
+            cardDistanceText.setText(formattedDouble + " km");
         }
     }
 
@@ -113,14 +117,15 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     }
 
     public void viewSetter(View view) {
-        steps = profile.getSteps();
         TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_text);
         circleProgressBar = (CircleProgressBar) view.findViewById(R.id.circle_progress_bar);
-        TextView cardStepsText = (TextView) view.findViewById(R.id.steps_cuantity_card_text);
+        TextView cardDistanceText = (TextView) view.findViewById(R.id.distance_card_text);
 
-        stepsText.setText(String.valueOf(steps));
-        circleProgressBar.progressChange(steps, profile.getStepsTarget());
-        cardStepsText.setText(String.valueOf(steps));
+        stepsText.setText(String.valueOf(profile.getSteps()));
+        circleProgressBar.progressChange(profile.getSteps(), profile.getStepsTarget());
+        float distance = ((((profile.getHeight() * 0.01f)/ 4) + 0.37f) * profile.getSteps()) * 0.001f;
+        String formattedDouble = new DecimalFormat("#0.00").format(distance);
+        cardDistanceText.setText(formattedDouble + " km");
     }
 
     private ServiceConnection connection = new ServiceConnection() {
