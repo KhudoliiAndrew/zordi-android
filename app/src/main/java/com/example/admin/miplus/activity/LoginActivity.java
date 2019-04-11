@@ -163,8 +163,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });*/
-            Intent GoToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
-            LoginActivity.this.startActivity(GoToMainActivity);
+            Intent goToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
+            goToMainActivity.putExtra("fromLogin", true);
+            LoginActivity.this.startActivity(goToMainActivity);
             LoginActivity.this.finish();
         }
     }

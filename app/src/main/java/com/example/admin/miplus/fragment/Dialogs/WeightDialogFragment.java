@@ -35,12 +35,12 @@ public class WeightDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        view = inflater.inflate(R.layout.height_dialog, null);
+        view = inflater.inflate(R.layout.weight_dialog, null);
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
 
         int min = 20;
         int max = 210;
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.height_picker);
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.weight_picker);
         numberPicker.setMaxValue(max);
         numberPicker.setValue(previsiourWeight);
         numberPicker.setMinValue(min);
@@ -65,7 +65,7 @@ public class WeightDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.height_picker);
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.weight_picker);
         int heightNumber = numberPicker.getValue() ;
         if (pushWeight != null) {
             pushWeight.weight(heightNumber);

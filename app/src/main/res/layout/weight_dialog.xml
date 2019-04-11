@@ -5,67 +5,36 @@
     android:background="@drawable/dialog_fragment_background">
 
     <TextView
-        android:id="@+id/text_steps_dialog"
+        android:id="@+id/text_weight_dialog"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:gravity="center"
-        android:text="Set the the length of sleep you want to sleep"
+        android:text="Set your weight, please"
         android:textColor="@color/textColorWhite"
         android:textSize="23sp" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_steps_dialog"
-        android:id="@+id/circle_layout">
-
-        <com.example.admin.miplus.CustomXML.CircleAlarmTimerView
-            android:id="@+id/circle_timer_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="280dp"
-            android:background="@drawable/steps_picker_background"
-            android:elevation="20dp" />
-
-        <TextView
-            android:id="@+id/start"
+        <RelativeLayout
+            android:id="@+id/weight_picker_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="30dp"
-            android:text="Start"
-            android:layout_marginStart="20dp"
-            android:textColor="@color/textColor"
-            android:textSize="27sp" />
+            android:layout_below="@id/text_weight_dialog">
 
-        <TextView
-            android:id="@+id/end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End"
-            android:layout_marginEnd="20dp"
-            android:textColor="@color/textColor"
-            android:textSize="27sp"
-            android:elevation="20dp"
-            android:layout_alignParentEnd="true"/>
+            <com.example.admin.miplus.CustomXML.ForFormatterPicker
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/weight_picker"
+                android:background="@drawable/steps_picker_background"/>
 
-        <TextView
-            android:id="@+id/sleep_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4:32"
-            android:layout_centerInParent="true"
-            android:textColor="@color/textColor"
-            android:textSize="27sp"
-            android:elevation="20dp" />
-    </RelativeLayout>
+        </RelativeLayout>
 
     <Button
         android:id="@+id/ok_button_picker"
         android:layout_width="246dp"
         android:layout_height="48dp"
-        android:layout_below="@+id/circle_layout"
+        android:layout_below="@+id/weight_picker_layout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"

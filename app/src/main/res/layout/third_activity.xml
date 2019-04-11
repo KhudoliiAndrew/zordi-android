@@ -66,7 +66,7 @@
 
                 <RelativeLayout
                     android:id="@+id/height_container"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
@@ -100,13 +100,21 @@
                         android:textColor="@color/textColorWhite"
                         android:textSize="20sp" />
 
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/ic_arrow_drop_down_white_24dp" />
+
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/weight_container"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="20dp"
@@ -133,11 +141,19 @@
                         android:layout_alignTop="@id/weight_title"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="13dp"
-                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
-                        android:text="160 kg"
+                        android:text="60 kg"
                         android:textColor="@color/textColorWhite"
                         android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/ic_arrow_drop_down_white_24dp" />
 
                 </RelativeLayout>
 

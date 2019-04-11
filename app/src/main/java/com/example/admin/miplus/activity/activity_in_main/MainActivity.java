@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNotification();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(new Intent(this, StepCounterService.class));
         } else {
@@ -109,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        newUserChecker();
     }
 
     private void initToolbar() {
@@ -219,6 +222,14 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(this.ALARM_SERVICE);
     }
 
+    private void newUserChecker(){
+        Intent intent = getIntent();
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
 
-
+        if(intent.getBooleanExtra("fromLogin", false) && viewPager != null){
+            viewPager.setCurrentItem(2);
+            bottomNavigationView.getMenu().findItem(R.id.item_settings).setChecked(true);
+        }
+    }
 }
