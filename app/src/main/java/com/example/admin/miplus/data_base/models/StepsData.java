@@ -1,8 +1,10 @@
 package com.example.admin.miplus.data_base.models;
 
+import java.util.Date;
+
 public class StepsData {
     private int steps;
-    private int stepsTarget;
+    private Date date;
 
     public int getSteps() {
         return steps;
@@ -12,11 +14,11 @@ public class StepsData {
         this.steps = steps;
     }
 
-    public int getStepsTarget() {
-        return stepsTarget;
+    public Date getDate() {
+        return date;
     }
 
-    public void setStepsTarget(int stepsTarget) {
-        this.stepsTarget = stepsTarget;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

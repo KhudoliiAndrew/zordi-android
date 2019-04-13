@@ -2,29 +2,24 @@ package com.example.admin.miplus.data_base;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.example.admin.miplus.data_base.models.GeoPoint;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DataBaseRepository {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Profile profile;
-    private GeoPoint geoPoint;
     private StepsData stepsData;
 
     public void setProfile(Profile profile){
@@ -48,35 +43,25 @@ public class DataBaseRepository {
         return profile;
     }
 
-    public void setGeoPoint(GeoPoint geoPoint) {
-        db.collection("geopositions").document(mAuth.getUid()).set(geoPoint);
+    public void setStepsData(StepsData stepsData){
+        db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").document().set(stepsData);
     }
 
-    public Task<DocumentSnapshot> getGeopointTask(){
-        final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).get();
-        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoPoint>(){
+   /* public Task<QuerySnapshot> getStepsDataTask() {
+        final ArrayList<StepsData> stepsDataList = null;
+        final Task<QuerySnapshot> task = db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").get();
 
+        task.onSuccessTask(new SuccessContinuation<QuerySnapshot, StepsData>(){
             @NonNull
             @Override
-            public Task<GeoPoint> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
-                geoPoint = documentSnapshot.toObject(GeoPoint.class);
+            public Task<StepsData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
+                stepsDataList = querySnapshot.toObjects(StepsData.class);
                 return null;
             }
         });
         return task;
-    }
+    }*/
 
-    public GeoPoint getGeoPoint(){
-        return geoPoint;
-    }
 
-    public void setStepsData(StepsData stepsData){
-        Date currentDate = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = df.format(currentDate);
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        db.collection("stepsInformation").document(mAuth.getUid()).collection(String.valueOf(formattedDate)).document(timeFormat.format(currentDate)).set(stepsData);
-        Log.d("TIMETIMETIMETIMETIME",  "DATA: " + String.valueOf(formattedDate) + "Time: "  + timeFormat.format(currentDate));
-    }
 }
 

@@ -2,7 +2,6 @@ package com.example.admin.miplus.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -21,11 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.activity.SplashActivity;
-import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
-import com.example.admin.miplus.data_base.models.GeoPoint;
-import com.example.admin.miplus.data_base.models.Profile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,7 +49,6 @@ import java.util.ArrayList;
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int LAYOUT = R.layout.second_activity;
 
-    private GeoPoint geoPoint;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
@@ -110,23 +104,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
         return view;
-    }
-
-    private void getTask(){
-        dataBaseRepository.getGeopointTask()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.getResult() != null && task.getResult().exists()) {
-                            geoPoint = task.getResult().toObject(GeoPoint.class);
-
-                        } else {
-                            geoPoint = new GeoPoint();
-
-
-                        }
-                    }
-                });
     }
 
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions) {

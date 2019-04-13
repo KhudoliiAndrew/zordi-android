@@ -21,6 +21,7 @@ import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.StepsData;
+import com.example.admin.miplus.fragment.FirstWindow.SleepInformationFragment;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.example.admin.miplus.pedometr.StepCounterService;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -87,7 +88,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toStepsInformation();
+                StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
             }
         });
 
@@ -95,7 +98,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         sleepRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SleepInformationFragment sleepInformationFragment = new SleepInformationFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragments_container, sleepInformationFragment).addToBackStack(null).commit();
             }
         });
 
@@ -108,12 +113,6 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         });
 
         return view;
-    }
-
-    private void toStepsInformation() {
-        StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
     }
 
     public void viewSetter(View view) {

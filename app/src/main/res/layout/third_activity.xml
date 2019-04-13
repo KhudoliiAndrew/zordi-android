@@ -230,7 +230,7 @@
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
                         android:onClick="toSleepSetActivity"
-                        android:text="Wake"
+                        android:text="Sleep"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
@@ -367,7 +367,7 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
-                        android:text="Goal Achievement"
+                        android:text="Goal achievement"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
@@ -393,7 +393,7 @@
                         android:layout_below="@id/goalAchievement_watch_button"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
-                        android:text="Upon Waking"
+                        android:text="After sleep"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 

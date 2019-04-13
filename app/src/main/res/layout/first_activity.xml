@@ -58,7 +58,8 @@
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/steps_cuantity_text" />
+                    app:layout_constraintTop_toTopOf="@id/steps_cuantity_text"
+                    android:layout_marginTop="35dp"/>
 
              <!--   <View
                     android:id="@+id/complete_circle"
@@ -235,7 +236,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:text="Pulse"
+                        android:text="Friends"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
