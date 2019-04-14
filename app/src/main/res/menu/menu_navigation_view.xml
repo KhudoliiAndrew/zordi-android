@@ -8,7 +8,8 @@
                 android:orderInCategory="1"
                 android:title="Notification"
                 android:icon="@drawable/ic_notifications_black_24dp"
-                app:actionLayout="@layout/layout_switch"/>
+                app:actionLayout="@layout/layout_switch"
+                android:id="@+id/notification_item"/>
             <item
                 android:checkable="true"
                 android:orderInCategory="1"

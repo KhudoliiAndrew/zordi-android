@@ -1,6 +1,6 @@
 <resources>
     
-    <style name="AppThemeWithTransparentStatusBAr" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LightAppThemeWithTransparentStatusBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -12,7 +12,7 @@
         <item name="android:windowBackground">@color/cardview_light_background</item>
     </style>
 
-    <style name="DefaultNumberPickerTheme" parent="AppThemeWithTransparentStatusBAr">
+    <style name="DefaultNumberPickerTheme" parent="LightAppThemeWithTransparentStatusBar">
         <item name="colorControlNormal">@android:color/transparent</item>
     </style>
 
@@ -21,22 +21,6 @@
         <item name="colorSwitchThumbNormal"> @color/colorPrimaryDark</item>
         <item name="android:colorForeground">@color/colorPrimaryLight </item>
     </style>
-
-    <declare-styleable name="ArcProgress">
-        <attr name="arc_progress" format="integer"/>
-        <attr name="arc_angle" format="float"/>
-        <attr name="arc_stroke_width" format="dimension"/>
-        <attr name="arc_max" format="integer"/>
-        <attr name="arc_unfinished_color" format="color"/>
-        <attr name="arc_finished_color" format="color"/>
-        <attr name="arc_text_size" format="dimension"/>
-        <attr name="arc_text_color" format="color"/>
-        <attr name="arc_suffix_text" format="string"/>
-        <attr name="arc_suffix_text_size" format="dimension"/>
-        <attr name="arc_suffix_text_padding" format="dimension"/>
-        <attr name="arc_bottom_text" format="string"/>
-        <attr name="arc_bottom_text_size" format="dimension"/>
-    </declare-styleable>
 
     <style name="FullScreenAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -59,6 +43,10 @@
         <item name="windowNoTitle">true</item>
         <item name="android:colorBackground">@color/background_material_light</item>
         <item name="android:windowBackground">@color/cardview_light_background</item>
+    </style>
+
+    <style name="DialogStyle" parent="AlertDialog.AppCompat">
+        <item name="android:background">@drawable/dialog_fragment_background</item>
     </style>
 
 </resources>

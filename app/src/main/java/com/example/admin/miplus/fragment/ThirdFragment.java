@@ -7,14 +7,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.Services.AlarmReceiver;
@@ -49,9 +57,11 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.third_activity, container, false);
 
+
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             viewSetter(view);
+            switchSetter(view);
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -59,6 +69,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
                             viewSetter(view);
+                            switchSetter(view);
                         }
                     });
 
@@ -113,7 +124,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         return view;
     }
 
-    private void viewSetter(View view){
+    private void viewSetter(View view) {
         TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
         TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
         TextView heightText = (TextView) view.findViewById(R.id.height_text);
@@ -125,7 +136,55 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
 
     }
 
-    private void setAlarm(){
+    private void switchSetter(View view) {
+        if (getView() != null) {
+            SwitchCompat sleepSwitch = (SwitchCompat) view.findViewById(R.id.sleep_switch);
+            SwitchCompat stepsSwitch = (SwitchCompat) view.findViewById(R.id.steps_switch);
+            final SwitchCompat lightThemeSwitch = (SwitchCompat) view.findViewById(R.id.light_theme_switch);
+            final SwitchCompat darkThemeSwitch = (SwitchCompat) view.findViewById(R.id.dark_theme_switch);
+
+            stepsSwitch.setChecked(profile.getStepsNotification());
+            sleepSwitch.setChecked(profile.getSleepNotification());
+            lightThemeSwitch.setChecked(profile.getLightTheme());
+            darkThemeSwitch.setChecked(!profile.getLightTheme());
+
+            stepsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    profile.setStepsNotification(isChecked);
+                    dataBaseRepository.setProfile(profile);
+                }
+            });
+            sleepSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    profile.setSleepNotification(isChecked);
+                    dataBaseRepository.setProfile(profile);
+                }
+            });
+
+            lightThemeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    darkThemeSwitch.setChecked(!isChecked);
+                    profile.setLightTheme(isChecked);
+                    dataBaseRepository.setProfile(profile);
+                }
+            });
+
+            darkThemeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    lightThemeSwitch.setChecked(!isChecked);
+                    profile.setLightTheme(!isChecked);
+                    dataBaseRepository.setProfile(profile);
+                }
+            });
+        }
+    }
+
+    private void setAlarm() {
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -187,4 +246,5 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         TextView weightText = (TextView) view.findViewById(R.id.weight_text);
         weightText.setText(String.valueOf(profile.getWeight() + " kg"));
     }
+
 }

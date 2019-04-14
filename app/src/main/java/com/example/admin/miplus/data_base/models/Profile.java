@@ -10,6 +10,10 @@ public class Profile {
     private float endRadian;
     private int height;
     private int weight;
+    private boolean isStepsNotification;
+    private boolean isSleepNotification;
+    private boolean isNotifications;
+    private boolean isLightTheme;
 
     public int getStepsTarget() {
         return stepsTarget;
@@ -59,7 +63,7 @@ public class Profile {
         this.endRadian = endRadian;
     }
 
-    public void setDefaultInstance(){
+    public void setDefaultInstance() {
         setStepsTarget(8000);
         setEndSleep("6:00");
         setStartSleep("23:00");
@@ -69,6 +73,10 @@ public class Profile {
         setSteps(0);
         setHeight(160);
         setWeight(55);
+        setStepsNotification(true);
+        setSleepNotification(true);
+        setNotifications(true);
+        setLightTheme(true);
     }
 
     public int getSteps() {
@@ -93,5 +101,37 @@ public class Profile {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public boolean getStepsNotification() {
+        return isStepsNotification;
+    }
+
+    public void setStepsNotification(boolean stepsNotification) {
+        isStepsNotification = stepsNotification;
+    }
+
+    public boolean getSleepNotification() {
+        return isSleepNotification;
+    }
+
+    public void setSleepNotification(boolean sleepNotification) {
+        isSleepNotification = sleepNotification;
+    }
+
+    public boolean getNotifications() {
+        return isNotifications;
+    }
+
+    public void setNotifications(boolean notifications) {
+        isNotifications = notifications;
+    }
+
+    public boolean getLightTheme() {
+        return isLightTheme;
+    }
+
+    public void setLightTheme(boolean lightTheme) {
+        isLightTheme = lightTheme;
     }
 }

@@ -3,24 +3,24 @@ package com.example.admin.miplus.activity.activity_in_main;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,6 +36,8 @@ import com.example.admin.miplus.R;
 import com.example.admin.miplus.Services.NotificationReceiver;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
+import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.example.admin.miplus.pedometr.StepCounterService;
@@ -45,14 +47,31 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NOTIFICATION_REMINDER_NIGHT = 2;
+    private Profile profile = new Profile();
+    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (dataBaseRepository.getProfile() != null) {
+            profile = dataBaseRepository.getProfile();
+        } else {
+            dataBaseRepository.getProfileTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            profile = task.getResult().toObject(Profile.class);
+                        }
+                    });
+
+        }
+
         setNotification();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -73,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
-        setTheme(R.style.AppThemeWithTransparentStatusBAr);
+        setTheme(R.style.LightAppThemeWithTransparentStatusBar);
         setContentView(R.layout.main_activity);
         initBottomNavigationView();
         initToolbar();
@@ -144,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 setHeaderContent();
+                setSwitchPositions();
             }
 
             @Override
@@ -153,9 +173,39 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerStateChanged(int newState) {
                 setHeaderContent();
+                setSwitchPositions();
             }
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+    }
+
+    private void setSwitchPositions(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
+        final SwitchCompat sleepSwitch = (SwitchCompat) findViewById(R.id.sleep_switch);
+        final SwitchCompat stepsSwitch = (SwitchCompat) findViewById(R.id.steps_switch);
+        final SwitchCompat notificationSwitch = (SwitchCompat) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.notification_item)).findViewById(R.id.drawer_switch);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        if (profile != null) notificationSwitch.setChecked(profile.getNotifications());
+
+        notificationSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewPager.getCurrentItem() == 2){
+                    if(!notificationSwitch.isChecked() ){
+                        profile.setNotifications(notificationSwitch.isChecked());
+                        stepsSwitch.setChecked(false);
+                        sleepSwitch.setChecked(false);
+                        dataBaseRepository.setProfile(profile);
+                    } else {
+                        profile.setNotifications(notificationSwitch.isChecked());
+                        stepsSwitch.setChecked(true);
+                        sleepSwitch.setChecked(true);
+                        dataBaseRepository.setProfile(profile);
+                    }
+                }
+            }
+        });
     }
 
     private void setHeaderContent() {
@@ -200,13 +250,13 @@ public class MainActivity extends AppCompatActivity {
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
 
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else{
+        } else {
             if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 getSupportFragmentManager().popBackStack();
             } else {
-                if(viewPager.getCurrentItem() != 0){
+                if (viewPager.getCurrentItem() != 0) {
                     viewPager.setCurrentItem(0);
                     bottomNavigationView.getMenu().findItem(R.id.item_main).setChecked(true);
                 }
@@ -216,18 +266,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNotification() {
+
+
         Intent notifyIntent = new Intent(this, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast
                 (this, NOTIFICATION_REMINDER_NIGHT, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(this.ALARM_SERVICE);
     }
 
-    private void newUserChecker(){
+    private void newUserChecker() {
         Intent intent = getIntent();
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
 
-        if(intent.getBooleanExtra("fromLogin", false) && viewPager != null){
+        if (intent.getBooleanExtra("fromLogin", false) && viewPager != null) {
             viewPager.setCurrentItem(2);
             bottomNavigationView.getMenu().findItem(R.id.item_settings).setChecked(true);
         }

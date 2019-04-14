@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
-        android:layout_marginBottom="54dp">
+        android:layout_marginBottom="54dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="30dp"
                     android:background="@drawable/primary_background_card"
                     android:elevation="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -117,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="30dp"
                     android:background="@drawable/primary_background_card"
                     android:elevation="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -273,7 +274,7 @@
                         android:background="@color/colorLine" />
 
                     <TextView
-                        android:id="@+id/light_watch_button"
+                        android:id="@+id/light_watch_text"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_below="@id/theme_watch_text"
@@ -284,51 +285,42 @@
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
-                    <RadioGroup
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/light_theme_switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/light_watch_button"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@id/light_watch_text"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="-40dp"
-                        android:elevation="10dp"
-                        android:theme="@style/SwitchStyle">
-
-                        <RadioButton
-                            android:id="@+id/light_theme_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignBottom="@id/light_watch_button"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginBottom="15dp"
-                            android:theme="@style/SwitchStyle" />
-
-                        <RadioButton
-                            android:id="@+id/dark_theme_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignBottom="@id/dark_watch_button"
-                            android:layout_alignParentEnd="true"
-                            android:theme="@style/SwitchStyle" />
-                    </RadioGroup>
-
+                        android:layout_marginBottom="10dp"
+                        android:theme="@style/SwitchStyle" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/divider_height"
-                        android:layout_below="@id/light_watch_button"
+                        android:layout_below="@id/light_watch_text"
                         android:background="@color/colorLine" />
 
                     <TextView
-                        android:id="@+id/dark_watch_button"
+                        android:id="@+id/dark_watch_text"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:layout_below="@id/light_watch_button"
+                        android:layout_below="@id/light_watch_text"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
                         android:text="Dark"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/dark_theme_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@id/dark_watch_text"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:theme="@style/SwitchStyle" />
 
                 </RelativeLayout>
 
@@ -372,6 +364,7 @@
                         android:textSize="20sp" />
 
                     <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/steps_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@id/goalAchievement_watch_button"
@@ -398,6 +391,7 @@
                         android:textSize="20sp" />
 
                     <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/sleep_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@id/uponWaking_watch_button"
