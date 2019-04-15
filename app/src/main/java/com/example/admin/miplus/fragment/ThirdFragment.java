@@ -138,27 +138,36 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
 
     private void switchSetter(View view) {
         if (getView() != null) {
-            SwitchCompat sleepSwitch = (SwitchCompat) view.findViewById(R.id.sleep_switch);
-            SwitchCompat stepsSwitch = (SwitchCompat) view.findViewById(R.id.steps_switch);
+            final SwitchCompat sleepSwitch = (SwitchCompat) view.findViewById(R.id.sleep_switch);
+            final SwitchCompat stepsSwitch = (SwitchCompat) view.findViewById(R.id.steps_switch);
             final SwitchCompat lightThemeSwitch = (SwitchCompat) view.findViewById(R.id.light_theme_switch);
             final SwitchCompat darkThemeSwitch = (SwitchCompat) view.findViewById(R.id.dark_theme_switch);
 
-            stepsSwitch.setChecked(profile.getStepsNotification());
-            sleepSwitch.setChecked(profile.getSleepNotification());
+
             lightThemeSwitch.setChecked(profile.getLightTheme());
             darkThemeSwitch.setChecked(!profile.getLightTheme());
+
+            if(!profile.getNotifications() ){
+                stepsSwitch.setChecked(false);
+                sleepSwitch.setChecked(false);
+            } else {
+                stepsSwitch.setChecked(profile.getStepsNotification());
+                sleepSwitch.setChecked(profile.getSleepNotification());
+            }
 
             stepsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    profile.setStepsNotification(isChecked);
+                    profile.setStepsNotification(stepsSwitch.isChecked());
+                    if(isChecked) profile.setNotifications(true);
                     dataBaseRepository.setProfile(profile);
                 }
             });
             sleepSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    profile.setSleepNotification(isChecked);
+                    profile.setSleepNotification(sleepSwitch.isChecked());
+                    if(isChecked) profile.setNotifications(true);
                     dataBaseRepository.setProfile(profile);
                 }
             });

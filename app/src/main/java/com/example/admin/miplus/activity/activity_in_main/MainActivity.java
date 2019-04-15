@@ -167,8 +167,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDrawerClosed(View drawerView) {
-            }
+            public void onDrawerClosed(View drawerView) {    }
 
             @Override
             public void onDrawerStateChanged(int newState) {
@@ -192,18 +191,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(viewPager.getCurrentItem() == 2){
-                    if(!notificationSwitch.isChecked() ){
-                        profile.setNotifications(notificationSwitch.isChecked());
+                    if(!notificationSwitch.isChecked()){
+                        profile.setStepsNotification(stepsSwitch.isChecked());
+                        profile.setSleepNotification(sleepSwitch.isChecked());
                         stepsSwitch.setChecked(false);
                         sleepSwitch.setChecked(false);
-                        dataBaseRepository.setProfile(profile);
                     } else {
-                        profile.setNotifications(notificationSwitch.isChecked());
-                        stepsSwitch.setChecked(true);
-                        sleepSwitch.setChecked(true);
-                        dataBaseRepository.setProfile(profile);
+                        stepsSwitch.setChecked(profile.getStepsNotification());
+                        sleepSwitch.setChecked(profile.getSleepNotification());
                     }
                 }
+                profile.setNotifications(notificationSwitch.isChecked());
+                dataBaseRepository.setProfile(profile);
             }
         });
     }
