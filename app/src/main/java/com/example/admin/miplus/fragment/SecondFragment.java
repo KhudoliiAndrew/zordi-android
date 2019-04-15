@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.GeoData;
+import com.example.admin.miplus.data_base.models.GeoSettings;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.google.android.gms.common.ConnectionResult;
@@ -47,10 +48,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
     private static final int LAYOUT = R.layout.second_activity;
@@ -62,6 +72,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private LocationRequest mLocationRequest;
     private ArrayList<LatLng> points;
     private GeoData geoData = new GeoData();
+    private GeoSettings geoSettings = new GeoSettings();
+    private List<GeoData> geoDataList = null;
     private DataBaseRepository dataBaseRepository = new DataBaseRepository();
     public Polyline line;
 
@@ -90,6 +102,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         Log.d(">>>>>>", "OnCreateView");
         View view = inflater.inflate(LAYOUT, container, false);
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         points = new ArrayList<LatLng>();
 
         //we add permissions we need to request location of the users
@@ -102,12 +117,20 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         btn = (Button) view.findViewById(R.id.myLocationButton);
         btn.setOnClickListener(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionsToRequest.size() > 0) {
-                requestPermissions(permissionsToRequest.
-                        toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-            }
-        }
+        getDataFirebase();
+
+        if (dataBaseRepository.getMapSettings() != null) {
+            geoSettings = dataBaseRepository.getMapSettings();
+            getMapType();
+        } else {
+            dataBaseRepository.getMapSettingsTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            geoSettings = task.getResult().toObject(GeoSettings.class);
+                            getMapType();
+                        }
+                    });}
 
         return view;
     }
@@ -199,8 +222,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //Called immediately after onCreateView has returned, but before any saved state has been restored in to the view
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
     }
 
     @Nullable
@@ -208,6 +230,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onMapReady(GoogleMap googleMap) {
         Log.d(">>>>>>", "MapReady");
         mGoogleMap = googleMap;
+        mGoogleMap.getUiSettings().setCompassEnabled(false);
         onGoogleApiClientConnected();
     }
 
@@ -252,7 +275,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(final Location location) {
         Log.d(">>>>>>", "Location Zordi");
         if (location == null) {
             Toast.makeText(getActivity(), "Can't get current location", Toast.LENGTH_LONG).show();
@@ -267,9 +290,74 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             geoData.setDate(new Date());
             dataBaseRepository.setGeoData(geoData);
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (permissionsToRequest.size() > 0) {
+                    requestPermissions(permissionsToRequest.
+                            toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+                }
+            }
+
             points.add(ll);
 
             redrawLine(ll);
+        }
+    }
+
+    private void getDataFirebase(){
+        dataBaseRepository.getGeoDataTask()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if(task.getResult() != null) {
+                            geoDataList = task.getResult().toObjects(GeoData.class);
+                            sortArrayList();
+                            for(int i = 0; i < geoDataList.size(); i++){
+                                geoData = geoDataList.get(i);
+                                LatLng latLng = new LatLng(geoData.getLatitude(), geoData.getLongitude());
+                                points.add(latLng);
+
+                                MarkerOptions marker = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_point)).position(latLng);
+                                mGoogleMap.addMarker(marker);
+                            }
+
+                            PolylineOptions points = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
+                            line = mGoogleMap.addPolyline(points);
+
+                        }else{
+                            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+                            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
+                            mGoogleMap.animateCamera(update);
+
+                            geoData.setUserPosition(location.getLatitude(), location.getLongitude());
+                            geoData.setDate(new Date());
+                            dataBaseRepository.setGeoData(geoData);
+                        }
+                    }
+                });
+    }
+
+    private void sortArrayList(){
+        Collections.sort(geoDataList, new Comparator<GeoData>() {
+            @Override
+            public int compare(GeoData o1, GeoData o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+    }
+
+    private void getMapType(){
+        if(geoSettings.getMapType().equals(getString(R.string.map_type_normal))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
+        if(geoSettings.getMapType().equals(getString(R.string.map_type_satellite))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        }
+        if(geoSettings.getMapType().equals(getString(R.string.map_type_hybrid))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        }
+        if(geoSettings.getMapType().equals(getString(R.string.map_type_terrain))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         }
     }
 
@@ -283,19 +371,10 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             options.add(point);
         }
 
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .icon(getMarkerIcon("#3f51b5")));
+        MarkerOptions marker = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_point)).position(latLng);
+        mGoogleMap.addMarker(marker);
 
         line = mGoogleMap.addPolyline(options); //add Polyline
-    }
-
-
-
-    public BitmapDescriptor getMarkerIcon(String color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(Color.parseColor(color), hsv);
-        return BitmapDescriptorFactory.defaultMarker(hsv[0]);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.example.admin.miplus.data_base.models.GeoData;
+import com.example.admin.miplus.data_base.models.GeoSettings;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DataBaseRepository {
@@ -24,6 +26,7 @@ public class DataBaseRepository {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Profile profile;
     private GeoData geoData;
+    private GeoSettings mapType;
 
     final FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -49,22 +52,50 @@ public class DataBaseRepository {
         return profile;
     }
 
+    DateFormat df = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss");
+    String date = df.format(Calendar.getInstance().getTime());
+
     public void setGeoData(GeoData geoData){
         db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
     }
 
     public Task<QuerySnapshot> getGeoDataTask() {
         final Task<QuerySnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").get();
+        task.onSuccessTask(new SuccessContinuation<QuerySnapshot, GeoData>() {
+            @NonNull
+            @Override
+            public Task<GeoData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
+                Query dateFilter = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").orderBy(date);
+                geoData = (GeoData) querySnapshot.toObjects(GeoData.class);
+                return null;
+            }
+        });
         return task;
-    }
-
-    public void getLocationHistory(){
-        geoData.getDate();
-        CollectionReference getGeoDataHistory = db.collection("LocationHistory");
-        getGeoDataHistory.whereGreaterThan("date",00 );
     }
 
     public GeoData getGeoData(){
         return geoData;
+    }
+
+    public void setMapSettings(GeoSettings mapType){
+        db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").set(mapType);
+    }
+
+    public Task<DocumentSnapshot> getMapSettingsTask() {
+        final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").get();
+        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>(){
+
+            @NonNull
+            @Override
+            public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                mapType = documentSnapshot.toObject(GeoSettings.class);
+                return null;
+            }
+        });
+        return task;
+    }
+
+    public GeoSettings getMapSettings(){
+        return mapType;
     }
 }

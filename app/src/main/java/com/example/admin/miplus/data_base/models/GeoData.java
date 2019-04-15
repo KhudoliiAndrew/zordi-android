@@ -28,4 +28,5 @@ public class GeoData {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
 }
