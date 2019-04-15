@@ -1,9 +1,12 @@
 package com.example.admin.miplus.pedometr;
 
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,11 +16,13 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.FirstFragment;
@@ -69,7 +74,7 @@ public class StepCounterService extends Service implements SensorEventListener {
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             steps = profile.getSteps();
-            if(mCallBack != null) mCallBack.setSteps(steps);
+            if (mCallBack != null) mCallBack.setSteps(steps);
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -77,11 +82,10 @@ public class StepCounterService extends Service implements SensorEventListener {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
                             steps = profile.getSteps();
-                            if(mCallBack != null) mCallBack.setSteps(steps);
+                            if (mCallBack != null) mCallBack.setSteps(steps);
                         }
                     });
         }
-
 
 
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -96,59 +100,60 @@ public class StepCounterService extends Service implements SensorEventListener {
         }
 
 
-
         return Service.START_STICKY;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-            Sensor sensor = event.sensor;
-            if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                synchronized (this) {
-                    float vSum = 0;
-                    for (int i = 0; i < 3; i++) {
-                        final float v = mYOffset + event.values[i] * mScale[1];
-                        vSum += v;
-                    }
-                    int k = 0;
-                    float v = vSum / 3;
-
-                    float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
-                    if (direction == -mLastDirections[k]) {
-                        // Direction changed
-                        int extType = (direction > 0 ? 0 : 1); // minumum or maximum?
-                        mLastExtremes[extType][k] = mLastValues[k];
-                        float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
-
-                        if (diff > mLimit) {
-
-                            boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
-                            boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
-                            boolean isNotContra = (mLastMatch != 1 - extType);
-
-                            if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                                steps++;
-                                if(mCallBack != null) mCallBack.setSteps(steps);
-                                currentTime = Calendar.getInstance().getTime();
-                                if (profile != null && steps % 30 == 0) {
-                                    profile.setSteps(steps);
-                                    dataBaseRepository.setProfile(profile);
-                                }
-
-                                for (StepListener stepListener : mStepListeners) {
-                                    stepListener.onStep();
-                                }
-                                mLastMatch = extType;
-                            } else {
-                                mLastMatch = -1;
-                            }
-                        }
-                        mLastDiff[k] = diff;
-                    }
-                    mLastDirections[k] = direction;
-                    mLastValues[k] = v;
+        Sensor sensor = event.sensor;
+        if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            synchronized (this) {
+                float vSum = 0;
+                for (int i = 0; i < 3; i++) {
+                    final float v = mYOffset + event.values[i] * mScale[1];
+                    vSum += v;
                 }
-            } else {}
+                int k = 0;
+                float v = vSum / 3;
+
+                float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
+                if (direction == -mLastDirections[k]) {
+                    // Direction changed
+                    int extType = (direction > 0 ? 0 : 1); // minumum or maximum?
+                    mLastExtremes[extType][k] = mLastValues[k];
+                    float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
+
+                    if (diff > mLimit) {
+
+                        boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
+                        boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
+                        boolean isNotContra = (mLastMatch != 1 - extType);
+
+                        if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
+                            steps++;
+                            goalNotification();
+                            if (mCallBack != null) mCallBack.setSteps(steps);
+                            currentTime = Calendar.getInstance().getTime();
+                            if (profile != null && steps % 30 == 0) {
+                                profile.setSteps(steps);
+                                dataBaseRepository.setProfile(profile);
+                            }
+
+                            for (StepListener stepListener : mStepListeners) {
+                                stepListener.onStep();
+                            }
+                            mLastMatch = extType;
+                        } else {
+                            mLastMatch = -1;
+                        }
+                    }
+                    mLastDiff[k] = diff;
+                }
+                mLastDirections[k] = direction;
+                mLastValues[k] = v;
+            }
+        } else {
+        }
     }
 
     @Override
@@ -178,6 +183,29 @@ public class StepCounterService extends Service implements SensorEventListener {
 
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;
+    }
+
+    private void goalNotification() {
+        if (profile != null && steps == profile.getStepsTarget() && profile.getNotifications() && profile.getStepsNotification()) {
+            Intent resultIntent = new Intent(this, SplashActivity.class);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("Congratulations!")
+                            .setContentText("You have passed the necessary number of steps")
+                            .setContentIntent(resultPendingIntent)
+                            .setAutoCancel(true)
+                            .setVibrate(new long[]{10, 60});
+
+            Notification notification = builder.build();
+
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(1, notification);
+        }
     }
 
     public interface CallBack {
