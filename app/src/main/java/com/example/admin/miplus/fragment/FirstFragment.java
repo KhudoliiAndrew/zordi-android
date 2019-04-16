@@ -29,8 +29,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class FirstFragment extends Fragment implements StepCounterService.CallBack {
 
@@ -42,6 +46,7 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     private CircleProgressBar circleProgressBar;
     private int steps;
     private StepCounterService stepCounterService;
+    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
 
     public void setSteps(int steps) {
         this.steps = steps;
@@ -82,6 +87,27 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                     });
         }
 
+        dataBaseRepository.getStepsDataList()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            stepsDataList = task.getResult().toObjects(StepsData.class);
+                            for (int i = 0; i < stepsDataList.size(); i++){
+                                stepsData = stepsDataList.get(i);
+                                if(stepsData.getSteps() > steps){
+                                    steps = stepsData.getSteps();
+                                    viewSetter(view);
+                                }
+                            }
+                        } else {
+                            stepsData.setDefaultInstance();
+                            dataBaseRepository.setStepsData(stepsData);
+                            viewSetter(view);
+                        }
+                    }
+                });
+
         bindService();
 
         RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
@@ -120,11 +146,14 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         circleProgressBar = (CircleProgressBar) view.findViewById(R.id.circle_progress_bar);
         TextView cardDistanceText = (TextView) view.findViewById(R.id.distance_card_text);
 
-        stepsText.setText(String.valueOf(profile.getSteps()));
-        circleProgressBar.progressChange(profile.getSteps(), profile.getStepsTarget());
-        float distance = ((((profile.getHeight() * 0.01f)/ 4) + 0.37f) * profile.getSteps()) * 0.001f;
-        String formattedDouble = new DecimalFormat("#0.00").format(distance);
-        cardDistanceText.setText(formattedDouble + " km");
+        if (stepsData != null && profile != null){
+            stepsText.setText(String.valueOf(stepsData.getSteps()));
+            circleProgressBar.progressChange(stepsData.getSteps(), profile.getStepsTarget());
+            float distance = ((((profile.getHeight() * 0.01f)/ 4) + 0.37f) * stepsData.getSteps()) * 0.001f;
+            String formattedDouble = new DecimalFormat("#0.00").format(distance);
+            cardDistanceText.setText(formattedDouble + " km");
+        }
+
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -148,14 +177,12 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     }
 
     @Override
-    public void onDestroy() {
-        // stepCounterService.unbindService(connection);
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach() {
-        //stepCounterService.unbindService(connection);
-        super.onDetach();
+    public void onPause() {
+        if (stepsData != null) {
+            stepsData.setSteps(steps);
+            stepsData.setDate(new Date());
+            dataBaseRepository.setStepsData(stepsData);
+        }
+        super.onPause();
     }
 }

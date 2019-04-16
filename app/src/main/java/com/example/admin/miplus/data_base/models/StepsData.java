@@ -21,4 +21,9 @@ public class StepsData {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public void setDefaultInstance(){
+        setSteps(0);
+        setDate(new Date());
+    }
 }

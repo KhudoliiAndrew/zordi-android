@@ -27,7 +27,6 @@
                 android:id="@+id/steps_cuantity_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1234"
                 android:textColor="@color/textColorWhite"
                 android:textSize="40dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +69,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="122"
                     android:textColor="@color/textColorWhite"
                     android:textSize="21dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +101,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="172"
                     android:textColor="@color/textColorWhite"
                     android:textSize="21dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -161,7 +158,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="12:00 AM"
-                android:textColor="@color/textColor" />
+                android:textColor="@color/textColor"
+                android:id="@+id/start_activity_text"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -170,7 +168,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:text="12:00 PM"
-                android:textColor="@color/textColor" />
+                android:textColor="@color/textColor"
+                android:id="@+id/end_activity_text"/>
 
         </RelativeLayout>
 

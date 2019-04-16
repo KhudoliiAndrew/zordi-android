@@ -1,26 +1,34 @@
 package com.example.admin.miplus.fragment;
 
 import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
+import com.example.admin.miplus.data_base.models.GeoData;
+import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,26 +40,20 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int LAYOUT = R.layout.second_activity;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    final DataBaseRepository dataBaseRepository = new DataBaseRepository();
 
     private GoogleMap mGoogleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -59,11 +61,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private TextView checkGoogleServices;
     private LocationRequest mLocationRequest;
     private ArrayList<LatLng> points;
+    private GeoData geoData = new GeoData();
+    private DataBaseRepository dataBaseRepository = new DataBaseRepository();
     public Polyline line;
 
-    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 0;
-    private final long UPDATE_INTERVAL = 0, FASTEST_INTERVAL = 0; // = 10 seconds
-    private final float SMALLEST_DISPLACEMENT = 0F; //10 meters
+    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 10 seconds
+    private final float SMALLEST_DISPLACEMENT = 10F; //10 meters
 
     // lists for permissions
     private ArrayList<String> permissionsToRequest;
@@ -84,16 +88,17 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //creates and returns the view hierarchy associated with the fragment, call to create components inside fragment
         Log.d(">>>>>>", "OnCreateView");
-        final View view = inflater.inflate(LAYOUT, container, false);
+        View view = inflater.inflate(LAYOUT, container, false);
 
         points = new ArrayList<LatLng>();
 
-      //  getTask();
+        //  getTask();
         //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         permissionsToRequest = permissionsToRequest(permissions);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (permissionsToRequest.size() > 0) {
@@ -242,27 +247,22 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         } else {
 
-
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
             mGoogleMap.animateCamera(update);
-            points.add(latLng);
-            redrawLine(latLng);
 
+            geoData.setUserPosition(location.getLatitude(), location.getLongitude());
+            geoData.setDate(new Date());
+            dataBaseRepository.setGeoData(geoData);
 
-        //    com.google.firebase.firestore.GeoPoint gP = new com.google.firebase.firestore.GeoPoint(location.getLatitude(), location.getLongitude());
-         //   if (gP != null) {
-          //      geoPoint.setGeoPoint(gP);
-          //  }
-         //   Log.d(">>>>>>>>>>", String.valueOf(gP));
+            points.add(ll);
+
+            redrawLine(ll);
         }
     }
 
-    private void setPositionStart() {
-    }
-
     private void redrawLine(LatLng latLng) {
-      //  Log.d(">>>>>>", "Drawing Line");
+        //  Log.d(">>>>>>", "Drawing Line");
         mGoogleMap.clear();  //clears all Markers and Polylines
 
         PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
@@ -283,7 +283,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         Color.colorToHSV(Color.parseColor(color), hsv);
         return BitmapDescriptorFactory.defaultMarker(hsv[0]);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -318,6 +317,18 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 } else {
                     if (mGoogleApiClient != null) {
                         mGoogleApiClient.connect();
+                        //permission ok, we get last location
+                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        startLocationUpdates();
                     }
                 }
                 break;

@@ -3,17 +3,16 @@ package com.example.admin.miplus.data_base;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.example.admin.miplus.data_base.models.GeoData;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class DataBaseRepository {
@@ -47,21 +46,12 @@ public class DataBaseRepository {
         db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").document().set(stepsData);
     }
 
-   /* public Task<QuerySnapshot> getStepsDataTask() {
-        final ArrayList<StepsData> stepsDataList = null;
-        final Task<QuerySnapshot> task = db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").get();
+    public Task<QuerySnapshot> getStepsDataList(){
+        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").get();
+    }
 
-        task.onSuccessTask(new SuccessContinuation<QuerySnapshot, StepsData>(){
-            @NonNull
-            @Override
-            public Task<StepsData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
-                stepsDataList = querySnapshot.toObjects(StepsData.class);
-                return null;
-            }
-        });
-        return task;
-    }*/
-
-
+    public void setGeoData(GeoData geoData){
+        db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
+    }
 }
 

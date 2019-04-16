@@ -25,27 +25,29 @@ import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.data_base.models.StepsData;
 import com.example.admin.miplus.fragment.FirstFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class StepCounterService extends Service implements SensorEventListener {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private int steps = 0;
-    private final static String TAG = "StepDetector";
     private float mLimit = 10;
     private float mLastValues[] = new float[3 * 2];
     private float mScale[] = new float[2];
@@ -56,11 +58,11 @@ public class StepCounterService extends Service implements SensorEventListener {
     private int mLastMatch = -1;
 
     private ArrayList<StepListener> mStepListeners = new ArrayList<StepListener>();
+    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
+    private StepsData stepsData = new StepsData();
 
     private MyBinder mLocalbinder = new MyBinder();
     private CallBack mCallBack;
-
-    private Date currentTime;
 
     public StepCounterService() {
         int h = 480;
@@ -71,22 +73,25 @@ public class StepCounterService extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (dataBaseRepository.getProfile() != null) {
-            profile = dataBaseRepository.getProfile();
-            steps = profile.getSteps();
-            if (mCallBack != null) mCallBack.setSteps(steps);
-        } else {
-            dataBaseRepository.getProfileTask()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
-                            steps = profile.getSteps();
-                            if (mCallBack != null) mCallBack.setSteps(steps);
-                        }
-                    });
-        }
 
+        dataBaseRepository.getStepsDataList()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            stepsDataList = task.getResult().toObjects(StepsData.class);
+                            for (int i = 0; i < stepsDataList.size(); i++){
+                                stepsData = stepsDataList.get(i);
+                                if(stepsData.getSteps() > steps){
+                                    steps = stepsData.getSteps();
+                                }
+                            }
+                        } else {
+                            stepsData.setDefaultInstance();
+                            dataBaseRepository.setStepsData(stepsData);
+                        }
+                    }
+                });
 
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -98,8 +103,6 @@ public class StepCounterService extends Service implements SensorEventListener {
             Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
         }
-
-
         return Service.START_STICKY;
     }
 
@@ -131,13 +134,9 @@ public class StepCounterService extends Service implements SensorEventListener {
 
                         if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
                             steps++;
-                            goalNotification();
                             if (mCallBack != null) mCallBack.setSteps(steps);
-                            currentTime = Calendar.getInstance().getTime();
-                            if (profile != null && steps % 30 == 0) {
-                                profile.setSteps(steps);
-                                dataBaseRepository.setProfile(profile);
-                            }
+                            setStepsToBd(steps);
+                            goalNotification();
 
                             for (StepListener stepListener : mStepListeners) {
                                 stepListener.onStep();
@@ -158,16 +157,22 @@ public class StepCounterService extends Service implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     @Override
     public void onDestroy() {
-        if (profile != null) {
-            profile.setSteps(steps);
-            dataBaseRepository.setProfile(profile);
+        if (stepsData != null) {
+            stepsData.setSteps(steps);
+            stepsData.setDate(new Date());
+            dataBaseRepository.setStepsData(stepsData);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+
+        super.onLowMemory();
     }
 
     @Nullable
@@ -205,6 +210,16 @@ public class StepCounterService extends Service implements SensorEventListener {
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.notify(1, notification);
+        }
+    }
+
+    private void setStepsToBd(int steps) {
+        if (stepsData != null){
+            if( System.currentTimeMillis() > stepsData.getDate().getTime() + 60000){
+                stepsData.setSteps(steps);
+                stepsData.setDate(new Date());
+                dataBaseRepository.setStepsData(stepsData);
+            }
         }
     }
 
