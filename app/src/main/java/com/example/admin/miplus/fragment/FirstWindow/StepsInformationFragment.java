@@ -30,15 +30,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
 public class StepsInformationFragment extends Fragment {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private StepsData stepsData = new StepsData();
+    private StepsData monthStepsData = new StepsData();
     private List<StepsData> stepsDataList = new ArrayList<StepsData>();
     private int steps = 0;
     private Profile profile = new Profile();
@@ -68,14 +73,6 @@ public class StepsInformationFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
                             stepsDataList = task.getResult().toObjects(StepsData.class);
-                            for (int i = 0; i < stepsDataList.size(); i++){
-                                stepsData = stepsDataList.get(i);
-                                if(stepsData.getSteps() > steps){
-                                    steps = stepsData.getSteps();
-                                    viewSetter(view);
-                                }
-                            }
-
                             boolean isSorted = false;
                             Date buf;
                             StepsData stepsData1 = new StepsData();
@@ -86,19 +83,53 @@ public class StepsInformationFragment extends Fragment {
                                     stepsData = stepsDataList.get(i);
                                     if(stepsData.getDate().getTime() > stepsData1.getDate().getTime()){
                                         isSorted = false;
-
                                         buf = stepsData.getDate() ;
                                         stepsData.setDate(stepsData1.getDate());
                                         stepsData1.setDate(buf);
                                     }
                                 }
-
                             }
                             initChart(view);
                         } else {
                             stepsData.setDefaultInstance();
                             dataBaseRepository.setStepsData(stepsData);
                             viewSetter(view);
+                        }
+                    }
+                });
+
+        dataBaseRepository.getStepsDataListOrderedDate()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            final Date date = new Date();
+                            stepsDataList = task.getResult().toObjects(StepsData.class);
+                            stepsData = stepsDataList.get(stepsDataList.size() - 1);
+                            if(stepsData.getDate().getDay() == date.getDay()) {
+                                steps = stepsData.getSteps();
+                                viewSetter(view);
+                            }else {
+                                stepsData.setDefaultInstance();
+                                dataBaseRepository.setStepsData(stepsData);
+                                viewSetter(view);
+                            }
+                        } else {
+                            stepsData.setDefaultInstance();
+                            dataBaseRepository.setStepsData(stepsData);
+                            viewSetter(view);
+                        }
+                    }
+                });
+
+        dataBaseRepository.getStepsDataByDay()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            final Date date = new Date();
+                            stepsDataList = task.getResult().toObjects(StepsData.class);
+                            initMonthChart(view);
                         }
                     }
                 });
@@ -134,18 +165,24 @@ public class StepsInformationFragment extends Fragment {
     }
 
     private void  initChart(View view){
+        Date date = new Date();
         TextView startActivity = (TextView) view.findViewById(R.id.start_activity_text);
         TextView endActivity = (TextView) view.findViewById(R.id.end_activity_text);
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        formatter.format(stepsDataList.get(1).getDate().getTime());
-
-        startActivity.setText(String.valueOf(formatter.format(stepsDataList.get(1).getDate().getTime())) );
         endActivity.setText(String.valueOf(formatter.format(stepsDataList.get(stepsDataList.size() - 1).getDate().getTime())));
         List<PointValue> values = new ArrayList<PointValue>();
-        for (int i = 0 ; i < stepsDataList.size(); i++){
+
+        boolean a = true;
+        for (int i = 0 ; i < stepsDataList.size(); i++) {
             stepsData = stepsDataList.get(i);
-            values.add(new PointValue(i, stepsData.getSteps()));
+            if (stepsData.getDate().getDate() >= date.getDate()) {
+                values.add(new PointValue(i, stepsData.getSteps()));
+                if (a) {
+                    startActivity.setText(String.valueOf(formatter.format(stepsDataList.get(i).getDate().getTime())));
+                    a = false;
+                }
+            }
         }
 
         Line line = new Line(values).setColor(getResources().getColor(R.color.colorPrimary)).setCubic(true).setHasPoints(false);
@@ -159,7 +196,30 @@ public class StepsInformationFragment extends Fragment {
         chart.setLineChartData(data);
 
         LineChartView chartView = (LineChartView) view.findViewById(R.id.chart);
+        chartView.isZoomEnabled();
         chartView.setLineChartData(data);
+    }
+
+    private void initMonthChart(View view){
+        ColumnChartView chart = (ColumnChartView) view.findViewById(R.id.column_chart);
+        List<SubcolumnValue> values = new ArrayList<SubcolumnValue>();
+        List<Column> columns = new ArrayList<Column>();
+
+     /*   for (int i = 0; i < stepsDataList.size(); i++){
+            monthStepsData = stepsDataList.get(i);
+            values.add(new SubcolumnValue(i, monthStepsData.getSteps()));
+        }*/
+        values.add(new SubcolumnValue(1, 1));
+        values.add(new SubcolumnValue(2, 2));
+        values.add(new SubcolumnValue(3, 3));
+
+        columns.add(new Column(values));
+        ColumnChartData data = new ColumnChartData(columns);
+
+        chart.setColumnChartData(data);
+        chart.setZoomEnabled(false);
+        chart.setScrollEnabled(false);
+
     }
 
     @Override

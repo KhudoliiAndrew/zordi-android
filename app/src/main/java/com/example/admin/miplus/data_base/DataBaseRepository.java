@@ -14,6 +14,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
+
 
 public class DataBaseRepository {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -50,8 +52,28 @@ public class DataBaseRepository {
         return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").get();
     }
 
+    public Task<QuerySnapshot> getStepsDataListOrderedDate(){
+        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").orderBy("date").get();
+    }
+
+    public Task<QuerySnapshot> getStepsDataListOrderedSteps(){
+        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").orderBy("steps").get();
+    }
+
     public void setGeoData(GeoData geoData){
         db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
+    }
+
+    public void deleteStepsDataDocuments(){
+        db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").document().delete();
+    }
+
+    public void setStepsDataByDay(StepsData stepsData){
+        db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").document().set(stepsData);
+    }
+
+    public Task<QuerySnapshot> getStepsDataByDay(){
+        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").orderBy("date").get();
     }
 }
 

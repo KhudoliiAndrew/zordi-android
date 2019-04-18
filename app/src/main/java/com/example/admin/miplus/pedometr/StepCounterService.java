@@ -74,17 +74,16 @@ public class StepCounterService extends Service implements SensorEventListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        dataBaseRepository.getStepsDataList()
+        dataBaseRepository.getStepsDataListOrderedDate()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            final Date date = new Date();
                             stepsDataList = task.getResult().toObjects(StepsData.class);
-                            for (int i = 0; i < stepsDataList.size(); i++){
-                                stepsData = stepsDataList.get(i);
-                                if(stepsData.getSteps() > steps){
-                                    steps = stepsData.getSteps();
-                                }
+                            stepsData = stepsDataList.get(stepsDataList.size() - 1);
+                            if(stepsData.getDate().getDay() == date.getDay()) {
+                                steps = stepsData.getSteps();
                             }
                         } else {
                             stepsData.setDefaultInstance();
@@ -214,8 +213,8 @@ public class StepCounterService extends Service implements SensorEventListener {
     }
 
     private void setStepsToBd(int steps) {
-        if (stepsData != null){
-            if( System.currentTimeMillis() > stepsData.getDate().getTime() + 60000){
+        if (stepsData != null) {
+            if (System.currentTimeMillis() > stepsData.getDate().getTime() + 60000) {
                 stepsData.setSteps(steps);
                 stepsData.setDate(new Date());
                 dataBaseRepository.setStepsData(stepsData);

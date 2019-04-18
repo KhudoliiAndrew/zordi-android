@@ -38,6 +38,7 @@ import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.data_base.models.StepsData;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.example.admin.miplus.pedometr.StepCounterService;
@@ -48,11 +49,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NOTIFICATION_REMINDER_NIGHT = 2;
     private Profile profile = new Profile();
+    private int steps;
+    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
+    private StepsData stepsData = new StepsData();
+    private StepsData dayStepsData = new StepsData();
+
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
 
     @Override
@@ -69,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                             profile = task.getResult().toObject(Profile.class);
                         }
                     });
-
         }
 
         setNotification();
@@ -105,6 +115,31 @@ public class MainActivity extends AppCompatActivity {
                 signoutOnclick();
             }
         });
+    }
+
+    private void stepsChecker() {
+        Date currentDate = new Date();
+        boolean isSorted = false;
+        Date buf;
+        StepsData stepsData1 = new StepsData();
+        while (!isSorted) {
+            isSorted = true;
+            for (int i = 0; i < stepsDataList.size() - 1; i++) {
+                stepsData1 = stepsDataList.get(i + 1);
+                stepsData = stepsDataList.get(i);
+                Log.d("stepList", "Date: " + String.valueOf(stepsData.getDate()) + "   Steps: " + String.valueOf(stepsData.getSteps()));
+         /*       if (stepsData.getDate().getTime() > stepsData1.getDate().getTime()) {
+                    if(stepsData.getDate().getDay() < currentDate.getDay()){
+                        //dayStepsData.setDate(currentDate.getDay());
+                    }
+                    isSorted = false;
+                    buf = stepsData.getDate();
+                    stepsData.setDate(stepsData1.getDate());
+                    stepsData1.setDate(buf);
+                }*/
+            }
+
+        }
     }
 
     private void initBottomNavigationView() {
@@ -167,7 +202,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDrawerClosed(View drawerView) {    }
+            public void onDrawerClosed(View drawerView) {
+            }
 
             @Override
             public void onDrawerStateChanged(int newState) {
@@ -178,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
-    private void setSwitchPositions(){
+    private void setSwitchPositions() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
         final SwitchCompat sleepSwitch = (SwitchCompat) findViewById(R.id.sleep_switch);
         final SwitchCompat stepsSwitch = (SwitchCompat) findViewById(R.id.steps_switch);
@@ -190,8 +226,8 @@ public class MainActivity extends AppCompatActivity {
         notificationSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(viewPager.getCurrentItem() == 2){
-                    if(!notificationSwitch.isChecked()){
+                if (viewPager.getCurrentItem() == 2) {
+                    if (!notificationSwitch.isChecked()) {
                         profile.setStepsNotification(stepsSwitch.isChecked());
                         profile.setSleepNotification(sleepSwitch.isChecked());
                         stepsSwitch.setChecked(false);
