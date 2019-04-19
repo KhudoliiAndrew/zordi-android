@@ -6,8 +6,7 @@
     android:background="@color/colorPrimary"
     android:fadingEdge="none"
     android:fitsSystemWindows="true"
-    android:requiresFadingEdge="vertical"
-    >
+    android:requiresFadingEdge="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,12 +29,12 @@
                     android:id="@+id/circle_progress_bar"
                     android:layout_width="300dp"
                     android:layout_height="200dp"
-                    android:elevation="20dp"
                     android:layout_centerHorizontal="true"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:elevation="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/steps_cuantity_text"
@@ -45,30 +44,30 @@
                     android:text="0"
                     android:textColor="@color/textColorWhite"
                     android:textSize="30sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="35dp"
                     android:layout_toEndOf="@id/steps_cuantity_text"
                     android:text="steps"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/textColorWhite"
                     android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/steps_cuantity_text"
-                    android:layout_marginTop="35dp"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/steps_cuantity_text" />
 
-             <!--   <View
-                    android:id="@+id/complete_circle"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/ic_circle_white_24"/>-->
+                <!--   <View
+                       android:id="@+id/complete_circle"
+                       android:layout_width="150dp"
+                       android:layout_height="150dp"
+                       android:layout_centerInParent="true"
+                       android:background="@drawable/ic_circle_white_24"/>-->
 
             </android.support.constraint.ConstraintLayout>
 
@@ -107,47 +106,60 @@
                         android:layout_below="@id/activity_steps_text"
                         android:background="@color/colorLine" />
 
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_steps_text"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="10dp"
-                        android:text="1245"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp" />
+                        android:layout_marginStart="15dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/activity_steps_text"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="40dp"
-                        android:text="Yesterday"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/yesterday_steps_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:text="1245"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp" />
 
-                    <TextView
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="40dp"
+                            android:text="Yesterday"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_steps_text"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:id="@+id/distance_card_text"/>
+                        android:layout_marginEnd="15dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/activity_steps_text"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginTop="40dp"
-                        android:text="Distance"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/distance_card_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="40dp"
+                            android:text="Distance"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp" />
+
+                    </RelativeLayout>
+
 
                 </RelativeLayout>
 
@@ -192,8 +204,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_sleep_text"
-                        android:layout_marginTop="40dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="40dp"
                         android:text="Start sleep"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -253,8 +265,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_pulse_text"
-                        android:layout_marginTop="5dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
                         android:text="Today"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />
@@ -274,8 +286,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/today_text"
-                        android:layout_marginTop="5dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
                         android:text="Yesterday"
                         android:textColor="@color/textColor"
                         android:textSize="20sp" />

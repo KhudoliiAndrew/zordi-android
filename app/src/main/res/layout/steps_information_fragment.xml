@@ -211,7 +211,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="60dp"
                 android:text="28.03"
                 android:textColor="@color/textColor"
                 android:id="@+id/four_day_before_text"/>
@@ -221,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="45dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="60dp"
                 android:text="31.03"
                 android:textColor="@color/textColor"
                 android:id="@+id/today_text"/>

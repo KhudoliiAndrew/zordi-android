@@ -40,12 +40,10 @@ import java.util.List;
 
 public class FirstFragment extends Fragment implements StepCounterService.CallBack {
 
-    private static int DAY_LONG = 86400000;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
     private StepsData stepsData = new StepsData();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private StepsData stepsDayData = new StepsData();
     private CircleProgressBar circleProgressBar;
     private int steps;
     private StepCounterService stepCounterService;
@@ -98,76 +96,94 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                             Date date = new Date();
                             stepsDataList = task.getResult().toObjects(StepsData.class);
                             stepsData = stepsDataList.get(stepsDataList.size() - 1);
-                            long dateNumber = date.getTime();
                             if (date.getDate() != stepsData.getDate().getDate()) {
                                 stepsData.setSteps(stepsData.getSteps());
                                 stepsData.setDate(stepsData.getDate());
                                 dataBaseRepository.setStepsDataByDay(stepsData);
                                 stepsData.setDefaultInstance();
+                                dataBaseRepository.setStepsData(stepsData);
+                            } else {
+                                steps = stepsData.getSteps();
+                                viewSetter(view);
+                            }
                         } else {
+                            stepsData.setDefaultInstance();
                             steps = stepsData.getSteps();
+                            dataBaseRepository.setStepsData(stepsData);
+                        }
+                    }
+
+                });
+
+        dataBaseRepository.getStepsDataByDay()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            final Date date = new Date();
+                            stepsDataList = task.getResult().toObjects(StepsData.class);
+                            stepsDayData = stepsDataList.get(stepsDataList.size() - 1);
+                            viewSetter(view);
+                        } else {
                             viewSetter(view);
                         }
-                    } else
-
-                    {
-                        stepsData.setDefaultInstance();
-                        steps = stepsData.getSteps();
                     }
-                }
+                });
 
-    });
+        bindService();
 
-    bindService();
-
-    RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
-        stepsRelativeLayout.setOnClickListener(new View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View v){
-        StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
-    }
-    });
-
-    RelativeLayout sleepRelativeLayout = (RelativeLayout) view.findViewById(R.id.toSleepInformationCard);
-        sleepRelativeLayout.setOnClickListener(new View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View v){
-        SleepInformationFragment sleepInformationFragment = new SleepInformationFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragments_container, sleepInformationFragment).addToBackStack(null).commit();
-    }
-    });
-
-    RelativeLayout pulseRelativeLayout = (RelativeLayout) view.findViewById(R.id.toPulseInformationCard);
-        pulseRelativeLayout.setOnClickListener(new View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View v){
-
-    }
-    });
+        listenerSet(view);
 
         return view;
-}
+    }
+
+    public void listenerSet(View view) {
+        RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
+        stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
+                }
+            }
+        });
+
+        RelativeLayout sleepRelativeLayout = (RelativeLayout) view.findViewById(R.id.toSleepInformationCard);
+        sleepRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    SleepInformationFragment sleepInformationFragment = new SleepInformationFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.fragments_container, sleepInformationFragment).addToBackStack(null).commit();
+
+                }
+            }
+        });
+
+        RelativeLayout pulseRelativeLayout = (RelativeLayout) view.findViewById(R.id.toPulseInformationCard);
+        pulseRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
 
     public void viewSetter(View view) {
         TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_text);
         circleProgressBar = (CircleProgressBar) view.findViewById(R.id.circle_progress_bar);
         TextView cardDistanceText = (TextView) view.findViewById(R.id.distance_card_text);
+        TextView yestedayStepsText = (TextView) view.findViewById(R.id.yesterday_steps_text);
 
-        if (stepsData != null && profile != null) {
+        if (stepsData != null && profile != null && stepsDayData != null) {
             stepsText.setText(String.valueOf(stepsData.getSteps()));
             circleProgressBar.progressChange(stepsData.getSteps(), profile.getStepsTarget());
             float distance = ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f;
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
             cardDistanceText.setText(formattedDouble + " km");
+            yestedayStepsText.setText(String.valueOf(stepsDayData.getSteps()));
         }
 
     }

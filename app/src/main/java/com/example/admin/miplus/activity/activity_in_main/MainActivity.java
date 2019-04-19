@@ -150,18 +150,22 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.item_main:
-                        viewPager.setCurrentItem(0);
-                        break;
-                    case R.id.item_map:
-                        viewPager.setCurrentItem(1);
-                        break;
-                    case R.id.item_settings:
-                        viewPager.setCurrentItem(2);
-                        break;
+                if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    switch (item.getItemId()) {
+                        case R.id.item_main:
+                            viewPager.setCurrentItem(0);
+                            break;
+                        case R.id.item_map:
+                            viewPager.setCurrentItem(1);
+                            break;
+                        case R.id.item_settings:
+                            viewPager.setCurrentItem(2);
+                            break;
+                    }
+                    return true;
+                } else {
+                    return false;
                 }
-                return true;
             }
         });
 
