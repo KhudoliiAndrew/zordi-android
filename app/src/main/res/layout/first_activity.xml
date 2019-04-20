@@ -234,7 +234,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/toPulseInformationCard"
+                    android:id="@+id/toFriendsCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"

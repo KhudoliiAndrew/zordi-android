@@ -117,31 +117,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void stepsChecker() {
-        Date currentDate = new Date();
-        boolean isSorted = false;
-        Date buf;
-        StepsData stepsData1 = new StepsData();
-        while (!isSorted) {
-            isSorted = true;
-            for (int i = 0; i < stepsDataList.size() - 1; i++) {
-                stepsData1 = stepsDataList.get(i + 1);
-                stepsData = stepsDataList.get(i);
-                Log.d("stepList", "Date: " + String.valueOf(stepsData.getDate()) + "   Steps: " + String.valueOf(stepsData.getSteps()));
-         /*       if (stepsData.getDate().getTime() > stepsData1.getDate().getTime()) {
-                    if(stepsData.getDate().getDay() < currentDate.getDay()){
-                        //dayStepsData.setDate(currentDate.getDay());
-                    }
-                    isSorted = false;
-                    buf = stepsData.getDate();
-                    stepsData.setDate(stepsData1.getDate());
-                    stepsData1.setDate(buf);
-                }*/
-            }
-
-        }
-    }
-
     private void initBottomNavigationView() {
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         TabsPagerFragmentAdapter adapter = new TabsPagerFragmentAdapter(getSupportFragmentManager());

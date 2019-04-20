@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.StepsData;
+import com.example.admin.miplus.fragment.FirstWindow.FriendsFragment;
 import com.example.admin.miplus.fragment.FirstWindow.SleepInformationFragment;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
 import com.example.admin.miplus.pedometr.StepCounterService;
@@ -137,7 +139,7 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         return view;
     }
 
-    public void listenerSet(View view) {
+    private void listenerSet(View view) {
         RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,10 +165,16 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
             }
         });
 
-        RelativeLayout pulseRelativeLayout = (RelativeLayout) view.findViewById(R.id.toPulseInformationCard);
-        pulseRelativeLayout.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout friendsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toFriendsCard);
+        friendsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    FriendsFragment friendsFragment = new FriendsFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.fragments_container, friendsFragment).addToBackStack(null).commit();
+
+                }
             }
         });
     }
