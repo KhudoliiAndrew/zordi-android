@@ -48,16 +48,8 @@ public class DataBaseRepository {
         db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").document().set(stepsData);
     }
 
-    public Task<QuerySnapshot> getStepsDataList(){
-        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").get();
-    }
-
     public Task<QuerySnapshot> getStepsDataListOrderedDate(){
         return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").orderBy("date").get();
-    }
-
-    public Task<QuerySnapshot> getStepsDataListOrderedSteps(){
-        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").orderBy("steps").get();
     }
 
     public void setGeoData(GeoData geoData){

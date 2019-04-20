@@ -34,12 +34,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
+import lecho.lib.hellocharts.model.ChartData;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.view.Chart;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
@@ -49,8 +53,11 @@ public class StepsInformationFragment extends Fragment {
     private StepsData stepsData = new StepsData();
     private StepsData monthStepsData = new StepsData();
     private List<StepsData> stepsDataList = new ArrayList<StepsData>();
+    private List<StepsData> monthStepsDataList = new ArrayList<StepsData>();
     private int steps = 0;
     private Profile profile = new Profile();
+
+    boolean hasLabel = false;
 
     @Nullable
     @Override
@@ -105,10 +112,20 @@ public class StepsInformationFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
                             final Date date = new Date();
-                            stepsDataList = task.getResult().toObjects(StepsData.class);
+                            monthStepsDataList = task.getResult().toObjects(StepsData.class);
                             initMonthChart(view);
                         } else {
-                            initMonthChart(view);
+                            TextView firstDay = (TextView) view.findViewById(R.id.four_day_before_text);
+                            TextView endDay = (TextView) view.findViewById(R.id.today_text);
+                            TextView noHistory = (TextView) view.findViewById(R.id.no_steps_history);
+                            ColumnChartView chart = (ColumnChartView) view.findViewById(R.id.column_chart);
+
+                            chart.setZoomEnabled(false);
+                            chart.setScrollEnabled(false);
+                            chart.setInteractive(false);
+                            noHistory.setText("No history of your steps");
+                            firstDay.setText("");
+                            endDay.setText("");
                         }
                     }
                 });
@@ -145,37 +162,61 @@ public class StepsInformationFragment extends Fragment {
         Date date = new Date();
         TextView startActivity = (TextView) view.findViewById(R.id.start_activity_text);
         TextView endActivity = (TextView) view.findViewById(R.id.end_activity_text);
+        TextView noSteps = (TextView) view.findViewById(R.id.no_steps_today);
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        endActivity.setText(String.valueOf(formatter.format(stepsDataList.get(stepsDataList.size() - 1).getDate().getTime())));
+        if(stepsDataList.size() != 0) {
+            endActivity.setText(String.valueOf(formatter.format(stepsDataList.get(stepsDataList.size() - 1).getDate().getTime())));
+        } else{
+            noSteps.setText("No progress of your steps");
+            startActivity.setText("");
+            endActivity.setText("");
+        }
+
         List<PointValue> values = new ArrayList<PointValue>();
 
         boolean a = true;
         for (int i = 0; i < stepsDataList.size(); i++) {
             stepsData = stepsDataList.get(i);
-            if(stepsData.getDate().getDate() == date.getDate() ) {
+            if (stepsData.getDate().getDate() == date.getDate()) {
                 values.add(new PointValue(i, stepsData.getSteps()));
+
+                final Line line = new Line(values).setColor(getResources().getColor(R.color.colorPrimary)).setCubic(true).setHasPoints(hasLabel).setHasLabels(hasLabel).setHasLabelsOnlyForSelected(true);
+                List<Line> lines = new ArrayList<Line>();
+                lines.add(line);
+
+                LineChartData data = new LineChartData();
+                data.setLines(lines);
+
+
+
+                LineChartView chartView = (LineChartView) view.findViewById(R.id.chart);
+                chartView.setLineChartData(data);
+
+
+                chartView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        hasLabel = !hasLabel;
+                        line.setHasLabels(hasLabel);
+                        line.setHasPoints(hasLabel);
+                    }
+                });
+
                 if (a) {
+                    if(stepsDataList.size() != 0){
                     startActivity.setText(String.valueOf(formatter.format(stepsDataList.get(i).getDate().getTime())));
+                    } else {
+                        noSteps.setText("No progress of your steps");
+                        startActivity.setText("");
+                        endActivity.setText("");
+                    }
                     a = false;
                 }
             }
         }
 
-        Line line = new Line(values).setColor(getResources().getColor(R.color.colorPrimary)).setCubic(false).setHasPoints(false);
-        List<Line> lines = new ArrayList<Line>();
-        lines.add(line);
 
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-
-        LineChartView chart = new LineChartView(getContext());
-        chart.setLineChartData(data);
-
-        LineChartView chartView = (LineChartView) view.findViewById(R.id.chart);
-        chartView.setLineChartData(data);
-        chartView.setZoomEnabled(false);
-        chartView.setScrollEnabled(false);
     }
 
     private void initMonthChart(View view) {
@@ -186,21 +227,37 @@ public class StepsInformationFragment extends Fragment {
         Date date = new Date();
         TextView firstDay = (TextView) view.findViewById(R.id.four_day_before_text);
         TextView endDay = (TextView) view.findViewById(R.id.today_text);
+        TextView noHistory = (TextView) view.findViewById(R.id.no_steps_history);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
-        endDay.setText(String.valueOf(formatter.format(stepsDataList.get(stepsDataList.size() - 1).getDate())));
+
 
         boolean a = true;
-        for (int i = 0; i < stepsDataList.size(); i++) {
-            if (i < 4) {
-                monthStepsData = stepsDataList.get(stepsDataList.size() - 4 + i);
-                Log.d(">>>><<<<", "initMonthChart: " + monthStepsData.getDate());
+        for (int i = 4; i > 0; i--) {
+            if (monthStepsDataList.size() >= 4) {
+                monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
                 values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));
                 if (a) {
                     firstDay.setText(String.valueOf(formatter.format(monthStepsData.getDate())));
+                    endDay.setText(String.valueOf(formatter.format(monthStepsDataList.get(monthStepsDataList.size() - 1).getDate())));
                     a = false;
                 }
+            } else {
+                if(monthStepsDataList.size() - i <= -1){
+                    values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
+                } else {
+                    monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
+                    values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));
+                    if (a) {
+                        firstDay.setText(String.valueOf(formatter.format(monthStepsData.getDate())));
+                        endDay.setText(String.valueOf(formatter.format(monthStepsDataList.get(monthStepsDataList.size() - 1).getDate())));
+                        a = false;
+                    }
+                }
             }
+            Log.d(">>>><<<<", "initMonthChart: " + monthStepsData.getDate());
+
+
         }
 
         columns.add(new Column(values));
@@ -210,7 +267,6 @@ public class StepsInformationFragment extends Fragment {
         chart.setZoomEnabled(false);
         chart.setScrollEnabled(false);
         chart.setInteractive(false);
-
     }
 
     @Override
