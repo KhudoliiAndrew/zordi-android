@@ -1,13 +1,15 @@
 package com.example.admin.miplus.fragment.FirstWindow;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,42 +19,29 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.activity.activity_in_main.MainActivity;
+import com.example.admin.miplus.adapter.FriendRowType;
+import com.example.admin.miplus.adapter.AddFriendRowType;
+import com.example.admin.miplus.adapter.ItemClickListener;
+import com.example.admin.miplus.adapter.MyRecyclerViewAdapter;
+import com.example.admin.miplus.adapter.RowType;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
-import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import lecho.lib.hellocharts.model.Column;
-import lecho.lib.hellocharts.model.ColumnChartData;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.view.ColumnChartView;
-import lecho.lib.hellocharts.view.LineChartView;
-
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment implements ItemClickListener {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-    private StepsData stepsData = new StepsData();
-    private StepsData monthStepsData = new StepsData();
-    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
-    private List<StepsData> monthStepsDataList = new ArrayList<StepsData>();
-    private int steps = 0;
     private Profile profile = new Profile();
 
-    boolean hasLabel = false;
+    RecyclerView recyclerView;
+    MyRecyclerViewAdapter adapter;
+    List<RowType> items = new ArrayList<>();
 
     @Nullable
     @Override
@@ -75,11 +64,20 @@ public class FriendsFragment extends Fragment {
                     });
         }
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.friends_container);
+        items.add(new FriendRowType());
+        items.add(new AddFriendRowType());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new MyRecyclerViewAdapter(items);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+
         initToolbar();
         return view;
     }
 
-    private void viewSetter(View view) {}
+    private void viewSetter(View view) {
+    }
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
@@ -95,9 +93,11 @@ public class FriendsFragment extends Fragment {
         final TextView name = (TextView) view.findViewById(R.id.user_name_google);
         final TextView email = (TextView) view.findViewById(R.id.user_email_google);
         final ImageView logo = (ImageView) view.findViewById(R.id.user_logo_google);
-        name.setText(mAuth.getCurrentUser().getDisplayName());
-        email.setText(mAuth.getCurrentUser().getEmail());
-        Glide.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
+        if (getActivity() != null) {
+            name.setText(mAuth.getCurrentUser().getDisplayName());
+            email.setText(mAuth.getCurrentUser().getEmail());
+            Glide.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
+        }
     }
 
     @Override
@@ -110,4 +110,13 @@ public class FriendsFragment extends Fragment {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
+
+    @Override
+    public void onClick(View view, int position) {
+            AddFriendFragment addFriendFragment = new AddFriendFragment();
+            FragmentManager fragmentManager = getActivity().getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragments_container, addFriendFragment).addToBackStack(null).commit();
+    }
+
+
 }

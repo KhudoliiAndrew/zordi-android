@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/friend_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/friends_card_background"
+    android:elevation="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/friend_logo"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="50dp"
+        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+    <TextView
+        android:id="@+id/friend_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/friend_logo"
+        android:text="Name"
+        android:textColor="@color/textColor"
+        android:textSize="25sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_below="@id/friend_name"
+        android:layout_alignStart="@id/friend_logo"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorLine" />
+
+
+    <RelativeLayout
+        android:id="@+id/steps_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/friend_name"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/friend_logo">
+
+        <TextView
+            android:id="@+id/friend_steps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:textColor="@color/textColor"
+            android:textSize="23sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@id/friend_steps"
+            android:text=" steps"
+            android:textColor="@color/textColor"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/steps_layout"
+        android:layout_marginStart="17dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/friend_logo">
+
+        <TextView
+            android:id="@+id/friend_sleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:textColor="@color/textColor"
+            android:textSize="23sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@id/friend_sleep"
+            android:text=" of sleep"
+            android:textColor="@color/textColor"
+            android:textSize="17sp" />
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/friend_position"
+        android:layout_width="50dp"
+        android:layout_height="75dp"
+        android:layout_marginEnd="20dp"
+        app:srcCompat="@drawable/ic_place_black_24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/friend_name"/>
+</RelativeLayout>

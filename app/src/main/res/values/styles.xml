@@ -16,6 +16,12 @@
         <item name="colorControlNormal">@android:color/transparent</item>
     </style>
 
+    <style name="LightSwitchStyle" >
+        <item name="colorControlActivated">@color/textColorWhite</item>
+        <item name="colorSwitchThumbNormal"> @color/colorBackgroundGray</item>
+        <item name="android:colorForeground">@color/colorBackgroundChart </item>
+    </style>
+
     <style name="SwitchStyle" >
         <item name="colorControlActivated">@color/colorPrimaryLight</item>
         <item name="colorSwitchThumbNormal"> @color/colorPrimaryDark</item>

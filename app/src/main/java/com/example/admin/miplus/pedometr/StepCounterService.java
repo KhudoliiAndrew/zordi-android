@@ -213,7 +213,7 @@ public class StepCounterService extends Service implements SensorEventListener {
     }
 
     private void setStepsToBd(int steps) {
-        if (stepsData != null) {
+        if (stepsData != null && stepsData.getDate() != null && System.currentTimeMillis() != 0) {
             if (System.currentTimeMillis() > stepsData.getDate().getTime() + 60000) {
                 stepsData.setSteps(steps);
                 stepsData.setDate(new Date());

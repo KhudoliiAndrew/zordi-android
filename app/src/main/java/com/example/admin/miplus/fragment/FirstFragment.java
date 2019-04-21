@@ -173,7 +173,6 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                     FriendsFragment friendsFragment = new FriendsFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.fragments_container, friendsFragment).addToBackStack(null).commit();
-
                 }
             }
         });
