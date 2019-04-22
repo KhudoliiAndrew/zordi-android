@@ -5,4 +5,14 @@
     <string name="notification_title">Pedometer is counting</string>
     <string name="goal_reached_notification">Goal reached! %s steps and counting</string>
     <string name="notification_text">%s steps to go</string>
+
+    <string name="map_type_normal">Normal</string>
+    <string name="map_type_terrain">Terrain</string>
+    <string name="map_type_satellite">Satellite</string>
+    <string name="map_type_hybrid">Hybrid</string>
+
+    <string name="marker_color_blue">Blue</string>
+    <string name="marker_color_red">Red</string>
+    <string name="marker_color_green">Green</string>
+    <string name="marker_color_black">Black</string>
 </resources>

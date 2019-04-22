@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.example.admin.miplus.data_base.models.GeoData;
+import com.example.admin.miplus.data_base.models.GeoSettings;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.SleepData;
 import com.example.admin.miplus.data_base.models.StepsData;
@@ -23,6 +24,10 @@ public class DataBaseRepository {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Profile profile;
     private SleepData sleepData;
+    private GeoSettings mapType;
+    private GeoSettings markerColor;
+    private GeoSettings polylineColor;
+    private GeoData geoData;
 
     public void setProfile(Profile profile){
         db.collection("profiles").document(mAuth.getUid()).set(profile);
@@ -53,10 +58,6 @@ public class DataBaseRepository {
         return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").orderBy("date").get();
     }
 
-    public void setGeoData(GeoData geoData){
-        db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
-    }
-
     public void setStepsDataByDay(StepsData stepsData){
         db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").document().set(stepsData);
     }
@@ -71,6 +72,72 @@ public class DataBaseRepository {
 
     public Task<QuerySnapshot> getSleepData(){
         return db.collection("sleepData").document(mAuth.getUid()).collection("sleepDayData").orderBy("date").get();
+    }
+
+    public void setGeoData(GeoData geoData){
+        db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
+    }
+
+    public Task<QuerySnapshot> getGeoDataTask() {
+        final Task<QuerySnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").get();
+        task.onSuccessTask(new SuccessContinuation<QuerySnapshot, GeoData>() {
+            @NonNull
+            @Override
+            public Task<GeoData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
+                //Query dateFilter = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").orderBy(date);
+                geoData = (GeoData) querySnapshot.toObjects(GeoData.class);
+                return null;
+            }
+        });
+        return task;
+    }
+
+    public GeoData getGeoData(){
+        return geoData;
+    }
+
+    public void setMapSettings(GeoSettings mapType){
+        db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").set(mapType);
+    }
+
+    public Task<DocumentSnapshot> getMapSettingsTask() {
+        final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").get();
+        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>(){
+
+            @NonNull
+            @Override
+            public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                mapType = documentSnapshot.toObject(GeoSettings.class);
+                return null;
+            }
+        });
+        return task;
+    }
+
+    public GeoSettings getMapSettings(){
+        return mapType;
+    }
+
+    public void setMarkerColorFS(GeoSettings markerColor){
+        db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").set(markerColor);
+    }
+
+    public Task<DocumentSnapshot> getMarkerColorFSTask() {
+        final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").get();
+        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>(){
+
+            @NonNull
+            @Override
+            public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                markerColor = documentSnapshot.toObject(GeoSettings.class);
+                return null;
+            }
+        });
+        return task;
+    }
+
+    public GeoSettings getMarkerColorFS(){
+        return markerColor;
     }
 }
 
