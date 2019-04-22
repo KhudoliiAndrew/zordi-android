@@ -17,14 +17,14 @@
         android:elevation="20dp">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/steps_cuantity_container"
+            android:id="@+id/sleep_cuantity_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:elevation="20dp">
 
             <TextView
-                android:id="@+id/steps_cuantity_fragment"
+                android:id="@+id/sleep_cuantity_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1234"
@@ -42,23 +42,23 @@
                 android:textColor="@color/textColorWhite"
                 android:textSize="19dp"
                 android:layout_marginTop="42dp"
-                android:layout_below="@id/steps_cuantity_fragment"
+                android:layout_below="@id/sleep_cuantity_fragment"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/steps_cuantity_fragment"
+                app:layout_constraintTop_toTopOf="@id/sleep_cuantity_fragment"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </android.support.constraint.ConstraintLayout>
 
         <RelativeLayout
-            android:id="@+id/cal_km_container"
+            android:id="@+id/start_end_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/steps_cuantity_container"
+            android:layout_below="@id/sleep_cuantity_container"
             android:layout_centerHorizontal="true">
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/burned_calories_container"
+                android:id="@+id/start_sleep_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -66,7 +66,7 @@
                 android:layout_marginBottom="20dp">
 
                 <TextView
-                    android:id="@+id/text_calories"
+                    android:id="@+id/text_start_sleep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -81,7 +81,7 @@
                     android:id="@+id/burned_calories_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="start"
+                    android:text="start sleep"
                     android:textColor="@color/textColorWhite"
                     android:textSize="19dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -96,10 +96,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
-                android:layout_toEndOf="@id/burned_calories_container">
+                android:layout_toEndOf="@id/start_sleep_container">
 
                 <TextView
-                    android:id="@+id/traveled_distance_text"
+                    android:id="@+id/end_sleep_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -113,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="end"
+                    android:text="end sleep"
                     android:textColor="@color/textColorWhite"
                     android:textSize="19dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -190,8 +190,6 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp" />
 
-
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -207,7 +205,7 @@
         android:elevation="25dp">
 
         <lecho.lib.hellocharts.view.ColumnChartView
-            android:id="@+id/column_chart"
+            android:id="@+id/column_day_sleep_chart"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"

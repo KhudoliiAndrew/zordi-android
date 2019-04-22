@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/primary_background"
-        android:elevation="15dp">
+        android:elevation="10dp">
 
         <ImageView
             android:id="@+id/user_logo_google"
@@ -80,7 +80,7 @@
                 android:textSize="20sp" />
 
             <android.support.v7.widget.SwitchCompat
-                android:id="@+id/sleep_switch"
+                android:id="@+id/geoposition_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_view"
@@ -92,7 +92,7 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.v7.widget.RecyclerView
+   <!-- <android.support.v7.widget.RecyclerView
         android:id="@+id/friends_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -100,8 +100,134 @@
         android:elevation="20dp"
         android:layout_marginTop="5dp">
 
-    </android.support.v7.widget.RecyclerView>
+    </android.support.v7.widget.RecyclerView>-->
+
+    <RelativeLayout
+        android:id="@+id/friend_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/friends_card_background"
+        android:elevation="10dp"
+        android:layout_below="@id/main_information_container">
+
+        <ImageView
+            android:id="@+id/friend_logo"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="50dp"
+            app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+        <TextView
+            android:id="@+id/friend_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@id/friend_logo"
+            android:text="Олег Лисицкий"
+            android:textColor="@color/textColor"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:layout_below="@id/friend_name"
+            android:layout_alignStart="@id/friend_logo"
+            android:layout_marginStart="85dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/colorLine" />
 
 
+        <RelativeLayout
+            android:id="@+id/steps_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/friend_name"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@id/friend_logo">
+
+            <TextView
+                android:id="@+id/friend_steps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7912"
+                android:textColor="@color/textColor"
+                android:textSize="23sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_toEndOf="@id/friend_steps"
+                android:text=" steps"
+                android:textColor="@color/textColor"
+                android:textSize="17sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/steps_layout"
+            android:layout_marginStart="17dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@id/friend_logo">
+
+            <TextView
+                android:id="@+id/friend_sleep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="05:37"
+                android:textColor="@color/textColor"
+                android:textSize="23sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_toEndOf="@id/friend_sleep"
+                android:text=" of sleep"
+                android:textColor="@color/textColor"
+                android:textSize="17sp" />
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/friend_position"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_marginEnd="20dp"
+            app:srcCompat="@drawable/ic_place_black_24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/friend_name"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/add_friend_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/friends_card_background"
+        android:elevation="10dp"
+        android:layout_below="@id/friend_card">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:srcCompat="@drawable/ic_add_circle_outline_black_24dp" />
+    </RelativeLayout>
 
 </RelativeLayout>

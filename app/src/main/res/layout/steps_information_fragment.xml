@@ -17,7 +17,7 @@
         android:elevation="20dp">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/steps_cuantity_container"
+            android:id="@+id/sleep_cuantity_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -50,14 +50,14 @@
         </android.support.constraint.ConstraintLayout>
 
         <RelativeLayout
-            android:id="@+id/cal_km_container"
+            android:id="@+id/start_end_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/steps_cuantity_container"
+            android:layout_below="@id/sleep_cuantity_container"
             android:layout_centerHorizontal="true">
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/burned_calories_container"
+                android:id="@+id/start_sleep_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -94,10 +94,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
-                android:layout_toEndOf="@id/burned_calories_container">
+                android:layout_toEndOf="@id/start_sleep_container">
 
                 <TextView
-                    android:id="@+id/traveled_distance_text"
+                    android:id="@+id/end_sleep__text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"

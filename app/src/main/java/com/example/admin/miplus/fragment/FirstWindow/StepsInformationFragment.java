@@ -1,11 +1,9 @@
 package com.example.admin.miplus.fragment.FirstWindow;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,19 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.StepsData;
-import com.example.admin.miplus.fragment.FirstFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
@@ -34,16 +28,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
-import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
-import lecho.lib.hellocharts.model.ChartData;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.view.Chart;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
@@ -137,7 +127,7 @@ public class StepsInformationFragment extends Fragment {
     private void viewSetter(View view) {
         TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_fragment);
         TextView callText = (TextView) view.findViewById(R.id.text_calories);
-        TextView distanceText = (TextView) view.findViewById(R.id.traveled_distance_text);
+        TextView distanceText = (TextView) view.findViewById(R.id.end_sleep__text);
 
         if (stepsData != null && profile != null) {
             stepsText.setText(String.valueOf(steps));

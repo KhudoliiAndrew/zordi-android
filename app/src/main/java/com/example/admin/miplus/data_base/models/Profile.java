@@ -13,6 +13,7 @@ public class Profile {
     private boolean isSleepNotification;
     private boolean isNotifications;
     private boolean isLightTheme;
+    private boolean isShowGeoposition;
 
     public int getStepsTarget() {
         return stepsTarget;
@@ -75,6 +76,7 @@ public class Profile {
         setSleepNotification(true);
         setNotifications(true);
         setLightTheme(true);
+        setShowGeoposition(true);
     }
 
 
@@ -124,5 +126,13 @@ public class Profile {
 
     public void setLightTheme(boolean lightTheme) {
         isLightTheme = lightTheme;
+    }
+
+    public boolean getShowGeoposition() {
+        return isShowGeoposition;
+    }
+
+    public void setShowGeoposition(boolean showGeoposition) {
+        isShowGeoposition = showGeoposition;
     }
 }

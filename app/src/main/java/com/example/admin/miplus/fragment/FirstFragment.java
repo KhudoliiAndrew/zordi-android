@@ -22,6 +22,7 @@ import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.data_base.models.SleepData;
 import com.example.admin.miplus.data_base.models.StepsData;
 import com.example.admin.miplus.fragment.FirstWindow.FriendsFragment;
 import com.example.admin.miplus.fragment.FirstWindow.SleepInformationFragment;
@@ -50,6 +51,8 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     private int steps;
     private StepCounterService stepCounterService;
     private List<StepsData> stepsDataList = new ArrayList<StepsData>();
+    private SleepData sleepData = new SleepData();
+    private List<SleepData> sleepDataList = new ArrayList<SleepData>();
 
     public void setSteps(int steps) {
         this.steps = steps;
@@ -132,6 +135,36 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                     }
                 });
 
+        dataBaseRepository.getSleepData()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            Date date = new Date();
+                            sleepDataList = task.getResult().toObjects(SleepData.class);
+                            sleepData = sleepDataList.get(sleepDataList.size() - 1);
+                            if (date.getDate() != sleepData.getDate().getDate()) {
+                                if(profile != null){
+                                    sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
+                                    sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                                    sleepData.setDate(date);
+                                    dataBaseRepository.setSleepData(sleepData);
+                                }
+                            }
+                            sleepCardSetter(view);
+                        } else {
+                            Date date = new Date();
+                            if(profile != null){
+                                sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
+                                sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                                sleepData.setDate(date);
+                                dataBaseRepository.setSleepData(sleepData);
+                                sleepCardSetter(view);
+                            }
+                        }
+                    }
+                });
+
         bindService();
 
         listenerSet(view);
@@ -184,15 +217,87 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         TextView cardDistanceText = (TextView) view.findViewById(R.id.distance_card_text);
         TextView yestedayStepsText = (TextView) view.findViewById(R.id.yesterday_steps_text);
 
+
         if (stepsData != null && profile != null && stepsDayData != null) {
             stepsText.setText(String.valueOf(stepsData.getSteps()));
             circleProgressBar.progressChange(stepsData.getSteps(), profile.getStepsTarget());
             float distance = ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f;
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
             cardDistanceText.setText(formattedDouble + " km");
-            yestedayStepsText.setText(String.valueOf(stepsDayData.getSteps()));
+            yestedayStepsText.setText(String.valueOf(stepsDayData.getSteps()) + " steps");
         }
 
+    }
+
+    private void sleepCardSetter(View view){
+        TextView startSleepText = (TextView) view.findViewById(R.id.start_sleep_text_first_fragment);
+        TextView endSleepText = (TextView) view.findViewById(R.id.end_sleep_text_first_fragment);
+
+        startSleepText.setText(sleepData.getStartSleep());
+        endSleepText.setText(sleepData.getEndSleep());
+    }
+
+    private String setStartSleep(String startSleep) {
+        String realStartSleep;
+        String[] partStartSleep = startSleep.split(":");
+
+        int startHour = Integer.parseInt(partStartSleep[0]);
+        int whenStartHour = (int) ((Math.random() * ((startHour + 2) - (startHour - 1) + 1) + (startHour - 1)));
+        int whenStartMinute = (int) ((Math.random() * (60 - 0 + 1) + 0));
+
+        if (whenStartHour > 23) {
+            if (whenStartMinute > 9) {
+                realStartSleep = "0" + String.valueOf(whenStartHour - 24) + ":" + String.valueOf(whenStartMinute);
+            } else {
+                realStartSleep = "0" + String.valueOf(whenStartHour - 24) + ":0" + String.valueOf(whenStartMinute);
+            }
+        } else {
+            if (whenStartHour > 10) {
+                if (whenStartMinute > 9) {
+                    realStartSleep = String.valueOf(whenStartHour) + ":" + String.valueOf(whenStartMinute);
+                } else {
+                    realStartSleep = String.valueOf(whenStartHour) + ":0" + String.valueOf(whenStartMinute);
+                }
+            } else {
+                if (whenStartMinute > 9) {
+                    realStartSleep = "0" + String.valueOf(whenStartHour) + ":" + String.valueOf(whenStartMinute);
+                } else {
+                    realStartSleep = "0" + String.valueOf(whenStartHour) + ":0" + String.valueOf(whenStartMinute);
+                }
+            }
+        }
+        return realStartSleep;
+    }
+
+    private String setEndSleep(String endSleep) {
+        String[] partEndSleep = endSleep.split(":");
+        String realEndSleep;
+        int endHour = Integer.parseInt(partEndSleep[0]);
+
+        int whenEndHour = (int) ((Math.random() * ((endHour + 2) - (endHour - 1) + 1) + (endHour - 1)));
+        int whenEndMinute = (int) ((Math.random() * (60 - 0 + 1) + 0));
+        if (whenEndHour > 23) {
+            if (whenEndMinute > 9) {
+                realEndSleep = "0" + String.valueOf(whenEndHour - 24) + ":" + String.valueOf(whenEndMinute);
+            } else {
+                realEndSleep = "0" + String.valueOf(whenEndHour - 24) + ":0" + String.valueOf(whenEndMinute);
+            }
+        } else {
+            if (whenEndHour > 10) {
+                if (whenEndMinute > 9) {
+                    realEndSleep = String.valueOf(whenEndHour) + ":" + String.valueOf(whenEndMinute);
+                } else {
+                    realEndSleep = String.valueOf(whenEndHour) + ":0" + String.valueOf(whenEndMinute);
+                }
+            } else {
+                if (whenEndMinute > 9) {
+                    realEndSleep = "0" + String.valueOf(whenEndHour) + ":" + String.valueOf(whenEndMinute);
+                } else {
+                    realEndSleep = "0" + String.valueOf(whenEndHour) + ":0" + String.valueOf(whenEndMinute);
+                }
+            }
+        }
+        return realEndSleep;
     }
 
     private ServiceConnection connection = new ServiceConnection() {

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.example.admin.miplus.data_base.models.GeoData;
 import com.example.admin.miplus.data_base.models.Profile;
+import com.example.admin.miplus.data_base.models.SleepData;
 import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
@@ -21,7 +22,7 @@ public class DataBaseRepository {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Profile profile;
-    private StepsData stepsData;
+    private SleepData sleepData;
 
     public void setProfile(Profile profile){
         db.collection("profiles").document(mAuth.getUid()).set(profile);
@@ -56,16 +57,20 @@ public class DataBaseRepository {
         db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
     }
 
-    public void deleteStepsDataDocuments(){
-        db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").document().delete();
-    }
-
     public void setStepsDataByDay(StepsData stepsData){
         db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").document().set(stepsData);
     }
 
     public Task<QuerySnapshot> getStepsDataByDay(){
         return db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").orderBy("date").get();
+    }
+
+    public void setSleepData(SleepData sleepData){
+        db.collection("sleepData").document(mAuth.getUid()).collection("sleepDayData").document().set(sleepData);
+    }
+
+    public Task<QuerySnapshot> getSleepData(){
+        return db.collection("sleepData").document(mAuth.getUid()).collection("sleepDayData").orderBy("date").get();
     }
 }
 

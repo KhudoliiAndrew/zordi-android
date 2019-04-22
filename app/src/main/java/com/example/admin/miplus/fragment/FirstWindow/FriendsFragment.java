@@ -9,12 +9,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -52,6 +56,7 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
             profile = dataBaseRepository.getProfile();
             viewSetter(view);
             setHeaderContent(view);
+            setCardContent(view);
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -60,17 +65,18 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
                             profile = task.getResult().toObject(Profile.class);
                             viewSetter(view);
                             setHeaderContent(view);
+                            setCardContent(view);
                         }
                     });
         }
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.friends_container);
+      /*  recyclerView = (RecyclerView) view.findViewById(R.id.friends_container);
         items.add(new FriendRowType());
         items.add(new AddFriendRowType());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MyRecyclerViewAdapter(items);
         adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);*/
 
         initToolbar();
         return view;
@@ -98,6 +104,27 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
             email.setText(mAuth.getCurrentUser().getEmail());
             Glide.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
         }
+    }
+
+    private  void setCardContent(View view){
+        ImageView logo = (ImageView) view.findViewById(R.id.friend_logo);
+        Glide.with(getActivity()).load(R.drawable.photo_oleg).apply(RequestOptions.circleCropTransform()).into(logo);
+        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.add_friend_container);
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "You can add more friends in the future", Toast.LENGTH_LONG).show();
+            }
+        });
+        SwitchCompat switchCompat = (SwitchCompat) view.findViewById(R.id.geoposition_switch);
+        switchCompat.setChecked(profile.getShowGeoposition());
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                profile.setShowGeoposition(isChecked);
+                dataBaseRepository.setProfile(profile);
+            }
+        });
     }
 
     @Override
