@@ -10,12 +10,7 @@
                 android:icon="@drawable/ic_notifications_black_24dp"
                 app:actionLayout="@layout/layout_switch"
                 android:id="@+id/notification_item"/>
-            <item
-                android:checkable="true"
-                android:orderInCategory="1"
-                android:title="Dynamic theme"
-                android:icon="@drawable/ic_center_focus_weak_black_24dp"
-                app:actionLayout="@layout/layout_switch"/>
+
         </menu>
     </item>
     <item android:title="Communicate">

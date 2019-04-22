@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.DarkAppThemeWithTransparentStatusBar);
         super.onCreate(savedInstanceState);
 
         if (dataBaseRepository.getProfile() != null) {

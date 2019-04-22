@@ -92,12 +92,13 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
 
             @Override
             public void end(String ending) {
-                Log.d(">>>>>>", String.valueOf(endSleep) + "::" + String.valueOf(ending));
                 sleepDistance.setText(sleepLong(startSleep, endSleep));
                 textView2.setText(endSleep);
                 endSleep = ending;
             }
         });
+        sleepDistance.setText(sleepLong(startSleep, endSleep));
+        textView2.setText(endSleep);
     }
 
     private String sleepLong(String startSleep, String endSleep) {

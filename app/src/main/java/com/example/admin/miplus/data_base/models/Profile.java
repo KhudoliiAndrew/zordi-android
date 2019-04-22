@@ -14,6 +14,7 @@ public class Profile {
     private boolean isNotifications;
     private boolean isLightTheme;
     private boolean isShowGeoposition;
+    private int waterCount;
 
     public int getStepsTarget() {
         return stepsTarget;
@@ -77,6 +78,7 @@ public class Profile {
         setNotifications(true);
         setLightTheme(true);
         setShowGeoposition(true);
+        setWaterCount(0);
     }
 
 
@@ -134,5 +136,14 @@ public class Profile {
 
     public void setShowGeoposition(boolean showGeoposition) {
         isShowGeoposition = showGeoposition;
+    }
+
+
+    public int getWaterCount() {
+        return waterCount;
+    }
+
+    public void setWaterCount(int waterCount) {
+        this.waterCount = waterCount;
     }
 }

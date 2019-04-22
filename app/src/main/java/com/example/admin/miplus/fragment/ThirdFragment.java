@@ -57,11 +57,11 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.third_activity, container, false);
 
-
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             viewSetter(view);
             switchSetter(view);
+            setWaterCouner(view);
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -70,6 +70,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                             profile = task.getResult().toObject(Profile.class);
                             viewSetter(view);
                             switchSetter(view);
+                            setWaterCouner(view);
                         }
                     });
 
@@ -140,12 +141,12 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         if (getView() != null) {
             final SwitchCompat sleepSwitch = (SwitchCompat) view.findViewById(R.id.sleep_switch);
             final SwitchCompat stepsSwitch = (SwitchCompat) view.findViewById(R.id.steps_switch);
-            final SwitchCompat lightThemeSwitch = (SwitchCompat) view.findViewById(R.id.light_theme_switch);
-            final SwitchCompat darkThemeSwitch = (SwitchCompat) view.findViewById(R.id.dark_theme_switch);
+          /*  final SwitchCompat lightThemeSwitch = (SwitchCompat) view.findViewById(R.id.light_theme_switch);
+            final SwitchCompat darkThemeSwitch = (SwitchCompat) view.findViewById(R.id.dark_theme_switch);*/
 
 
-            lightThemeSwitch.setChecked(profile.getLightTheme());
-            darkThemeSwitch.setChecked(!profile.getLightTheme());
+           /* lightThemeSwitch.setChecked(profile.getLightTheme());
+            darkThemeSwitch.setChecked(!profile.getLightTheme());*/
 
             if(!profile.getNotifications() ){
                 stepsSwitch.setChecked(false);
@@ -172,7 +173,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                 }
             });
 
-            lightThemeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          /*  lightThemeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     darkThemeSwitch.setChecked(!isChecked);
@@ -189,15 +190,28 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                     profile.setLightTheme(!isChecked);
                     dataBaseRepository.setProfile(profile);
                 }
-            });
+            });*/
         }
     }
 
-    private void setAlarm() {
-        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, Integer.parseInt(profile.getEndSleep()), pendingIntent);
+    private void setWaterCouner(View view){
+        TextView textView = (TextView) view.findViewById(R.id.all_water);
+        textView.setText(" /" + (profile.getWeight() * 35) + " ml");
+        Button button = (Button) view.findViewById(R.id.add_water_ml);
+        final TextView textView1 = (TextView) view.findViewById(R.id.water_counter_text);
+        textView1.setText(String.valueOf(profile.getWaterCount()));
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(profile.getWaterCount() < 10000){
+                    profile.setWaterCount(profile.getWaterCount() + 250);
+                    textView1.setText(String.valueOf(profile.getWaterCount()));
+                    dataBaseRepository.setProfile(profile);
+                } else{
+                    Toast.makeText(getActivity(), "You drank too much", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -256,4 +270,26 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         weightText.setText(String.valueOf(profile.getWeight() + " kg"));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (dataBaseRepository.getProfile() != null) {
+            profile = dataBaseRepository.getProfile();
+            viewSetter(view);
+            switchSetter(view);
+            setWaterCouner(view);
+        } else {
+            dataBaseRepository.getProfileTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            profile = task.getResult().toObject(Profile.class);
+                            viewSetter(view);
+                            switchSetter(view);
+                            setWaterCouner(view);
+                        }
+                    });
+
+        }
+    }
 }
