@@ -82,9 +82,6 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
 
         Button stepsButton = (Button) view.findViewById(R.id.steps_watch_button);
         Button sleepButton = (Button) view.findViewById(R.id.waking_watch_button);
-        Button locationSettings = (Button) view.findViewById(R.id.location_settings_button);
-        Button mapType = (Button) view.findViewById(R.id.map_type_button);
-        final TextView mapTypeText = (TextView) view.findViewById(R.id.map_type_text);
 
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,58 +101,6 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                     dlgf1.show(getFragmentManager(), "dlgf1");
                 }
 
-            }
-        });
-
-        locationSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
-                }
-            });
-
-        mapType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            listItems = new String[] {"Normal", "Satellite", "Hybrid", "Terrain"};
-                AlertDialog.Builder mapTypeBuilder = new AlertDialog.Builder(getActivity());
-                mapTypeBuilder.setTitle("Choose a type");
-                mapTypeBuilder.setIcon(R.drawable.ic_list);
-                mapTypeBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mapTypeText.setText(listItems[which]);
-                        dialog.dismiss();
-
-                    switch(which){
-                        case 0 :
-                            geoSettings.setMapType(getString(R.string.map_type_normal));
-                            dataBaseRepository.setMapSettings(geoSettings);
-                        break;
-                        case 1 :
-                            geoSettings.setMapType(getString(R.string.map_type_satellite));
-                            dataBaseRepository.setMapSettings(geoSettings);
-                            break;
-                        case 2 :
-                            geoSettings.setMapType(getString(R.string.map_type_hybrid));
-                            dataBaseRepository.setMapSettings(geoSettings);
-                            break;
-                        case 3 :
-                            geoSettings.setMapType(getString(R.string.map_type_terrain));
-                            dataBaseRepository.setMapSettings(geoSettings);
-                            break;
-                    }
-                    }
-                });
-
-                mapTypeBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                AlertDialog mapTypeDialog = mapTypeBuilder.create();
-                mapTypeDialog.show();
             }
         });
 

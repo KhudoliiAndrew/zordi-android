@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/map_settings"
+    android:background="@color/colorPrimary"
+    android:fadingEdge="none"
+    android:fitsSystemWindows="true"
+    android:requiresFadingEdge="vertical"
+    android:elevation="5dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="54dp"
+        android:fadingEdge="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/mapSettingsPhone"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ic_settings_black_24dp"
+                    android:elevation="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <Button
+                    android:id="@+id/backToMapButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="170dp"
+                    android:layout_marginEnd="355dp"
+                    android:background="@drawable/ic_arrow_back_white_24dp"
+                    android:elevation="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/menu_big_container_background"
+                android:elevation="7dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/menu_container_background"
+                    android:elevation="7dp"
+                    android:padding="@dimen/default_padding">
+
+                    <TextView
+                        android:id="@+id/type_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Type"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_height"
+                        android:layout_below="@id/type_text"
+                        android:background="@color/colorLine" />
+
+                    <Button
+                        android:id="@+id/map_type_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/type_text"
+                        android:layout_marginStart="10dp"
+                        android:background="@android:color/transparent"
+                        android:text="Your Type of Map"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_height"
+                        android:layout_below="@id/map_type_button"
+                        android:background="@color/colorLine" />
+
+                    <TextView
+                        android:id="@+id/map_type_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/map_type_button"
+                        android:layout_alignTop="@+id/map_type_button"
+                        android:layout_alignEnd="@+id/map_type_button"
+                        android:layout_alignBottom="@+id/map_type_button"
+                        android:layout_marginStart="300dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/textColor"
+                        android:textSize="15sp"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/menu_container_background"
+                    android:elevation="7dp"
+                    android:padding="@dimen/default_padding">
+
+                    <TextView
+                        android:id="@+id/marker_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Marker"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_height"
+                        android:layout_below="@id/marker_text"
+                        android:background="@color/colorLine" />
+
+                    <Button
+                        android:id="@+id/marker_color_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/marker_text"
+                        android:layout_marginStart="10dp"
+                        android:background="@android:color/transparent"
+                        android:text="Marker Color"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_height"
+                        android:layout_below="@id/marker_color_button"
+                        android:background="@color/colorLine" />
+
+                    <TextView
+                        android:id="@+id/marker_color_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/marker_color_button"
+                        android:layout_alignTop="@+id/marker_color_button"
+                        android:layout_alignEnd="@+id/marker_color_button"
+                        android:layout_alignBottom="@+id/marker_color_button"
+                        android:layout_marginStart="300dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/textColor"
+                        android:textSize="15sp"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/menu_container_background"
+                    android:elevation="7dp"
+                    android:padding="@dimen/default_padding">
+
+                    <TextView
+                        android:id="@+id/polyline_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Polyline"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_height"
+                        android:layout_below="@id/polyline_text"
+                        android:background="@color/colorLine" />
+
+                    <Button
+                        android:id="@+id/polyline_color_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/polyline_text"
+                        android:layout_marginStart="10dp"
+                        android:background="@android:color/transparent"
+                        android:text="Polyline Color"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_height"
+                        android:layout_below="@id/polyline_color_button"
+                        android:background="@color/colorLine" />
+
+                    <TextView
+                        android:id="@+id/polyline_color_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/polyline_color_button"
+                        android:layout_alignTop="@+id/polyline_color_button"
+                        android:layout_alignEnd="@+id/polyline_color_button"
+                        android:layout_alignBottom="@+id/polyline_color_button"
+                        android:layout_marginStart="300dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/textColor"
+                        android:textSize="15sp"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

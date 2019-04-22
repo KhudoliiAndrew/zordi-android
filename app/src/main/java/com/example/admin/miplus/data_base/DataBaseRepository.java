@@ -27,7 +27,8 @@ public class DataBaseRepository {
     private Profile profile;
     private GeoData geoData;
     private GeoSettings mapType;
-
+    private GeoSettings markerColor;
+    private GeoSettings polylineColor;
     final FirebaseUser currentUser = mAuth.getCurrentUser();
 
     public void setProfile(Profile profile){
@@ -52,8 +53,8 @@ public class DataBaseRepository {
         return profile;
     }
 
-    DateFormat df = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss");
-    String date = df.format(Calendar.getInstance().getTime());
+    /*DateFormat df = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss");
+    String date = df.format(Calendar.getInstance().getTime());*/
 
     public void setGeoData(GeoData geoData){
         db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
@@ -65,7 +66,7 @@ public class DataBaseRepository {
             @NonNull
             @Override
             public Task<GeoData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
-                Query dateFilter = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").orderBy(date);
+                //Query dateFilter = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").orderBy(date);
                 geoData = (GeoData) querySnapshot.toObjects(GeoData.class);
                 return null;
             }
@@ -97,5 +98,27 @@ public class DataBaseRepository {
 
     public GeoSettings getMapSettings(){
         return mapType;
+    }
+
+    public void setMarkerColorFS(GeoSettings markerColor){
+        db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").set(markerColor);
+    }
+
+    public Task<DocumentSnapshot> getMarkerColorFSTask() {
+        final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").get();
+        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>(){
+
+            @NonNull
+            @Override
+            public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                markerColor = documentSnapshot.toObject(GeoSettings.class);
+                return null;
+            }
+        });
+        return task;
+    }
+
+    public GeoSettings getMarkerColorFS(){
+        return markerColor;
     }
 }
