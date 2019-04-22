@@ -162,7 +162,7 @@ public class SleepInformationFragment extends Fragment {
     private void adviceSetter(View view) {
         TextView firstAdvice = (TextView) view.findViewById(R.id.first_advice);
         TextView secondAdvice = (TextView) view.findViewById(R.id.second_advice);
-        TextView thirdAdvice = (TextView) view.findViewById(R.id.third_advice);
+      //  TextView thirdAdvice = (TextView) view.findViewById(R.id.third_advice);
 
         if(sleepData != null) {
            // if(profile.getStartSleep() != null && profile.getEndSleep() != null){
@@ -230,7 +230,7 @@ public class SleepInformationFragment extends Fragment {
 
       //  firstAdvice.setText("Fell asleep " + "1h 2m" + " early/later");
       //  secondAdvice.setText("Woke up " + "1h 2m" + " early/later");
-        thirdAdvice.setText("Sleep " + "increased by " + "1h");
+       /* thirdAdvice.setText("Sleep " + "increased by " + "1h");*/
     }
 
     private void viewSetter(View view) {

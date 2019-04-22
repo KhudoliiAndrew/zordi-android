@@ -1,5 +1,7 @@
 package com.example.admin.miplus.data_base.models;
 
+import java.util.Date;
+
 public class Profile {
     private int stepsTarget;
     private String sleepTarget;
@@ -15,6 +17,7 @@ public class Profile {
     private boolean isLightTheme;
     private boolean isShowGeoposition;
     private int waterCount;
+    private Date date;
 
     public int getStepsTarget() {
         return stepsTarget;
@@ -79,6 +82,7 @@ public class Profile {
         setLightTheme(true);
         setShowGeoposition(true);
         setWaterCount(0);
+        setDate(new Date());
     }
 
 
@@ -145,5 +149,13 @@ public class Profile {
 
     public void setWaterCount(int waterCount) {
         this.waterCount = waterCount;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

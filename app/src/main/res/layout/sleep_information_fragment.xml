@@ -170,15 +170,15 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp" />
 
-        <View
+       <!-- <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider_height"
             android:layout_below="@id/second_advice"
             android:background="@color/colorLine"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"/>
+            android:layout_marginEnd="15dp"/>-->
 
-        <TextView
+       <!-- <TextView
             android:layout_below="@id/second_advice"
             android:id="@+id/third_advice"
             android:layout_width="wrap_content"
@@ -188,7 +188,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="20dp" />-->
 
     </RelativeLayout>
 
@@ -204,17 +204,28 @@
         android:background="@drawable/container_background_white"
         android:elevation="25dp">
 
+        <TextView
+            android:id="@+id/sleep_chart_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Sleep progress in the last 4 days"
+            android:textColor="@color/textColor"
+            android:textSize="17dp" />
+
         <lecho.lib.hellocharts.view.ColumnChartView
             android:id="@+id/column_day_sleep_chart"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentTop="true"
             android:layout_alignBottom="@id/week_text"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="30dp"
-            android:elevation="20dp" />
+            android:elevation="20dp"
+            android:layout_below="@id/sleep_chart_label"/>
 
         <RelativeLayout
             android:id="@+id/week_text"

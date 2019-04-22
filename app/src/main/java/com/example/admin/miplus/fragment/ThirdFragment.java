@@ -38,6 +38,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
+
 public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget, HeightDialogFragment.PushHeight, WeightDialogFragment.PushWeight {
     private View view;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
@@ -61,7 +63,15 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
             profile = dataBaseRepository.getProfile();
             viewSetter(view);
             switchSetter(view);
-            setWaterCouner(view);
+            Date date = new Date();
+            if(profile.getDate().getDate() != date.getDate()){
+                profile.setWaterCount(0);
+                profile.setDate(date);
+                dataBaseRepository.setProfile(profile);
+                setWaterCouner(view);
+            } else{
+                setWaterCouner(view);
+            }
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -70,7 +80,15 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                             profile = task.getResult().toObject(Profile.class);
                             viewSetter(view);
                             switchSetter(view);
-                            setWaterCouner(view);
+                            Date date = new Date();
+                            if(profile.getDate().getDate() != date.getDate()){
+                                profile.setWaterCount(0);
+                                profile.setDate(date);
+                                dataBaseRepository.setProfile(profile);
+                                setWaterCouner(view);
+                            } else{
+                                setWaterCouner(view);
+                            }
                         }
                     });
 
@@ -268,28 +286,5 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         dataBaseRepository.setProfile(profile);
         TextView weightText = (TextView) view.findViewById(R.id.weight_text);
         weightText.setText(String.valueOf(profile.getWeight() + " kg"));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (dataBaseRepository.getProfile() != null) {
-            profile = dataBaseRepository.getProfile();
-            viewSetter(view);
-            switchSetter(view);
-            setWaterCouner(view);
-        } else {
-            dataBaseRepository.getProfileTask()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
-                            viewSetter(view);
-                            switchSetter(view);
-                            setWaterCouner(view);
-                        }
-                    });
-
-        }
     }
 }
