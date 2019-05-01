@@ -17,6 +17,10 @@ import com.example.admin.miplus.CustomXML.CircleAlarmTimerView;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.fragment.ThirdFragment;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class SleepRangeDialogFragment extends DialogFragment implements View.OnClickListener {
     View view;
     private String sleepTarget;
@@ -32,7 +36,7 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
 
 
     @SuppressLint("ValidFragment")
-    public SleepRangeDialogFragment(String sleepTarget, String startSleep, String endSleep,  float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
+    public SleepRangeDialogFragment(String sleepTarget, String startSleep, String endSleep, float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
         this.sleepTarget = sleepTarget;
         this.startSleep = startSleep;
         this.endSleep = endSleep;
@@ -41,7 +45,8 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         this.endRadian = endRadian;
     }
 
-    public SleepRangeDialogFragment() { }
+    public SleepRangeDialogFragment() {
+    }
 
     @Nullable
     @Override
@@ -57,7 +62,7 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         textView1.setText(startSleep);
         textView2.setText(endSleep);
         initView();
-      //  circleAlarmTimerView.setStartRadian(startSleep, endSleep);
+        //  circleAlarmTimerView.setStartRadian(startSleep, endSleep);
 
         return view;
     }
@@ -86,8 +91,16 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
             public void start(String starting) {
                 sleepDistance.setText(sleepLong(startSleep, endSleep));
                 textView1.setText(startSleep);
-                textView2.setText(endSleep);
                 startSleep = starting;
+
+                Date date1 = null;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                try {
+                    date1 = simpleDateFormat.parse(startSleep);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.d("><><><><>", startSleep + "\t" + simpleDateFormat.format(date1));
             }
 
             @Override
@@ -130,16 +143,16 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         } else {
             int differenceTime = 60 - (Integer.parseInt(partStartSleep[1]) + 1 - Integer.parseInt(partEndSleep[1]));
             if (differenceTime < 10) {
-                if(Integer.parseInt(sleepTarget) - 1 < 10){
+                if (Integer.parseInt(sleepTarget) - 1 < 10) {
                     sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
                 } else {
                     sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
                 }
             } else {
-                if(Integer.parseInt(sleepTarget) - 1 != -1){
-                    if(Integer.parseInt(sleepTarget) - 1 < 10){
+                if (Integer.parseInt(sleepTarget) - 1 != -1) {
+                    if (Integer.parseInt(sleepTarget) - 1 < 10) {
                         sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
-                    } else{
+                    } else {
                         sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
                     }
                 } else {

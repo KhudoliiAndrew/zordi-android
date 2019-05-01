@@ -71,9 +71,10 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
     private static final int LAYOUT = R.layout.second_activity;
 
     private GoogleMap mGoogleMap;
@@ -81,11 +82,11 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private Location location;
     private TextView checkGoogleServices;
     private LocationRequest mLocationRequest;
-    private GeoData geoData = new GeoData();
+
     private GeoSettings geoSettings = new GeoSettings();
     private GeoSettings geoSettingsM = new GeoSettings();
     private GeoSettings geoSettingsP = new GeoSettings();
-    private Set<GeoData> geoDataList = new TreeSet<GeoData>(getGeoComparator());
+    private SortedSet<GeoData> geoDataList = new TreeSet<GeoData>(getGeoComparator());
     private DataBaseRepository dataBaseRepository = new DataBaseRepository();
     public Polyline line;
 
@@ -123,7 +124,14 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         permissionsToRequest = permissionsToRequest(permissions);
 
-      /*  Button btn;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (permissionsToRequest.size() > 0) {
+                requestPermissions(permissionsToRequest.
+                        toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+            }
+        }
+
+        /*Button btn;
         btn = (Button) view.findViewById(R.id.myLocationButton);
         btn.setOnClickListener(this);
 
@@ -133,7 +141,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         getDataFirebase();
 
-     /*   if (dataBaseRepository.getMapSettings() != null) {
+        if (dataBaseRepository.getMapSettings() != null) {
             geoSettings = dataBaseRepository.getMapSettings();
             getMapType();
         } else {
@@ -145,25 +153,15 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                             getMapType();
                         }
                     });
-        }*/
+        }
 
         return view;
     }
 
-  /*  @Override
+    @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        /*switch (v.getId()) {
             case R.id.myLocationButton:
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
                 location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
@@ -176,9 +174,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 fragmentTransaction.replace(R.id.map_fragment, fragment);
                 fragmentTransaction.commit();
                 break;
-        }
+        }*/
 
-    }*/
+    }
 
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions) {
         ArrayList<String> result = new ArrayList<>();
@@ -268,6 +266,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setCompassEnabled(false);
         onGoogleApiClientConnected();
+
     }
 
     @Override
@@ -322,35 +321,31 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
             mGoogleMap.animateCamera(update);
 
-            MarkerOptions marker = new MarkerOptions().position(ll);
-            mGoogleMap.addMarker(marker);
+            if (location.getLatitude() < 38.5 && location.getLatitude() > 37.5 && location.getLongitude() > 70 && location.getLongitude() < 71) {
+                Log.d(">>>>>>", "+1");
+            }
+
+            GeoData geoData = new GeoData();
 
             geoData.setUserPosition(location.getLatitude(), location.getLongitude());
             geoData.setDate(new Date());
             dataBaseRepository.setGeoData(geoData);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (permissionsToRequest.size() > 0) {
-                    requestPermissions(permissionsToRequest.
-                            toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-                }
-            }
-
             geoDataList.add(geoData);
 
-            /*if (dataBaseRepository.getMarkerColorFS() != null) {
+            if (dataBaseRepository.getMarkerColorFS() != null) {
                 geoSettingsM = dataBaseRepository.getMarkerColorFS();
-                //getMarkerColorHere();
+                getMarkerColorHere();
             } else {
                 dataBaseRepository.getMarkerColorFSTask()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 geoSettingsM = task.getResult().toObject(GeoSettings.class);
-                                //getMarkerColorHere();
+                                getMarkerColorHere();
                             }
                         });
-            }*/
+            }
 
             redrawLine();
 
@@ -358,11 +353,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void getDataFirebase() {
+
         dataBaseRepository.getGeoDataTask()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                        GeoData geoData = new GeoData();
+                        if (task.getResult() != null) {
                             geoDataList.addAll(task.getResult().toObjects(GeoData.class));
                             redrawLine();
 
@@ -383,54 +380,57 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         return new Comparator<GeoData>() {
             @Override
             public int compare(GeoData o1, GeoData o2) {
-                return o1.getDate().compareTo(o2.getDate());
+                if(o1 != null && o2 != null){
+                    if(o1.getDate() != null && o2.getDate() != null){
+                        return o1.getDate().compareTo(o2.getDate());
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return 0;
+                }
             }
 
         };
     }
 
-  /*  private void getMapType() {
-        if(geoSettings != null) {
-            if (geoSettings.getMapType().equals(getString(R.string.map_type_normal))) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            } else if (geoSettings.getMapType().equals(getString(R.string.map_type_satellite))) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            } else if (geoSettings.getMapType().equals(getString(R.string.map_type_hybrid))) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            } else if (geoSettings.getMapType().equals(getString(R.string.map_type_terrain))) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-            }
+    private void getMapType() {
+        if (geoSettings.getMapType().equals(getString(R.string.map_type_normal))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        } else if (geoSettings.getMapType().equals(getString(R.string.map_type_satellite))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        } else if (geoSettings.getMapType().equals(getString(R.string.map_type_hybrid))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        } else if (geoSettings.getMapType().equals(getString(R.string.map_type_terrain))) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         }
-    }*/
+    }
 
-    /*private void getMarkerColorHere(){
-        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-        if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_blue))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_blue)).position(ll);
+    private void getMarkerColorHere() {
+        /*LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        if (geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_blue))) {
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_blue)).position(latLng);
             mGoogleMap.addMarker(marker);
-        }
-        else if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_red))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_red)).position(ll);
+        } else if (geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_red))) {
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_red)).position(latLng);
             mGoogleMap.addMarker(marker);
-        }
-        else if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_green))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_green)).position(ll);
+        } else if (geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_green))) {
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_green)).position(latLng);
             mGoogleMap.addMarker(marker);
-        }
-        else if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_black))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_black)).position(ll);
+        } else if (geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_black))) {
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_black)).position(latLng);
             mGoogleMap.addMarker(marker);
-        }
-    }*/
+        }*/
+    }
 
-/*    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }*/
+    }
 
     private void redrawLine() {
         Log.d(">>>>>>", "Drawing Line");
@@ -441,13 +441,20 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         while (itr.hasNext()) {
             GeoData a = itr.next();
-            Date date = new Date();
-            if(a.getDate().getDate() == date.getDate()){
-                LatLng latLng = new LatLng(a.getLatitude(), a.getLongitude());
-                options.add(latLng);
-            }
-
+            LatLng latLng = new LatLng(a.getLatitude(), a.getLongitude());
+            options.add(latLng);
         }
+
+        if(geoDataList.size() != 0  ){
+            GeoData last = geoDataList.last();
+            LatLng latLng = new LatLng(last.getLatitude(), last.getLongitude());
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_blue)).position(latLng);
+            mGoogleMap.addMarker(marker);
+        }
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(38.5, 70))
+                .title("Hello world"));
 
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
@@ -487,13 +494,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                         mGoogleApiClient.connect();
                         //permission ok, we get last location
                         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
                             return;
                         }
                         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
