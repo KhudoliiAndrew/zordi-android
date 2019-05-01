@@ -71,6 +71,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
@@ -81,11 +82,11 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private Location location;
     private TextView checkGoogleServices;
     private LocationRequest mLocationRequest;
-    private GeoData geoData = new GeoData();
+
     private GeoSettings geoSettings = new GeoSettings();
     private GeoSettings geoSettingsM = new GeoSettings();
     private GeoSettings geoSettingsP = new GeoSettings();
-    private Set<GeoData> geoDataList = new TreeSet<GeoData>(getGeoComparator());
+    private SortedSet<GeoData> geoDataList = new TreeSet<GeoData>(getGeoComparator());
     private DataBaseRepository dataBaseRepository = new DataBaseRepository();
     public Polyline line;
 
@@ -122,6 +123,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         permissionsToRequest = permissionsToRequest(permissions);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (permissionsToRequest.size() > 0) {
+                requestPermissions(permissionsToRequest.
+                        toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+            }
+        }
 
         Button btn;
         btn = (Button) view.findViewById(R.id.myLocationButton);
@@ -258,6 +266,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setCompassEnabled(false);
         onGoogleApiClientConnected();
+
     }
 
     @Override
@@ -312,19 +321,16 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
             mGoogleMap.animateCamera(update);
 
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_blue)).position(ll);
-            mGoogleMap.addMarker(marker);
+            if (location.getLatitude() < 38.5 && location.getLatitude() > 37.5 && location.getLongitude() > 70 && location.getLongitude() < 71)
+            {
+                Log.d(">>>>>>", "+1");
+            }
+
+            GeoData geoData = new GeoData();
 
             geoData.setUserPosition(location.getLatitude(), location.getLongitude());
             geoData.setDate(new Date());
             dataBaseRepository.setGeoData(geoData);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (permissionsToRequest.size() > 0) {
-                    requestPermissions(permissionsToRequest.
-                            toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-                }
-            }
 
             geoDataList.add(geoData);
 
@@ -348,10 +354,12 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void getDataFirebase(){
+
         dataBaseRepository.getGeoDataTask()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        GeoData geoData = new GeoData();
                         if(task.getResult() != null) {
                             geoDataList.addAll(task.getResult().toObjects(GeoData.class));
                             redrawLine();
@@ -395,21 +403,21 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void getMarkerColorHere(){
-        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_blue))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_blue)).position(ll);
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_blue)).position(latLng);
             mGoogleMap.addMarker(marker);
         }
         else if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_red))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_red)).position(ll);
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_red)).position(latLng);
             mGoogleMap.addMarker(marker);
         }
         else if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_green))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_green)).position(ll);
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_green)).position(latLng);
             mGoogleMap.addMarker(marker);
         }
         else if(geoSettingsM.getMarkerColor().equals(getString(R.string.marker_color_black))) {
-            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_black)).position(ll);
+            MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_black)).position(latLng);
             mGoogleMap.addMarker(marker);
         }
     }
@@ -435,6 +443,16 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             LatLng latLng = new LatLng(a.getLatitude(), a.getLongitude());
             options.add(latLng);
         }
+
+        GeoData last = geoDataList.last();
+        LatLng latLng = new LatLng(last.getLatitude(), last.getLongitude());
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(38.5, 70))
+                .title("Hello world"));
+
+        MarkerOptions marker = new MarkerOptions().icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_location_point_blue)).position(latLng);
+        mGoogleMap.addMarker(marker);
 
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
