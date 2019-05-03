@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent" />
 
-
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +71,5 @@
             android:background="@android:color/transparent"
             android:text="Log Out" />
     </android.support.design.widget.NavigationView>
-
-
 
 </android.support.v4.widget.DrawerLayout>

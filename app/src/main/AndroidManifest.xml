@@ -37,6 +37,11 @@
             android:exported="true" />
 
         <service
+            android:name=".Services.MapPositionService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
             android:name=".Services.NotificationService"
             android:exported="false" />
 

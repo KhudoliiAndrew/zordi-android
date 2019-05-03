@@ -59,10 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int NOTIFICATION_REMINDER_NIGHT = 2;
     private Profile profile = new Profile();
-    private int steps;
-    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
-    private StepsData stepsData = new StepsData();
-    private StepsData dayStepsData = new StepsData();
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
 
@@ -82,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-
-        setNotification();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(new Intent(this, StepCounterService.class));
@@ -278,13 +272,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-    }
-
-    private void setNotification() {
-        Intent notifyIntent = new Intent(this, NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast
-                (this, NOTIFICATION_REMINDER_NIGHT, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(this.ALARM_SERVICE);
     }
 
     private void newUserChecker() {

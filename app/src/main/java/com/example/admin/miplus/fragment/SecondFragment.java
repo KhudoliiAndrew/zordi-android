@@ -1,6 +1,9 @@
 package com.example.admin.miplus.fragment;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,13 +33,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.Services.MapPositionService;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.GeoData;
 import com.example.admin.miplus.data_base.models.GeoSettings;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.FirstWindow.MapSettingsFragment;
 import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
+import com.example.admin.miplus.pedometr.StepCounterService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -62,6 +68,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,7 +81,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
+public class SecondFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, MapPositionService.CallBack {
     private static final int LAYOUT = R.layout.second_activity;
 
     private GoogleMap mGoogleMap;
@@ -89,6 +96,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private SortedSet<GeoData> geoDataList = new TreeSet<GeoData>(getGeoComparator());
     private DataBaseRepository dataBaseRepository = new DataBaseRepository();
     public Polyline line;
+
+    private MapPositionService mapPositionService;
 
     private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 10 seconds
@@ -114,6 +123,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         //creates and returns the view hierarchy associated with the fragment, call to create components inside fragment
         Log.d(">>>>>>", "OnCreateView");
         View view = inflater.inflate(LAYOUT, container, false);
+
+        bindService();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -502,5 +513,31 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                 }
                 break;
         }
+    }
+
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            MapPositionService.MyBinder binder = (MapPositionService.MyBinder) service;
+            mapPositionService = binder.getService();
+            mapPositionService.setCallBack(SecondFragment.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            if (mapPositionService != null) mapPositionService.setCallBack(null);
+        }
+    };
+
+    private void bindService() {
+        Intent intent = new Intent(getActivity(), MapPositionService.class);
+        getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void setGeoposition(LatLng latLng) {
+        // принимаешь значения из сервиса сюда
+        // и ставишь точку(redrawLine)
     }
 }

@@ -1,51 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/map_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"   >
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
 
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_marginBottom="55dp"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/checkpoints_counter_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Reached checkpoints"
+            android:textColor="@color/textColorWhite"
+            android:textSize="21sp"
+            android:id="@+id/map_title_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/checkpoints_counter_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/textColorWhite"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/map_title_text" />
+
+        <TextView
+            android:id="@+id/all_water"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/10"
+            android:textColor="@color/textColorWhite"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/checkpoints_counter_text"
+            app:layout_constraintStart_toEndOf="@id/checkpoints_counter_text" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/map"
-        android:tag="MapTag"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        card_view:cardCornerRadius="12dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/checkpoints_counter_container">
 
-  <!--  <Button
-        android:id="@+id/myLocationButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="355dp"
-        android:layout_marginTop="545dp"
-        android:elevation="3dp"
-        android:background="@drawable/menu_container_background"/>
--->
-   <!-- <Button
-        android:id="@+id/mapSettingsButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="545dp"
-        android:elevation="3dp"
-        android:background="@drawable/ic_settings_black_24dp"/>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            android:tag="MapTag"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <ImageView
-        android:id="@+id/my_loc_ic"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="9dp"
-        android:layout_alignStart="@+id/myLocationButton"
-        android:layout_alignTop="@+id/myLocationButton"
-        android:background="@drawable/my_position_icon"
-        android:elevation="5dp"
-        android:visibility="visible" />-->
+    </android.support.v7.widget.CardView>
 </RelativeLayout>
 

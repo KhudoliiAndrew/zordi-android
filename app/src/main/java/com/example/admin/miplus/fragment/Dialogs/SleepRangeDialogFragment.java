@@ -34,6 +34,9 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private float startRadian;
     private float endRadian;
 
+    Date startSleepDate = null;
+    Date endSleepDate = null;
+
 
     @SuppressLint("ValidFragment")
     public SleepRangeDialogFragment(String sleepTarget, String startSleep, String endSleep, float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
@@ -82,6 +85,8 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void initView() {
+
+
         sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
         circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
         circleAlarmTimerView.setmCurrentRadian1(startRadian);
@@ -89,28 +94,30 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         circleAlarmTimerView.setOnTimeChangedListener(new CircleAlarmTimerView.OnTimeChangedListener() {
             @Override
             public void start(String starting) {
-                sleepDistance.setText(sleepLong(startSleep, endSleep));
-                textView1.setText(startSleep);
-                startSleep = starting;
-
-                Date date1 = null;
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
                 try {
-                    date1 = simpleDateFormat.parse(startSleep);
+                    startSleepDate = simpleDateFormat.parse(starting);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Log.d("><><><><>", startSleep + "\t" + simpleDateFormat.format(date1));
+                sleepDistance.setText(sleepLongDate(startSleepDate, endSleepDate));
+                textView1.setText(simpleDateFormat.format(startSleepDate));
             }
 
             @Override
             public void end(String ending) {
-                sleepDistance.setText(sleepLong(startSleep, endSleep));
-                textView2.setText(endSleep);
-                endSleep = ending;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                try {
+                    endSleepDate = simpleDateFormat.parse(ending);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                sleepDistance.setText(sleepLongDate(startSleepDate, endSleepDate));
+                textView2.setText(simpleDateFormat.format(endSleepDate));
             }
+
         });
-        sleepDistance.setText(sleepLong(startSleep, endSleep));
+        sleepDistance.setText(sleepLongDate(startSleepDate, endSleepDate));
         textView2.setText(endSleep);
     }
 
@@ -162,6 +169,22 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
             }
         }
         return sleepTarget;
+    }
+
+    private String sleepLongDate(Date startSleep, Date endSleep) {
+        if(startSleep != null && endSleep != null){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            if(startSleep.getTime() >= endSleep.getTime()){
+                sleepTarget = simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime());
+            } else{
+                if(startSleep.getTime() < endSleep.getTime()){
+                    sleepTarget = simpleDateFormat.format( endSleep.getTime() - startSleep.getTime());
+                }
+            }
+            return sleepTarget;
+        } else{
+            return "";
+        }
     }
 
     public interface PushSleepTarget {
