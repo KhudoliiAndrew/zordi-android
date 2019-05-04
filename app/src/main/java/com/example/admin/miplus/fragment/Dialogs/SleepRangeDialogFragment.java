@@ -23,9 +23,9 @@ import java.util.Date;
 
 public class SleepRangeDialogFragment extends DialogFragment implements View.OnClickListener {
     View view;
-    private String sleepTarget;
-    private String startSleep;
-    private String endSleep;
+    private Date sleepTarget;
+    private Date startSleep;
+    private Date endSleep;
     private PushSleepTarget pushSleepTarget;
     private TextView textView1;
     private TextView textView2;
@@ -34,12 +34,9 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private float startRadian;
     private float endRadian;
 
-    Date startSleepDate = null;
-    Date endSleepDate = null;
-
 
     @SuppressLint("ValidFragment")
-    public SleepRangeDialogFragment(String sleepTarget, String startSleep, String endSleep, float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
+    public SleepRangeDialogFragment(Date sleepTarget, Date startSleep, Date endSleep, float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
         this.sleepTarget = sleepTarget;
         this.startSleep = startSleep;
         this.endSleep = endSleep;
@@ -59,13 +56,10 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
         textView1 = (TextView) view.findViewById(R.id.start);
         textView2 = (TextView) view.findViewById(R.id.end);
-//        textView1.setText(startSleep);
-//        textView2.setText(endSleep);
 
-        textView1.setText(startSleep);
-        textView2.setText(endSleep);
+        textView1.setText(new SimpleDateFormat("HH:mm").format(startSleep));
+        textView2.setText(new SimpleDateFormat("HH:mm").format(endSleep));
         initView();
-        //  circleAlarmTimerView.setStartRadian(startSleep, endSleep);
 
         return view;
     }
@@ -79,14 +73,13 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
             pushSleepTarget.endRadian(endRadian);
             pushSleepTarget.startSleep(startSleep);
             pushSleepTarget.endSleep(endSleep);
-            pushSleepTarget.sleepTarget(sleepLong(startSleep, endSleep));
+            pushSleepTarget.sleepTarget(sleepLongDate(startSleep, endSleep));
         }
         dismiss();
     }
 
     private void initView() {
-
-
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
         circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
         circleAlarmTimerView.setmCurrentRadian1(startRadian);
@@ -94,105 +87,58 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         circleAlarmTimerView.setOnTimeChangedListener(new CircleAlarmTimerView.OnTimeChangedListener() {
             @Override
             public void start(String starting) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+
+                sleepDistance.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(startSleep, endSleep)));
+                textView1.setText(simpleDateFormat.format(startSleep));
+                textView2.setText(simpleDateFormat.format(endSleep));
                 try {
-                    startSleepDate = simpleDateFormat.parse(starting);
+                    startSleep = simpleDateFormat.parse(starting);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                sleepDistance.setText(sleepLongDate(startSleepDate, endSleepDate));
-                textView1.setText(simpleDateFormat.format(startSleepDate));
             }
 
             @Override
             public void end(String ending) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                sleepDistance.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(startSleep, endSleep)));
+                textView2.setText(simpleDateFormat.format(endSleep));
+
                 try {
-                    endSleepDate = simpleDateFormat.parse(ending);
+                    endSleep = simpleDateFormat.parse(ending);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                sleepDistance.setText(sleepLongDate(startSleepDate, endSleepDate));
-                textView2.setText(simpleDateFormat.format(endSleepDate));
             }
 
         });
-        sleepDistance.setText(sleepLongDate(startSleepDate, endSleepDate));
-        textView2.setText(endSleep);
+        //sleepDistance.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(startSleep, endSleep)));
     }
 
-    private String sleepLong(String startSleep, String endSleep) {
-        String[] partStartSleep = startSleep.split(":");
-        String[] partEndSleep = endSleep.split(":");
-        if (Integer.parseInt(partEndSleep[0]) >= Integer.parseInt(partStartSleep[0])) {
-            int differenceTime = Integer.parseInt(partEndSleep[0]) - Integer.parseInt(partStartSleep[0]);
-            if (differenceTime < 10) {
-                sleepTarget = "0" + String.valueOf(differenceTime);
-            } else {
-                sleepTarget = String.valueOf(differenceTime);
-            }
-        } else {
-            int differenceTime = 24 - (Integer.parseInt(partStartSleep[0]) - Integer.parseInt(partEndSleep[0]));
-            if (differenceTime < 10) {
-                sleepTarget = "0" + String.valueOf(differenceTime);
-            } else {
-                sleepTarget = String.valueOf(differenceTime);
-            }
-        }
-
-        if (Integer.parseInt(partEndSleep[1]) >= Integer.parseInt(partStartSleep[1])) {
-            int differenceTime = Integer.parseInt(partEndSleep[1]) - Integer.parseInt(partStartSleep[1]);
-            if (differenceTime < 10) {
-                sleepTarget = sleepTarget + ":0" + differenceTime;
-            } else {
-                sleepTarget = sleepTarget + ":" + differenceTime;
-            }
-        } else {
-            int differenceTime = 60 - (Integer.parseInt(partStartSleep[1]) + 1 - Integer.parseInt(partEndSleep[1]));
-            if (differenceTime < 10) {
-                if (Integer.parseInt(sleepTarget) - 1 < 10) {
-                    sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
-                } else {
-                    sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
-                }
-            } else {
-                if (Integer.parseInt(sleepTarget) - 1 != -1) {
-                    if (Integer.parseInt(sleepTarget) - 1 < 10) {
-                        sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
-                    } else {
-                        sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
-                    }
-                } else {
-                    sleepTarget = "23:" + differenceTime;
-                }
-
-            }
-        }
-        return sleepTarget;
-    }
-
-    private String sleepLongDate(Date startSleep, Date endSleep) {
+    private Date sleepLongDate(Date startSleep, Date endSleep) {
+        Date date = new Date();
         if(startSleep != null && endSleep != null){
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             if(startSleep.getTime() >= endSleep.getTime()){
-                sleepTarget = simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime());
+                date.setTime(75600000 - startSleep.getTime() + endSleep.getTime());
+                Log.d("<><><><>",   "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end "+ endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime())  + "   range " + String.valueOf(86400000 - startSleep.getTime() + endSleep.getTime()) + "  " + simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime()));
             } else{
                 if(startSleep.getTime() < endSleep.getTime()){
-                    sleepTarget = simpleDateFormat.format( endSleep.getTime() - startSleep.getTime());
+                    date.setTime(endSleep.getTime() - startSleep.getTime() - 10800000);
+                    Log.d("<><><><>",   "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end "+ endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime())  + "   range " + String.valueOf(endSleep.getTime() - startSleep.getTime()) + "  " + simpleDateFormat.format(endSleep.getTime() - startSleep.getTime()));
                 }
             }
-            return sleepTarget;
+            return date;
         } else{
-            return "";
+            return date;
         }
     }
 
     public interface PushSleepTarget {
-        void sleepTarget(String sleepTarget);
+        void sleepTarget(Date sleepTarget);
 
-        void startSleep(String startSleep);
+        void startSleep(Date startSleep);
 
-        void endSleep(String endSleep);
+        void endSleep(Date endSleep);
 
         void startRadian(float startRadian);
 

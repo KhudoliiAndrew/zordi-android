@@ -36,6 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -144,9 +146,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                             sleepDataList = task.getResult().toObjects(SleepData.class);
                             sleepData = sleepDataList.get(sleepDataList.size() - 1);
                             if (date.getDate() != sleepData.getDate().getDate()) {
-                                if(profile != null){
-                                    sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
-                                    sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                                if (profile != null) {
+                                    sleepData.setStartSleep(setRandomSleep(profile.getStartSleep()));
+                                    sleepData.setEndSleep(setRandomSleep(profile.getEndSleep()));
                                     sleepData.setDate(date);
                                     dataBaseRepository.setSleepData(sleepData);
                                 }
@@ -154,9 +156,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                             sleepCardSetter(view);
                         } else {
                             Date date = new Date();
-                            if(profile != null){
-                                sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
-                                sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                            if (profile != null) {
+                                sleepData.setStartSleep(setRandomSleep(profile.getStartSleep()));
+                                sleepData.setEndSleep(setRandomSleep(profile.getEndSleep()));
                                 sleepData.setDate(date);
                                 dataBaseRepository.setSleepData(sleepData);
                                 sleepCardSetter(view);
@@ -229,75 +231,34 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
 
     }
 
-    private void sleepCardSetter(View view){
+    private void sleepCardSetter(View view) {
         TextView startSleepText = (TextView) view.findViewById(R.id.start_sleep_text_first_fragment);
         TextView endSleepText = (TextView) view.findViewById(R.id.end_sleep_text_first_fragment);
 
-        startSleepText.setText(sleepData.getStartSleep());
-        endSleepText.setText(sleepData.getEndSleep());
+        startSleepText.setText(new SimpleDateFormat("HH:mm").format(sleepData.getStartSleep()));
+        endSleepText.setText(new SimpleDateFormat("HH:mm").format(sleepData.getEndSleep()));
     }
 
-    private String setStartSleep(String startSleep) {
-        String realStartSleep;
-        String[] partStartSleep = startSleep.split(":");
+    private Date setRandomSleep(final Date startSleep) {
+        final Date whenStartTime = new Date();
 
-        int startHour = Integer.parseInt(partStartSleep[0]);
-        int whenStartHour = (int) ((Math.random() * ((startHour + 2) - (startHour - 1) + 1) + (startHour - 1)));
-        int whenStartMinute = (int) ((Math.random() * (60 - 0 + 1) + 0));
-
-        if (whenStartHour > 23) {
-            if (whenStartMinute > 9) {
-                realStartSleep = "0" + String.valueOf(whenStartHour - 24) + ":" + String.valueOf(whenStartMinute);
-            } else {
-                realStartSleep = "0" + String.valueOf(whenStartHour - 24) + ":0" + String.valueOf(whenStartMinute);
-            }
+        if (dataBaseRepository.getProfile() != null) {
+            profile = dataBaseRepository.getProfile();
+            whenStartTime.setTime((long) (Math.random() * ((startSleep.getTime() + 7200000) - (startSleep.getTime() - 3600000) + 3600000) + (startSleep.getTime() - 3600000)));
+            return whenStartTime;
         } else {
-            if (whenStartHour > 10) {
-                if (whenStartMinute > 9) {
-                    realStartSleep = String.valueOf(whenStartHour) + ":" + String.valueOf(whenStartMinute);
-                } else {
-                    realStartSleep = String.valueOf(whenStartHour) + ":0" + String.valueOf(whenStartMinute);
-                }
-            } else {
-                if (whenStartMinute > 9) {
-                    realStartSleep = "0" + String.valueOf(whenStartHour) + ":" + String.valueOf(whenStartMinute);
-                } else {
-                    realStartSleep = "0" + String.valueOf(whenStartHour) + ":0" + String.valueOf(whenStartMinute);
-                }
-            }
+            dataBaseRepository.getProfileTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            profile = task.getResult().toObject(Profile.class);
+                            whenStartTime.setTime((long) (Math.random() * ((startSleep.getTime() + 7200000) - (startSleep.getTime() - 3600000) + 3600000) + (startSleep.getTime() - 3600000)));
+                        }
+                    });
+            return whenStartTime;
         }
-        return realStartSleep;
-    }
 
-    private String setEndSleep(String endSleep) {
-        String[] partEndSleep = endSleep.split(":");
-        String realEndSleep;
-        int endHour = Integer.parseInt(partEndSleep[0]);
 
-        int whenEndHour = (int) ((Math.random() * ((endHour + 2) - (endHour - 1) + 1) + (endHour - 1)));
-        int whenEndMinute = (int) ((Math.random() * (60 - 0 + 1) + 0));
-        if (whenEndHour > 23) {
-            if (whenEndMinute > 9) {
-                realEndSleep = "0" + String.valueOf(whenEndHour - 24) + ":" + String.valueOf(whenEndMinute);
-            } else {
-                realEndSleep = "0" + String.valueOf(whenEndHour - 24) + ":0" + String.valueOf(whenEndMinute);
-            }
-        } else {
-            if (whenEndHour > 10) {
-                if (whenEndMinute > 9) {
-                    realEndSleep = String.valueOf(whenEndHour) + ":" + String.valueOf(whenEndMinute);
-                } else {
-                    realEndSleep = String.valueOf(whenEndHour) + ":0" + String.valueOf(whenEndMinute);
-                }
-            } else {
-                if (whenEndMinute > 9) {
-                    realEndSleep = "0" + String.valueOf(whenEndHour) + ":" + String.valueOf(whenEndMinute);
-                } else {
-                    realEndSleep = "0" + String.valueOf(whenEndHour) + ":0" + String.valueOf(whenEndMinute);
-                }
-            }
-        }
-        return realEndSleep;
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -322,7 +283,8 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
 
     @Override
     public void onPause() {
-        if (stepsData != null && steps != stepsData.getSteps()) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (stepsData != null && steps != stepsData.getSteps() && mAuth.getUid() != null) {
             stepsData.setSteps(steps);
             stepsData.setDate(new Date());
             dataBaseRepository.setStepsData(stepsData);

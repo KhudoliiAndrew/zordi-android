@@ -42,7 +42,7 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
-    private Profile profile  = new Profile();
+    private Profile profile = new Profile();
 
     private FirebaseAuth mAuth;
 
@@ -109,32 +109,26 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
                 FirebaseUser GoogleUser = mAuth.getCurrentUser();
                 updateUI(GoogleUser);
-            } catch (ApiException e) {}
+            } catch (ApiException e) {
+            }
         }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth
-                .signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(">>>>>>", "fgsdfgsdgsg     " + task.toString());
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "Done");
                             FirebaseUser GoogleUser = mAuth.getCurrentUser();
                             updateUI(GoogleUser);
                         }
                     }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(">>>>>>", "fgsdfgsdgsg     " + e.toString());
-            }
-        });
-        }
+                }).addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {}
+                });
+    }
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
@@ -144,27 +138,23 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.getResult() != null && task.getResult().exists()) {
                                 profile = task.getResult().toObject(Profile.class);
-                                Log.d(">>>>>>",  "3333333333");
-                            }else {
+                                Log.d(">>>>>>", "3333333333");
+                                Intent goToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
+                                //goToMainActivity.putExtra("fromLogin", true);
+                                LoginActivity.this.startActivity(goToMainActivity);
+                                LoginActivity.this.finish();
+                            } else {
                                 profile.setDefaultInstance();
                                 dataBaseRepository.setProfile(profile);
-                                Log.d(">>>>>>",  "44444444444");
+                                Log.d(">>>>>>", "44444444444");
+                                Intent goToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
+                                //goToMainActivity.putExtra("fromLogin", true);
+                                LoginActivity.this.startActivity(goToMainActivity);
+                                LoginActivity.this.finish();
                             }
                         }
                     });
-           /* dataBaseRepository.getGeopointTask()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.getResult() != null && task.getResult().exists()) {
-                                geoPoint = task.getResult().toObject(GeoPoint.class);
-                            }
-                        }
-                    });*/
-            Intent goToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
-            goToMainActivity.putExtra("fromLogin", true);
-            LoginActivity.this.startActivity(goToMainActivity);
-            LoginActivity.this.finish();
+
         }
     }
 
@@ -173,22 +163,23 @@ public class LoginActivity extends AppCompatActivity {
         updateUI(GoogleUser);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        Toast.makeText(this, "Please, wait", Toast.LENGTH_LONG).show();
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser FacebookUser = mAuth.getCurrentUser();
-                            updateUI(FacebookUser);
-                        }
-                    }
-                });
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser FacebookUser = mAuth.getCurrentUser();
+                    updateUI(FacebookUser);
+                }
+            }
+        });
     }
 
-    private void checking(){
+    private void checking() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         Log.d(">>>>>>", "somethin g good" + apiAvailability.getErrorString(resultCode));

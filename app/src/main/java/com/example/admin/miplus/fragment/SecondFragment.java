@@ -406,7 +406,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void getMapType() {
-        if (geoSettings.getMapType().equals(getString(R.string.map_type_normal))) {
+     /*   if (geoSettings.getMapType().equals(getString(R.string.map_type_normal))) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         } else if (geoSettings.getMapType().equals(getString(R.string.map_type_satellite))) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
@@ -414,7 +414,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         } else if (geoSettings.getMapType().equals(getString(R.string.map_type_terrain))) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        }
+        }*/
     }
 
     private void getMarkerColorHere() {

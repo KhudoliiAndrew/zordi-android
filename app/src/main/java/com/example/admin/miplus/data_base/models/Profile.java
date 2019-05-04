@@ -1,12 +1,14 @@
 package com.example.admin.miplus.data_base.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Profile {
     private int stepsTarget;
-    private String sleepTarget;
-    private String startSleep;
-    private String endSleep;
+    private Date sleepTarget;
+    private Date startSleep;
+    private Date endSleep;
     private float startRadian;
     private float endRadian;
     private int height;
@@ -27,27 +29,27 @@ public class Profile {
         this.stepsTarget = stepsTarget;
     }
 
-    public String getSleepTarget() {
+    public Date getSleepTarget() {
         return sleepTarget;
     }
 
-    public void setSleepTarget(String sleepTarget) {
+    public void setSleepTarget(Date sleepTarget) {
         this.sleepTarget = sleepTarget;
     }
 
-    public String getStartSleep() {
+    public Date getStartSleep() {
         return startSleep;
     }
 
-    public void setStartSleep(String startSleep) {
+    public void setStartSleep(Date startSleep) {
         this.startSleep = startSleep;
     }
 
-    public String getEndSleep() {
+    public Date getEndSleep() {
         return endSleep;
     }
 
-    public void setEndSleep(String endSleep) {
+    public void setEndSleep(Date endSleep) {
         this.endSleep = endSleep;
     }
 
@@ -69,9 +71,21 @@ public class Profile {
 
     public void setDefaultInstance() {
         setStepsTarget(8000);
-        setEndSleep("6:00");
-        setStartSleep("23:00");
-        setSleepTarget("7:00");
+        try {
+            setEndSleep( new SimpleDateFormat("HH:mm").parse("06:00"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            setStartSleep(new SimpleDateFormat("HH:mm").parse("23:00"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            setSleepTarget(new SimpleDateFormat("HH:mm").parse("07:00"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         setStartRadian(5.763731f);
         setEndRadian(2.096111f);
         setHeight(160);

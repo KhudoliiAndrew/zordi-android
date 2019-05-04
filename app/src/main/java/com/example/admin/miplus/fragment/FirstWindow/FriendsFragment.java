@@ -107,24 +107,26 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
     }
 
     private  void setCardContent(View view){
-        ImageView logo = (ImageView) view.findViewById(R.id.friend_logo);
-        Glide.with(getActivity()).load(R.drawable.photo_oleg).apply(RequestOptions.circleCropTransform()).into(logo);
-        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.add_friend_container);
-        relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "You can add more friends in the future", Toast.LENGTH_LONG).show();
-            }
-        });
-        SwitchCompat switchCompat = (SwitchCompat) view.findViewById(R.id.geoposition_switch);
-        switchCompat.setChecked(profile.getShowGeoposition());
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                profile.setShowGeoposition(isChecked);
-                dataBaseRepository.setProfile(profile);
-            }
-        });
+        if(getActivity() != null){
+            ImageView logo = (ImageView) view.findViewById(R.id.friend_logo);
+            Glide.with(getActivity()).load(R.drawable.photo_oleg).apply(RequestOptions.circleCropTransform()).into(logo);
+            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.add_friend_container);
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "You can add more friends in the future", Toast.LENGTH_LONG).show();
+                }
+            });
+            SwitchCompat switchCompat = (SwitchCompat) view.findViewById(R.id.geoposition_switch);
+            switchCompat.setChecked(profile.getShowGeoposition());
+            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    profile.setShowGeoposition(isChecked);
+                    dataBaseRepository.setProfile(profile);
+                }
+            });
+        }
     }
 
     @Override

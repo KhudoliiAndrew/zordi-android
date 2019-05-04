@@ -17,7 +17,6 @@ import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.SleepData;
-import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
@@ -63,8 +61,8 @@ public class SleepInformationFragment extends Fragment {
                                 sleepData = sleepDataList.get(sleepDataList.size() - 1);
                                 if (profile != null) {
                                     if (date.getDate() != sleepData.getDate().getDate()) {
-                                        sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
-                                        sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                                        sleepData.setStartSleep(profile.getStartSleep());
+                                        sleepData.setEndSleep(profile.getEndSleep());
                                         sleepData.setDate(date);
                                         dataBaseRepository.setSleepData(sleepData);
                                     }
@@ -76,8 +74,8 @@ public class SleepInformationFragment extends Fragment {
                             } else {
                                 Date date = new Date();
                                 if (profile != null) {
-                                    sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
-                                    sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                                    sleepData.setStartSleep(profile.getStartSleep());
+                                    sleepData.setEndSleep(profile.getEndSleep());
                                     sleepData.setDate(date);
                                     dataBaseRepository.setSleepData(sleepData);
                                     adviceSetter(view);
@@ -103,8 +101,8 @@ public class SleepInformationFragment extends Fragment {
                                                 sleepData = sleepDataList.get(sleepDataList.size() - 1);
                                                 if (profile != null) {
                                                     if (date.getDate() != sleepData.getDate().getDate()) {
-                                                        sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
-                                                        sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                                                        sleepData.setStartSleep(profile.getStartSleep());
+                                                        sleepData.setEndSleep(profile.getEndSleep());
                                                         sleepData.setDate(date);
                                                         dataBaseRepository.setSleepData(sleepData);
                                                     }
@@ -116,8 +114,8 @@ public class SleepInformationFragment extends Fragment {
                                             } else {
                                                 Date date = new Date();
                                                 if (profile != null) {
-                                                    sleepData.setStartSleep(setStartSleep(profile.getStartSleep()));
-                                                    sleepData.setEndSleep(setEndSleep(profile.getEndSleep()));
+                                                    sleepData.setStartSleep(profile.getStartSleep());
+                                                    sleepData.setEndSleep(profile.getEndSleep());
                                                     sleepData.setDate(date);
                                                     dataBaseRepository.setSleepData(sleepData);
                                                     adviceSetter(view);
@@ -130,8 +128,6 @@ public class SleepInformationFragment extends Fragment {
                         }
                     });
         }
-
-
 
 
         initToolbar();
@@ -151,96 +147,90 @@ public class SleepInformationFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        if (getActivity() != null) {
+            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+            //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        }
     }
 
     private void adviceSetter(View view) {
         TextView firstAdvice = (TextView) view.findViewById(R.id.first_advice);
         TextView secondAdvice = (TextView) view.findViewById(R.id.second_advice);
-      //  TextView thirdAdvice = (TextView) view.findViewById(R.id.third_advice);
+        TextView thirdAdvice = (TextView) view.findViewById(R.id.third_advice);
 
-        if(sleepData != null) {
-           // if(profile.getStartSleep() != null && profile.getEndSleep() != null){
-                String[] startSleep = sleepData.getStartSleep().split(":");
-                String[] endSleep = sleepData.getEndSleep().split(":");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
-                String[] mustStartSleep = profile.getStartSleep().split(":");
-                String[] mustEndSleep = profile.getEndSleep().split(":");
-
-                if (Integer.parseInt(startSleep[0]) >= Integer.parseInt(mustStartSleep[0])) {
-                    if (Integer.parseInt(startSleep[1]) >= Integer.parseInt(mustStartSleep[1])) {
-                        if(Integer.parseInt(startSleep[0]) - Integer.parseInt(mustStartSleep[0]) > 9){
-                            firstAdvice.setText("Fell asleep " + String.valueOf(Integer.parseInt(startSleep[0]) - Integer.parseInt(mustStartSleep[0])) + ":" + String.valueOf(Integer.parseInt(startSleep[1]) - Integer.parseInt(mustStartSleep[1])) + " later");
-                        } else{
-                            if(Integer.parseInt(startSleep[0]) - Integer.parseInt(mustStartSleep[0]) < 10){
-                                firstAdvice.setText("Fell asleep " + "0" + String.valueOf(Integer.parseInt(startSleep[0]) - Integer.parseInt(mustStartSleep[0])) + ":" + String.valueOf(Integer.parseInt(startSleep[1]) - Integer.parseInt(mustStartSleep[1])) + " later");
-                            }
-                        }
-
-                    } else {
-                        if (Integer.parseInt(startSleep[1]) < Integer.parseInt(mustStartSleep[1])) {
-                            firstAdvice.setText("Fell asleep " + String.valueOf(Integer.parseInt(startSleep[0]) - Integer.parseInt(mustStartSleep[0])) + ":" + String.valueOf(Integer.parseInt(startSleep[1]) + (60 - Integer.parseInt(mustStartSleep[1]))) + " later");
-                        }
-                    }
+        if (sleepData != null) {
+            if (sleepData.getStartSleep().getTime() < profile.getStartSleep().getTime()) {
+                long range = profile.getStartSleep().getTime() - sleepData.getStartSleep().getTime() - 10800000;
+                firstAdvice.setText("Fell asleep " + simpleDateFormat.format(range) + " early");
+            }
+            if (sleepData.getStartSleep().getTime() > profile.getStartSleep().getTime()) {
+                long range = sleepData.getStartSleep().getTime() - profile.getStartSleep().getTime() - 10800000;
+                if (simpleDateFormat.format(range).compareTo("00:00") == 0) {
+                    firstAdvice.setText("You went to bed on time");
                 } else {
-                    if (Integer.parseInt(startSleep[0]) < Integer.parseInt(mustStartSleep[0])) {
-                        if (Integer.parseInt(startSleep[1]) >= Integer.parseInt(mustStartSleep[1])) {
-                            firstAdvice.setText("Fell asleep " + String.valueOf(24 - Integer.parseInt(mustStartSleep[0]) + Integer.parseInt(startSleep[0])) + ":" + String.valueOf(Integer.parseInt(startSleep[1]) - Integer.parseInt(mustStartSleep[1])) + " early");
-                        } else {
-                            if (Integer.parseInt(startSleep[1]) < Integer.parseInt(mustStartSleep[1])) {
-                                firstAdvice.setText("Fell asleep " + String.valueOf(24 - Integer.parseInt(mustStartSleep[0]) + Integer.parseInt(startSleep[0])) + ":" + String.valueOf(Integer.parseInt(startSleep[1]) + (60 - Integer.parseInt(mustStartSleep[1]))) + " early");
-                            }
-                        }
-                    }
-                }
-
-                if (Integer.parseInt(endSleep[0]) >= Integer.parseInt(mustEndSleep[0])) {
-                    if (Integer.parseInt(endSleep[1]) >= Integer.parseInt(mustEndSleep[1])) {
-                        if(Integer.parseInt(endSleep[0]) - Integer.parseInt(mustEndSleep[0]) > 9){
-                            secondAdvice.setText("Woke up " + String.valueOf(24 - Integer.parseInt(mustEndSleep[0]) + Integer.parseInt(endSleep[0])) + ":" + String.valueOf(Integer.parseInt(endSleep[1]) - Integer.parseInt(mustEndSleep[1])) + " later");
-                        } else{
-                            if(Integer.parseInt(endSleep[0]) - Integer.parseInt(mustEndSleep[0]) < 10){
-                                secondAdvice.setText("Woke up " + String.valueOf(24 - Integer.parseInt(mustEndSleep[0]) + Integer.parseInt(endSleep[0])) + ":" + String.valueOf(Integer.parseInt(endSleep[1]) - Integer.parseInt(mustEndSleep[1])) + " later");
-                            }
-                        }
-
-                    } else {
-                        if (Integer.parseInt(endSleep[1]) < Integer.parseInt(mustEndSleep[1])) {
-                            secondAdvice.setText("Woke up " + String.valueOf(Integer.parseInt(endSleep[0]) - Integer.parseInt(mustEndSleep[0])) + ":" + String.valueOf(Integer.parseInt(endSleep[1]) + (60 - Integer.parseInt(mustEndSleep[1]))) + " early");
-                        }
-                    }
-                } else {
-                    if (Integer.parseInt(endSleep[0]) < Integer.parseInt(mustEndSleep[0])) {
-                        if (Integer.parseInt(endSleep[1]) >= Integer.parseInt(mustEndSleep[1])) {
-                            secondAdvice.setText("Woke up " + String.valueOf(Integer.parseInt(mustEndSleep[0]) - Integer.parseInt(endSleep[0])) + ":" + String.valueOf(Integer.parseInt(endSleep[1]) +(60 - Integer.parseInt(mustEndSleep[1]))) + " early");
-                        } else {
-                            if (Integer.parseInt(endSleep[1]) < Integer.parseInt(mustEndSleep[1])) {
-                                secondAdvice.setText("Woke up " + "0" + String.valueOf(Integer.parseInt(mustEndSleep[0]) -Integer.parseInt(endSleep[0])) + ":" + String.valueOf(Integer.parseInt(endSleep[1]) + (60 - Integer.parseInt(mustEndSleep[1]))) + " early");
-                            }
-                        }
-                    }
+                    firstAdvice.setText("Fell asleep " + simpleDateFormat.format(range) + " later");
                 }
             }
-      //  }
 
-      //  firstAdvice.setText("Fell asleep " + "1h 2m" + " early/later");
-      //  secondAdvice.setText("Woke up " + "1h 2m" + " early/later");
-       /* thirdAdvice.setText("Sleep " + "increased by " + "1h");*/
+            if (sleepData.getEndSleep().getTime() < profile.getEndSleep().getTime()) {
+                long range = profile.getEndSleep().getTime() - sleepData.getEndSleep().getTime() - 10800000;
+                secondAdvice.setText("Woke up " + simpleDateFormat.format(range) + " early");
+            }
+            if (sleepData.getEndSleep().getTime() > profile.getEndSleep().getTime()) {
+                long range = sleepData.getEndSleep().getTime() - profile.getEndSleep().getTime() - 10800000;
+                if (simpleDateFormat.format(range).compareTo("00:00") == 0) {
+                    secondAdvice.setText("You woke up on time");
+                } else {
+                    secondAdvice.setText("Woke up " + simpleDateFormat.format(range) + " later");
+                }
+            }
+
+            if (sleepData.getEndSleep().getTime() < profile.getEndSleep().getTime()) {
+                long range = profile.getEndSleep().getTime() - sleepData.getEndSleep().getTime() - 10800000;
+                secondAdvice.setText("Woke up " + simpleDateFormat.format(range) + " early");
+            }
+            if (sleepData.getEndSleep().getTime() > profile.getEndSleep().getTime()) {
+                long range = sleepData.getEndSleep().getTime() - profile.getEndSleep().getTime() - 10800000;
+                if (simpleDateFormat.format(range).compareTo("00:00") == 0) {
+                    secondAdvice.setText("You woke up on time");
+                } else {
+                    secondAdvice.setText("Woke up " + simpleDateFormat.format(range) + " later");
+                }
+            }
+
+            long sleepRangeReal = sleepLongDate(sleepData.getStartSleep(), sleepData.getEndSleep()).getTime();
+            long sleepRangeMust = sleepLongDate(profile.getStartSleep(), profile.getEndSleep()).getTime();
+
+            if (sleepRangeReal > sleepRangeMust) {
+                long range = sleepRangeReal - sleepRangeMust - 10800000;
+                if (simpleDateFormat.format(range).compareTo("00:00") == 0) {
+                    thirdAdvice.setText("Sleep has not changed");
+                } else {
+                    thirdAdvice.setText("Sleep " + "increased by " + simpleDateFormat.format(range));
+                }
+            }
+            if (sleepRangeReal < sleepRangeMust) {
+                long range = sleepRangeMust - sleepRangeReal - 10800000;
+                thirdAdvice.setText("Sleep " + "reduced by " + simpleDateFormat.format(range));
+            }
+        }
     }
+
 
     private void viewSetter(View view) {
         TextView sleepLength = (TextView) view.findViewById(R.id.sleep_cuantity_fragment);
         TextView sleepStart = (TextView) view.findViewById(R.id.text_start_sleep);
         TextView sleepEnd = (TextView) view.findViewById(R.id.end_sleep_text);
 
-        sleepLength.setText(sleepLongString(sleepData.getStartSleep(), sleepData.getEndSleep()));
-        sleepStart.setText(sleepData.getStartSleep());
-        sleepEnd.setText(sleepData.getEndSleep());
+        sleepLength.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(sleepData.getStartSleep(), sleepData.getEndSleep())));
+        sleepStart.setText(new SimpleDateFormat("HH:mm").format(sleepData.getStartSleep()));
+        sleepEnd.setText(new SimpleDateFormat("HH:mm").format(sleepData.getEndSleep()));
     }
 
     private void initMonthChart(View view) {
@@ -255,31 +245,33 @@ public class SleepInformationFragment extends Fragment {
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
 
-
-        boolean a = true;
-        for (int i = 4; i > 0; i--) {
-            if (sleepDataList.size() >= 4) {
-                sleepData = sleepDataList.get(sleepDataList.size() - i);
-                values.add(new SubcolumnValue(sleepLong(sleepData.getStartSleep(), sleepData.getEndSleep()), getResources().getColor(R.color.colorPrimary)));
-                if (a) {
-                    firstDay.setText(String.valueOf(formatter.format(sleepData.getDate())));
-                    endDay.setText(String.valueOf(formatter.format(sleepDataList.get(sleepDataList.size() - 1).getDate())));
-                    a = false;
-                }
-            } else {
-                if (sleepDataList.size() - i <= -1) {
-                    values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
-                } else {
+        if (getContext() != null) {
+            boolean a = true;
+            for (int i = 4; i > 0; i--) {
+                if (sleepDataList.size() >= 4) {
                     sleepData = sleepDataList.get(sleepDataList.size() - i);
-                    values.add(new SubcolumnValue(sleepLong(sleepData.getStartSleep(), sleepData.getEndSleep()), getResources().getColor(R.color.colorPrimary)));
+                    values.add(new SubcolumnValue(sleepLongDate(sleepData.getStartSleep(), sleepData.getEndSleep()).getTime(), getResources().getColor(R.color.colorPrimary)));
                     if (a) {
                         firstDay.setText(String.valueOf(formatter.format(sleepData.getDate())));
                         endDay.setText(String.valueOf(formatter.format(sleepDataList.get(sleepDataList.size() - 1).getDate())));
                         a = false;
                     }
+                } else {
+                    if (sleepDataList.size() - i <= -1) {
+                        values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
+                    } else {
+                        sleepData = sleepDataList.get(sleepDataList.size() - i);
+                        values.add(new SubcolumnValue(sleepLongDate(sleepData.getStartSleep(), sleepData.getEndSleep()).getTime(), getResources().getColor(R.color.colorPrimary)));
+                        if (a) {
+                            firstDay.setText(String.valueOf(formatter.format(sleepData.getDate())));
+                            endDay.setText(String.valueOf(formatter.format(sleepDataList.get(sleepDataList.size() - 1).getDate())));
+                            a = false;
+                        }
+                    }
                 }
             }
         }
+
 
         columns.add(new Column(values));
         ColumnChartData data = new ColumnChartData(columns);
@@ -290,168 +282,22 @@ public class SleepInformationFragment extends Fragment {
         chart.setInteractive(false);
     }
 
-    private String setStartSleep(String startSleep) {
-        String realStartSleep;
-        String[] partStartSleep = startSleep.split(":");
-
-        int startHour = Integer.parseInt(partStartSleep[0]);
-        int whenStartHour = (int) ((Math.random() * ((startHour + 2) - (startHour - 1) + 1) + (startHour - 1)));
-        int whenStartMinute = (int) ((Math.random() * (60 - 0 + 1) + 0));
-
-        if (whenStartHour > 23) {
-            if (whenStartMinute > 9) {
-                realStartSleep = "0" + String.valueOf(whenStartHour - 24) + ":" + String.valueOf(whenStartMinute);
+    private Date sleepLongDate(Date startSleep, Date endSleep) {
+        Date date = new Date();
+        if (startSleep != null && endSleep != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            if (startSleep.getTime() >= endSleep.getTime()) {
+                date.setTime(75600000 - startSleep.getTime() + endSleep.getTime());
+                Log.d("<><><><>", "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end " + endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime()) + "   range " + String.valueOf(86400000 - startSleep.getTime() + endSleep.getTime()) + "  " + simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime()));
             } else {
-                realStartSleep = "0" + String.valueOf(whenStartHour - 24) + ":0" + String.valueOf(whenStartMinute);
+                if (startSleep.getTime() < endSleep.getTime()) {
+                    date.setTime(endSleep.getTime() - startSleep.getTime() - 10800000);
+                    Log.d("<><><><>", "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end " + endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime()) + "   range " + String.valueOf(endSleep.getTime() - startSleep.getTime()) + "  " + simpleDateFormat.format(endSleep.getTime() - startSleep.getTime()));
+                }
             }
+            return date;
         } else {
-            if (whenStartHour > 10) {
-                if (whenStartMinute > 9) {
-                    realStartSleep = String.valueOf(whenStartHour) + ":" + String.valueOf(whenStartMinute);
-                } else {
-                    realStartSleep = String.valueOf(whenStartHour) + ":0" + String.valueOf(whenStartMinute);
-                }
-            } else {
-                if (whenStartMinute > 9) {
-                    realStartSleep = "0" + String.valueOf(whenStartHour) + ":" + String.valueOf(whenStartMinute);
-                } else {
-                    realStartSleep = "0" + String.valueOf(whenStartHour) + ":0" + String.valueOf(whenStartMinute);
-                }
-            }
+            return date;
         }
-        return realStartSleep;
-    }
-
-    private String setEndSleep(String endSleep) {
-        String[] partEndSleep = endSleep.split(":");
-        String realEndSleep;
-        int endHour = Integer.parseInt(partEndSleep[0]);
-
-        int whenEndHour = (int) ((Math.random() * ((endHour + 2) - (endHour - 1) + 1) + (endHour - 1)));
-        int whenEndMinute = (int) ((Math.random() * (60 - 0 + 1) + 0));
-        if (whenEndHour > 23) {
-            if (whenEndMinute > 9) {
-                realEndSleep = "0" + String.valueOf(whenEndHour - 24) + ":" + String.valueOf(whenEndMinute);
-            } else {
-                realEndSleep = "0" + String.valueOf(whenEndHour - 24) + ":0" + String.valueOf(whenEndMinute);
-            }
-        } else {
-            if (whenEndHour > 10) {
-                if (whenEndMinute > 9) {
-                    realEndSleep = String.valueOf(whenEndHour) + ":" + String.valueOf(whenEndMinute);
-                } else {
-                    realEndSleep = String.valueOf(whenEndHour) + ":0" + String.valueOf(whenEndMinute);
-                }
-            } else {
-                if (whenEndMinute > 9) {
-                    realEndSleep = "0" + String.valueOf(whenEndHour) + ":" + String.valueOf(whenEndMinute);
-                } else {
-                    realEndSleep = "0" + String.valueOf(whenEndHour) + ":0" + String.valueOf(whenEndMinute);
-                }
-            }
-        }
-        return realEndSleep;
-    }
-
-    private Integer sleepLong(String startSleep, String endSleep) {
-        String[] partStartSleep = startSleep.split(":");
-        String[] partEndSleep = endSleep.split(":");
-        if (Integer.parseInt(partEndSleep[0]) >= Integer.parseInt(partStartSleep[0])) {
-            int differenceTime = Integer.parseInt(partEndSleep[0]) - Integer.parseInt(partStartSleep[0]);
-            if (differenceTime < 10) {
-                sleepTarget = "0" + String.valueOf(differenceTime);
-            } else {
-                sleepTarget = String.valueOf(differenceTime);
-            }
-        } else {
-            int differenceTime = 24 - (Integer.parseInt(partStartSleep[0]) - Integer.parseInt(partEndSleep[0]));
-            if (differenceTime < 10) {
-                sleepTarget = "0" + String.valueOf(differenceTime);
-            } else {
-                sleepTarget = String.valueOf(differenceTime);
-            }
-        }
-
-        if (Integer.parseInt(partEndSleep[1]) >= Integer.parseInt(partStartSleep[1])) {
-            int differenceTime = Integer.parseInt(partEndSleep[1]) - Integer.parseInt(partStartSleep[1]);
-            if (differenceTime < 10) {
-                sleepTarget = sleepTarget + ":0" + differenceTime;
-            } else {
-                sleepTarget = sleepTarget + ":" + differenceTime;
-            }
-        } else {
-            int differenceTime = 60 - (Integer.parseInt(partStartSleep[1]) + 1 - Integer.parseInt(partEndSleep[1]));
-            if (differenceTime < 10) {
-                if (Integer.parseInt(sleepTarget) - 1 < 10) {
-                    sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
-                } else {
-                    sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
-                }
-            } else {
-                if (Integer.parseInt(sleepTarget) - 1 != -1) {
-                    if (Integer.parseInt(sleepTarget) - 1 < 10) {
-                        sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
-                    } else {
-                        sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
-                    }
-                } else {
-                    sleepTarget = "23:" + differenceTime;
-                }
-
-            }
-        }
-
-        String[] s = sleepTarget.split(":");
-        return Integer.parseInt(s[0]);
-    }
-
-    private String sleepLongString(String startSleep, String endSleep) {
-        String[] partStartSleep = startSleep.split(":");
-        String[] partEndSleep = endSleep.split(":");
-        if (Integer.parseInt(partEndSleep[0]) >= Integer.parseInt(partStartSleep[0])) {
-            int differenceTime = Integer.parseInt(partEndSleep[0]) - Integer.parseInt(partStartSleep[0]);
-            if (differenceTime < 10) {
-                sleepTarget = "0" + String.valueOf(differenceTime);
-            } else {
-                sleepTarget = String.valueOf(differenceTime);
-            }
-        } else {
-            int differenceTime = 24 - (Integer.parseInt(partStartSleep[0]) - Integer.parseInt(partEndSleep[0]));
-            if (differenceTime < 10) {
-                sleepTarget = "0" + String.valueOf(differenceTime);
-            } else {
-                sleepTarget = String.valueOf(differenceTime);
-            }
-        }
-
-        if (Integer.parseInt(partEndSleep[1]) >= Integer.parseInt(partStartSleep[1])) {
-            int differenceTime = Integer.parseInt(partEndSleep[1]) - Integer.parseInt(partStartSleep[1]);
-            if (differenceTime < 10) {
-                sleepTarget = sleepTarget + ":0" + differenceTime;
-            } else {
-                sleepTarget = sleepTarget + ":" + differenceTime;
-            }
-        } else {
-            int differenceTime = 60 - (Integer.parseInt(partStartSleep[1]) + 1 - Integer.parseInt(partEndSleep[1]));
-            if (differenceTime < 10) {
-                if (Integer.parseInt(sleepTarget) - 1 < 10) {
-                    sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
-                } else {
-                    sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":0" + differenceTime;
-                }
-            } else {
-                if (Integer.parseInt(sleepTarget) - 1 != -1) {
-                    if (Integer.parseInt(sleepTarget) - 1 < 10) {
-                        sleepTarget = "0" + String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
-                    } else {
-                        sleepTarget = String.valueOf(Integer.parseInt(sleepTarget) - 1) + ":" + differenceTime;
-                    }
-                } else {
-                    sleepTarget = "23:" + differenceTime;
-                }
-
-            }
-        }
-        return sleepTarget;
     }
 }

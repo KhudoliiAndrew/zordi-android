@@ -38,6 +38,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget, HeightDialogFragment.PushHeight, WeightDialogFragment.PushWeight {
@@ -144,19 +145,20 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     }
 
     private void viewSetter(View view) {
-        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-        TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
-        TextView heightText = (TextView) view.findViewById(R.id.height_text);
-        TextView weightText = (TextView) view.findViewById(R.id.weight_text);
-        stepsText.setText(String.valueOf(profile.getStepsTarget()));
-        sleepText.setText(String.valueOf(profile.getSleepTarget()));
-        heightText.setText(String.valueOf(profile.getHeight() + " cm"));
-        weightText.setText(String.valueOf(profile.getWeight() + " kg"));
-
+        if(profile != null){
+            TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
+            TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
+            TextView heightText = (TextView) view.findViewById(R.id.height_text);
+            TextView weightText = (TextView) view.findViewById(R.id.weight_text);
+            stepsText.setText(String.valueOf(profile.getStepsTarget()));
+            sleepText.setText(new SimpleDateFormat("HH:mm").format(profile.getSleepTarget()));
+            heightText.setText(String.valueOf(profile.getHeight() + " cm"));
+            weightText.setText(String.valueOf(profile.getWeight() + " kg"));
+        }
     }
 
     private void switchSetter(View view) {
-        if (getView() != null) {
+        if (profile != null) {
             final SwitchCompat sleepSwitch = (SwitchCompat) view.findViewById(R.id.sleep_switch);
             final SwitchCompat stepsSwitch = (SwitchCompat) view.findViewById(R.id.steps_switch);
           /*  final SwitchCompat lightThemeSwitch = (SwitchCompat) view.findViewById(R.id.light_theme_switch);
@@ -253,21 +255,21 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     }
 
     @Override
-    public void sleepTarget(String sleepTarget) {
+    public void sleepTarget(Date sleepTarget) {
         profile.setSleepTarget(sleepTarget);
         dataBaseRepository.setProfile(profile);
         TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
-        sleepText.setText(String.valueOf(sleepTarget));
+        sleepText.setText(new SimpleDateFormat("HH:mm").format(sleepTarget));
     }
 
     @Override
-    public void startSleep(String startSleep) {
+    public void startSleep(Date startSleep) {
         profile.setStartSleep(startSleep);
         dataBaseRepository.setProfile(profile);
     }
 
     @Override
-    public void endSleep(String endSleep) {
+    public void endSleep(Date endSleep) {
         profile.setEndSleep(endSleep);
         dataBaseRepository.setProfile(profile);
     }

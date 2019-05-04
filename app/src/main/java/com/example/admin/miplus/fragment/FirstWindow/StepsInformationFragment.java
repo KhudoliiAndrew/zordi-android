@@ -148,7 +148,7 @@ public class StepsInformationFragment extends Fragment {
         actionbar.setDisplayShowHomeEnabled(true);
     }
 
-    private void initChart(View view) {
+    private void initChart( View view) {
         Date date = new Date();
         TextView startActivity = (TextView) view.findViewById(R.id.start_activity_text);
         TextView endActivity = (TextView) view.findViewById(R.id.end_activity_text);
@@ -165,47 +165,47 @@ public class StepsInformationFragment extends Fragment {
 
         List<PointValue> values = new ArrayList<PointValue>();
 
-        boolean a = true;
-        for (int i = 0; i < stepsDataList.size(); i++) {
-            stepsData = stepsDataList.get(i);
-            if (stepsData.getDate().getDate() == date.getDate()) {
-                values.add(new PointValue(i, stepsData.getSteps()));
+        if (getContext() != null) {
+            boolean a = true;
+            for (int i = 0; i < stepsDataList.size(); i++) {
+                stepsData = stepsDataList.get(i);
+                if (stepsData.getDate().getDate() == date.getDate()) {
+                    values.add(new PointValue(i, stepsData.getSteps()));
 
-                final Line line = new Line(values).setColor(getResources().getColor(R.color.colorPrimary)).setCubic(true).setHasPoints(hasLabel).setHasLabels(hasLabel).setHasLabelsOnlyForSelected(true);
-                List<Line> lines = new ArrayList<Line>();
-                lines.add(line);
+                    final Line line = new Line(values).setColor(getResources().getColor(R.color.colorPrimary)).setCubic(true).setHasPoints(hasLabel).setHasLabels(hasLabel).setHasLabelsOnlyForSelected(true);
+                    List<Line> lines = new ArrayList<Line>();
+                    lines.add(line);
 
-                LineChartData data = new LineChartData();
-                data.setLines(lines);
-
-
-
-                LineChartView chartView = (LineChartView) view.findViewById(R.id.chart);
-                chartView.setLineChartData(data);
+                    LineChartData data = new LineChartData();
+                    data.setLines(lines);
 
 
-                chartView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        hasLabel = !hasLabel;
-                        line.setHasLabels(hasLabel);
-                        line.setHasPoints(hasLabel);
+                    LineChartView chartView = (LineChartView) view.findViewById(R.id.chart);
+                    chartView.setLineChartData(data);
+
+
+                    chartView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            hasLabel = !hasLabel;
+                            line.setHasLabels(hasLabel);
+                            line.setHasPoints(hasLabel);
+                        }
+                    });
+
+                    if (a) {
+                        if (stepsDataList.size() != 0) {
+                            startActivity.setText(String.valueOf(formatter.format(stepsDataList.get(i).getDate().getTime())));
+                        } else {
+                            noSteps.setText("No progress of your steps");
+                            startActivity.setText("");
+                            endActivity.setText("");
+                        }
+                        a = false;
                     }
-                });
-
-                if (a) {
-                    if(stepsDataList.size() != 0){
-                    startActivity.setText(String.valueOf(formatter.format(stepsDataList.get(i).getDate().getTime())));
-                    } else {
-                        noSteps.setText("No progress of your steps");
-                        startActivity.setText("");
-                        endActivity.setText("");
-                    }
-                    a = false;
                 }
             }
         }
-
 
     }
 
@@ -221,7 +221,7 @@ public class StepsInformationFragment extends Fragment {
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
 
-
+        if (getContext() != null) {
         boolean a = true;
         for (int i = 4; i > 0; i--) {
             if (monthStepsDataList.size() >= 4) {
@@ -233,8 +233,8 @@ public class StepsInformationFragment extends Fragment {
                     a = false;
                 }
             } else {
-                if(monthStepsDataList.size() - i <= -1){
-                    values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
+                if (monthStepsDataList.size() - i <= -1) {
+                    //values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
                 } else {
                     monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
                     values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));
@@ -245,8 +245,7 @@ public class StepsInformationFragment extends Fragment {
                     }
                 }
             }
-            Log.d(">>>><<<<", "initMonthChart: " + monthStepsData.getDate());
-
+        }
 
         }
 
@@ -262,11 +261,13 @@ public class StepsInformationFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        if(getActivity() != null) {
+            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+            //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        }
     }
 }

@@ -3,23 +3,23 @@ package com.example.admin.miplus.data_base.models;
 import java.util.Date;
 
 public class SleepData {
-    private String startSleep;
-    private String endSleep;
+    private Date startSleep;
+    private Date endSleep;
     private Date date;
 
-    public String getStartSleep() {
+    public Date getStartSleep() {
         return startSleep;
     }
 
-    public void setStartSleep(String startSleep) {
+    public void setStartSleep(Date startSleep) {
         this.startSleep = startSleep;
     }
 
-    public String getEndSleep() {
+    public Date getEndSleep() {
         return endSleep;
     }
 
-    public void setEndSleep(String endSleep) {
+    public void setEndSleep(Date endSleep) {
         this.endSleep = endSleep;
     }
 
