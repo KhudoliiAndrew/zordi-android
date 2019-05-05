@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "user_friends", "email"));
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", /*"user_friends",*/ "email"));
                 FirebaseUser FacebookUser = mAuth.getCurrentUser();
                 updateUI(FacebookUser);
             }

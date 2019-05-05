@@ -5,6 +5,9 @@ import android.app.AlarmManager;
 import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -22,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,10 +51,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.DarkAppThemeWithTransparentStatusBar);
         super.onCreate(savedInstanceState);
-
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
         } else {
@@ -139,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        newUserChecker();
+       // newUserChecker();
     }
 
     private void initToolbar() {
@@ -271,17 +277,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-        }
-    }
-
-    private void newUserChecker() {
-        Intent intent = getIntent();
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
-
-        if (intent.getBooleanExtra("fromLogin", false) && viewPager != null) {
-            viewPager.setCurrentItem(2);
-            bottomNavigationView.getMenu().findItem(R.id.item_settings).setChecked(true);
         }
     }
 }

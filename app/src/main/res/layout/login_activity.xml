@@ -11,22 +11,20 @@
         android:id="@+id/gp_logo"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo"
+        android:layout_above="@id/sign_in"/>
 
     <TextView
         android:id="@+id/sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/greeting_text"
-        android:layout_below="@id/gp_logo"
         android:layout_marginTop="35dp"
         android:gravity="center"
         android:text="Welcome"
         android:textColor="@color/textColorWhite"
-        android:textSize="60sp"
+        android:textSize="50sp"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -39,7 +37,7 @@
         android:gravity="center"
         android:text="Please login with"
         android:textColor="#ffffff"
-        android:textSize="25sp" />
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/google_signIn_button"
