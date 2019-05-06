@@ -340,11 +340,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
             geoData.setUserPosition(location.getLatitude(), location.getLongitude());
             geoData.setDate(new Date());
-            dataBaseRepository.setGeoData(geoData);
+            if(dataBaseRepository != null){
+                dataBaseRepository.setGeoData(geoData);
+            }
 
             geoDataList.add(geoData);
 
-            if (dataBaseRepository.getMarkerColorFS() != null) {
+           /* if (dataBaseRepository.getMarkerColorFS() != null) {
                 geoSettingsM = dataBaseRepository.getMarkerColorFS();
                 getMarkerColorHere();
             } else {
@@ -356,7 +358,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                                 getMarkerColorHere();
                             }
                         });
-            }
+            }*/
 
             redrawLine();
 

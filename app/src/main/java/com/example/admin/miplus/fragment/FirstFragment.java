@@ -252,7 +252,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
-                            whenStartTime.setTime((long) (Math.random() * ((startSleep.getTime() + 7200000) - (startSleep.getTime() - 3600000) + 3600000) + (startSleep.getTime() - 3600000)));
+                            if(startSleep != null){
+                                whenStartTime.setTime((long) (Math.random() * ((startSleep.getTime() + 7200000) - (startSleep.getTime() - 3600000) + 3600000) + (startSleep.getTime() - 3600000)));
+                            }
                         }
                     });
             return whenStartTime;

@@ -1,31 +1,21 @@
 package com.example.admin.miplus.fragment;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.Services.AlarmReceiver;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.fragment.Dialogs.HeightDialogFragment;
@@ -69,9 +59,9 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                 profile.setWaterCount(0);
                 profile.setDate(date);
                 dataBaseRepository.setProfile(profile);
-                setWaterCouner(view);
+                setWaterCounter(view);
             } else{
-                setWaterCouner(view);
+                setWaterCounter(view);
             }
         } else {
             dataBaseRepository.getProfileTask()
@@ -86,9 +76,9 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                                 profile.setWaterCount(0);
                                 profile.setDate(date);
                                 dataBaseRepository.setProfile(profile);
-                                setWaterCouner(view);
+                                setWaterCounter(view);
                             } else{
-                                setWaterCouner(view);
+                                setWaterCounter(view);
                             }
                         }
                     });
@@ -214,7 +204,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         }
     }
 
-    private void setWaterCouner(View view){
+    private void setWaterCounter(View view){
         TextView textView = (TextView) view.findViewById(R.id.all_water);
         textView.setText(" /" + (profile.getWeight() * 35) + " ml");
         Button button = (Button) view.findViewById(R.id.add_water_ml);
@@ -288,5 +278,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         dataBaseRepository.setProfile(profile);
         TextView weightText = (TextView) view.findViewById(R.id.weight_text);
         weightText.setText(String.valueOf(profile.getWeight() + " kg"));
+        TextView textView = (TextView) view.findViewById(R.id.all_water);
+        textView.setText(" /" + (profile.getWeight() * 35) + " ml");
     }
 }

@@ -76,13 +76,15 @@ public class MainActivity extends AppCompatActivity {
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
         } else {
-            dataBaseRepository.getProfileTask()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
-                        }
-                    });
+            if(dataBaseRepository.getProfileTask()  != null){
+                dataBaseRepository.getProfileTask()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                profile = task.getResult().toObject(Profile.class);
+                            }
+                        });
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -217,8 +219,10 @@ public class MainActivity extends AppCompatActivity {
                         sleepSwitch.setChecked(profile.getSleepNotification());
                     }
                 }
-                profile.setNotifications(notificationSwitch.isChecked());
-                dataBaseRepository.setProfile(profile);
+                if(profile != null){
+                    profile.setNotifications(notificationSwitch.isChecked());
+                    dataBaseRepository.setProfile(profile);
+                }
             }
         });
     }
