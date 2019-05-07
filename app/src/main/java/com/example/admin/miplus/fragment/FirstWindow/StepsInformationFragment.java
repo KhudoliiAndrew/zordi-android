@@ -125,17 +125,27 @@ public class StepsInformationFragment extends Fragment {
     }
 
     private void viewSetter(View view) {
+        String formattedDoubleCal = "0";
         TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_fragment);
         TextView callText = (TextView) view.findViewById(R.id.text_calories);
         TextView distanceText = (TextView) view.findViewById(R.id.end_sleep__text);
 
         if (stepsData != null && profile != null) {
             stepsText.setText(String.valueOf(steps));
-            String formattedDoubleCal = new DecimalFormat("#0.00").format(0.035f * profile.getWeight() + (1.38889f * 1.38889f / profile.getHeight()) * 0.029f * profile.getWeight());
-            callText.setText(formattedDoubleCal);
             float distance = ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f;
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
             distanceText.setText(formattedDouble);
+
+            if(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f < 10){
+                formattedDoubleCal = new DecimalFormat("#0.00").format(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f);
+            }
+            if(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f < 100 && 0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f >= 10){
+                formattedDoubleCal = new DecimalFormat("#00.00").format(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f);
+            }
+            if(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f > 100){
+                formattedDoubleCal = new DecimalFormat("#000.00").format(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f);
+            }
+            callText.setText(formattedDoubleCal);
         }
     }
 
@@ -234,7 +244,7 @@ public class StepsInformationFragment extends Fragment {
                 }
             } else {
                 if (monthStepsDataList.size() - i <= -1) {
-                    //values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
+                    values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
                 } else {
                     monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
                     values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));

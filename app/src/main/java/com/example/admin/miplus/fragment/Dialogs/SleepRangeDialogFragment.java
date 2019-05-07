@@ -34,7 +34,6 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private float startRadian;
     private float endRadian;
 
-
     @SuppressLint("ValidFragment")
     public SleepRangeDialogFragment(Date sleepTarget, Date startSleep, Date endSleep, float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
         this.sleepTarget = sleepTarget;
@@ -79,6 +78,7 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void initView() {
+
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
         circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
@@ -87,30 +87,33 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
         circleAlarmTimerView.setOnTimeChangedListener(new CircleAlarmTimerView.OnTimeChangedListener() {
             @Override
             public void start(String starting) {
-
-                sleepDistance.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(startSleep, endSleep)));
-                textView1.setText(simpleDateFormat.format(startSleep));
-                textView2.setText(simpleDateFormat.format(endSleep));
                 try {
                     startSleep = simpleDateFormat.parse(starting);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+                sleepDistance.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(startSleep, endSleep)));
+                textView1.setText(simpleDateFormat.format(startSleep));
             }
 
             @Override
             public void end(String ending) {
+                if("00:00".compareTo(ending) != 0){
+                    try {
+                        endSleep = simpleDateFormat.parse(ending);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
                 sleepDistance.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(startSleep, endSleep)));
                 textView2.setText(simpleDateFormat.format(endSleep));
-
-                try {
-                    endSleep = simpleDateFormat.parse(ending);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
             }
 
         });
+
         //sleepDistance.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(startSleep, endSleep)));
     }
 

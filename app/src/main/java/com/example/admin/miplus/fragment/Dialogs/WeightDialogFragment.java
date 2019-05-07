@@ -66,9 +66,9 @@ public class WeightDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.weight_picker);
-        int heightNumber = numberPicker.getValue() ;
+        int weightNumber = numberPicker.getValue() ;
         if (pushWeight != null) {
-            pushWeight.weight(heightNumber);
+            pushWeight.weight(weightNumber);
         }
         dismiss();
     }
