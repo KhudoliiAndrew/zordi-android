@@ -1,15 +1,11 @@
 package com.example.admin.miplus.activity.activity_in_main;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.FragmentTransaction;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Color;
 import android.os.Build;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -25,25 +21,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.BuildConfig;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.Services.MapPositionService;
-import com.example.admin.miplus.Services.NotificationReceiver;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
-import com.example.admin.miplus.data_base.models.StepsData;
 import com.example.admin.miplus.fragment.Dialogs.DonateDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.FeedbackDialogFragment;
 import com.example.admin.miplus.pedometr.StepCounterService;
@@ -52,28 +46,26 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int NOTIFICATION_REMINDER_NIGHT = 2;
     private Profile profile = new Profile();
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
+
+    private TextToSpeech textSay;
+    int result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.DarkAppThemeWithTransparentStatusBar);
         super.onCreate(savedInstanceState);
+
+        textToSpeech("hola");
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
         } else {
@@ -116,6 +108,20 @@ public class MainActivity extends AppCompatActivity {
                 signoutOnclick();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        if(profile != null){
+            if(profile.getSpeak()){
+                menu.findItem(R.id.speak_item).setIcon(R.drawable.ic_volume_up_white_24dp);
+            }
+            if(!profile.getSpeak()){
+                menu.findItem(R.id.speak_item).setIcon(R.drawable.ic_volume_off_white_24dp);
+            }
+        }
+        return true;
     }
 
     private void initBottomNavigationView() {
@@ -167,6 +173,20 @@ public class MainActivity extends AppCompatActivity {
         } else {
             onBackPressed();
         }
+        if (item.getItemId() == R.id.speak_item) {
+            if(profile != null){
+                profile.setSpeak(!profile.getSpeak());
+                dataBaseRepository.setProfile(profile);
+                if(profile.getSpeak()){
+                    item.setIcon(R.drawable.ic_volume_up_white_24dp);
+                }
+                if(!profile.getSpeak()){
+                    item.setIcon(R.drawable.ic_volume_off_white_24dp);
+                }
+            }
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -225,6 +245,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void textToSpeech(final String text) {
+        textSay = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    result = textSay.setLanguage(Locale.UK);
+                    textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void setHeaderContent() {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final TextView name = (TextView) findViewById(R.id.user_name_google);
@@ -246,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
                         FirebaseAuth.getInstance().signOut();
                         Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
                         MainActivity.this.startActivity(userIntent);
-                        //MainActivity.this.finish();
                     }
                 });
     }

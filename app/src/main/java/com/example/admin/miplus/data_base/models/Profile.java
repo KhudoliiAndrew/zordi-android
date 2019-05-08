@@ -20,6 +20,7 @@ public class Profile {
     private boolean isShowGeoposition;
     private int waterCount;
     private Date date;
+    private boolean isSpeak;
 
     public int getStepsTarget() {
         return stepsTarget;
@@ -97,8 +98,8 @@ public class Profile {
         setShowGeoposition(true);
         setWaterCount(0);
         setDate(new Date());
+        setSpeak(true);
     }
-
 
     public int getHeight() {
         return height;
@@ -171,5 +172,13 @@ public class Profile {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean getSpeak() {
+        return isSpeak;
+    }
+
+    public void setSpeak(boolean speak) {
+        isSpeak = speak;
     }
 }

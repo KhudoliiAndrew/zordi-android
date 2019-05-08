@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
@@ -42,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FirstFragment extends Fragment implements StepCounterService.CallBack {
 
@@ -55,6 +58,8 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     private List<StepsData> stepsDataList = new ArrayList<StepsData>();
     private SleepData sleepData = new SleepData();
     private List<SleepData> sleepDataList = new ArrayList<SleepData>();
+
+    private TextToSpeech textSay ;
 
     public void setSteps(int steps) {
         this.steps = steps;
@@ -81,6 +86,7 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.first_activity, container, false);
+        //textToSpeetch();
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             viewSetter(view);
@@ -252,14 +258,26 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
-                            if(startSleep != null){
+                            if (startSleep != null) {
                                 whenStartTime.setTime((long) (Math.random() * ((startSleep.getTime() + 7200000) - (startSleep.getTime() - 3600000) + 3600000) + (startSleep.getTime() - 3600000)));
                             }
                         }
                     });
             return whenStartTime;
         }
+    }
 
+    private void textToSpeetch(){
+
+        textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    textSay.setLanguage(Locale.ENGLISH);
+                }
+            }
+        });
+        textSay.speak("Hello", TextToSpeech.QUEUE_FLUSH, null);
 
     }
 
@@ -290,6 +308,11 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
             stepsData.setSteps(steps);
             stepsData.setDate(new Date());
             dataBaseRepository.setStepsData(stepsData);
+        }
+
+        if (textSay != null) {
+            textSay.stop();
+            textSay.shutdown();
         }
         super.onPause();
     }
