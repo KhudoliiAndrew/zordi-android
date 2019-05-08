@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,33 +15,24 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.Services.MapPositionService;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.GeoData;
 import com.example.admin.miplus.data_base.models.GeoSettings;
-import com.example.admin.miplus.data_base.models.Profile;
-import com.example.admin.miplus.fragment.FirstWindow.MapSettingsFragment;
-import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
-import com.example.admin.miplus.pedometr.StepCounterService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,7 +44,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -64,20 +53,14 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -329,39 +312,73 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         } else {
 
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
-            mGoogleMap.animateCamera(update);
-
-            if (location.getLatitude() < 38.5 && location.getLatitude() > 37.5 && location.getLongitude() > 70 && location.getLongitude() < 71) {
-                Log.d(">>>>>>", "+1");
-            }
-
-            GeoData geoData = new GeoData();
-
-            geoData.setUserPosition(location.getLatitude(), location.getLongitude());
-            geoData.setDate(new Date());
-            dataBaseRepository.setGeoData(geoData);
-
-            geoDataList.add(geoData);
-
-            if (dataBaseRepository.getMarkerColorFS() != null) {
-                geoSettingsM = dataBaseRepository.getMarkerColorFS();
-                getMarkerColorHere();
-            } else {
-                dataBaseRepository.getMarkerColorFSTask()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                geoSettingsM = task.getResult().toObject(GeoSettings.class);
-                                getMarkerColorHere();
-                            }
-                        });
-            }
-
-            redrawLine();
-
+            addNewMarker(ll);
         }
     }
+
+    private void addNewMarker(LatLng ll){
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
+        mGoogleMap.animateCamera(update);
+
+        if (ll.latitude < 50.459827 && location.getLatitude() > 50.459787 && location.getLongitude() < 30.516161 && location.getLongitude() > 30.516121) {
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.426616 && location.getLatitude() > 50.426576 && location.getLongitude() < 30.563069 && location.getLongitude() > 30.563029){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.449576 && location.getLatitude() > 50.449536 && location.getLongitude() < 30.525405 && location.getLongitude() > 30.525365){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.454489 && location.getLatitude() > 50.454449 && location.getLongitude() < 30.529983 && location.getLongitude() > 30.529943){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.448476 && location.getLatitude() > 50.448436 && location.getLongitude() < 30.537612 && location.getLongitude() > 30.537572){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.448860 && location.getLatitude() > 50.448820 && location.getLongitude() < 30.513348 && location.getLongitude() > 30.513308){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.452946 && location.getLatitude() > 50.452906 && location.getLongitude() < 30.514316 && location.getLongitude() > 30.514276){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.434675 && location.getLatitude() > 50.434635 && location.getLongitude() < 30.557255 && location.getLongitude() > 30.557215){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.414952 && location.getLatitude() > 50.414912 && location.getLongitude() < 30.562778 && location.getLongitude() > 30.562738){
+            Log.d(">>>>>>", "+1");
+        }
+        else if(location.getLatitude() < 50.452114 && location.getLatitude() > 50.452074 && location.getLongitude() < 30.462330 && location.getLongitude() > 30.462290){
+            Log.d(">>>>>>", "+1");
+        }
+        GeoData geoData = new GeoData();
+
+        geoData.setUserPosition(location.getLatitude(), location.getLongitude());
+        geoData.setDate(new Date());
+        dataBaseRepository.setGeoData(geoData);
+
+        geoDataList.add(geoData);
+
+        if (dataBaseRepository.getMarkerColorFS() != null) {
+            geoSettingsM = dataBaseRepository.getMarkerColorFS();
+            getMarkerColorHere();
+        } else {
+            dataBaseRepository.getMarkerColorFSTask()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            geoSettingsM = task.getResult().toObject(GeoSettings.class);
+                            getMarkerColorHere();
+                        }
+                    });
+        }
+        redrawLine();
+    }
+
+    public BitmapDescriptor getMarkerIcon(String color) {
+    float[] hsv = new float[3];
+    Color.colorToHSV(Color.parseColor(color), hsv);
+    return BitmapDescriptorFactory.defaultMarker(hsv[0]);}
+
 
     private void getDataFirebase() {
 
@@ -371,7 +388,19 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         GeoData geoData = new GeoData();
                         if (task.getResult() != null) {
-                            geoDataList.addAll(task.getResult().toObjects(GeoData.class));
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+                            cal.set(Calendar.MINUTE, 0);
+                            cal.set(Calendar.SECOND, 0);
+                            long cal2 = cal.getTime().getTime();
+                            List<GeoData> a = task.getResult().toObjects(GeoData.class);
+                            for (int u = 0; u < a.size(); u++) {
+                                GeoData item = a.get(u);
+                                if(item == null) continue;
+                                if (item.getDate().getTime() > cal2) {
+                                    geoDataList.add(item);
+                                }
+                            }
                             redrawLine();
 
                         } else {
@@ -406,6 +435,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void getMapType() {
+        if (geoSettings != null && geoSettings.getMapType() != null){
         if (geoSettings.getMapType().equals(getString(R.string.map_type_normal))) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         } else if (geoSettings.getMapType().equals(getString(R.string.map_type_satellite))) {
@@ -414,6 +444,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         } else if (geoSettings.getMapType().equals(getString(R.string.map_type_terrain))) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        }
+        }else{
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
     }
 
@@ -452,6 +485,12 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         while (itr.hasNext()) {
             GeoData a = itr.next();
+            if (a != null)
+            {
+            }
+            else {
+                continue;
+            }
             LatLng latLng = new LatLng(a.getLatitude(), a.getLongitude());
             options.add(latLng);
         }
@@ -464,8 +503,54 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         }
 
         mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(38.5, 70))
-                .title("Hello world"));
+                .position(new LatLng(50.459807, 30.516141))
+                .title("Andriyivskyy Descent")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.426596, 30.563049))
+                .title("The Motherland Monument")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.449556, 30.525385))
+                .title("Independence Square")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.454469, 30.529963))
+                .title("People's Friendship Arch")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.448456, 30.537592))
+                .title("Mariyinsky Palace")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.448840, 30.513328))
+                .title("Golden Gate")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.452926, 30.514296))
+                .title("Saint Sophia's Cathedral")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.434655, 30.557235))
+                .title("Kiev Pechersk Lavra")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.414932, 30.562758))
+                .title("Hryshko National Botanical Garden")
+                .icon(getMarkerIcon("#3f51b5")));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(50.452094, 30.462310))
+                .title("The Zoo")
+                .icon(getMarkerIcon("#3f51b5")));
 
         line = mGoogleMap.addPolyline(options); //add Polyline
     }
@@ -537,7 +622,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void setGeoposition(LatLng latLng) {
-        // принимаешь значения из сервиса сюда
-        // и ставишь точку(redrawLine)
+       addNewMarker(latLng);
     }
 }

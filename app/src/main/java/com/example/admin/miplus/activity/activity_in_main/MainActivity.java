@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.BuildConfig;
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.Services.MapPositionService;
 import com.example.admin.miplus.Services.NotificationReceiver;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
@@ -84,6 +85,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startService(new Intent(this, StepCounterService.class));
             Log.d(">>>>>>", "sdadfasdsadsa");
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(this, MapPositionService.class));
+        } else {
+            startService(new Intent(this, MapPositionService.class));
+            Log.d(">>>>>>", "dadadasdsedsa");
         }
 
         if (savedInstanceState == null) {

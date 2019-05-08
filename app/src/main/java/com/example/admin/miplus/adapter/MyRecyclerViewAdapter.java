@@ -78,7 +78,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter {
         this.clickListener = itemClickListener;
     }
 
-
 }
 
 

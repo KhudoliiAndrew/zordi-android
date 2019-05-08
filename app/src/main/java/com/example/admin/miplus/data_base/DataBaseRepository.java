@@ -11,12 +11,9 @@ import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.Date;
 
 
 public class DataBaseRepository {
@@ -139,5 +136,9 @@ public class DataBaseRepository {
     public GeoSettings getMarkerColorFS(){
         return markerColor;
     }
+
+    /*public void setAndDes(CheckPoints checkPoints){
+        db.collection("geopositions").document(mAuth.getUid()).collection("CheckPoints").document("nuGkOTKbAoSSKoRG6i6W").set(checkPoints);
+    }*/
 }
 
