@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.BuildConfig;
 import com.example.admin.miplus.R;
+import com.example.admin.miplus.Services.MapPositionService;
 import com.example.admin.miplus.Services.NotificationReceiver;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.adapter.TabsPagerFragmentAdapter;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
         } else {
-            if(dataBaseRepository.getProfileTask()  != null){
+            if (dataBaseRepository.getProfileTask() != null) {
                 dataBaseRepository.getProfileTask()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
@@ -87,12 +88,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(this, StepCounterService.class));
-        } else {
-            startService(new Intent(this, StepCounterService.class));
-            Log.d(">>>>>>", "sdadfasdsadsa");
-        }
+        startService(new Intent(this, StepCounterService.class));
+        startService(new Intent(this, MapPositionService.class));
+
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -128,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     switch (item.getItemId()) {
                         case R.id.item_main:
                             viewPager.setCurrentItem(0);
@@ -147,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-       // newUserChecker();
+        // newUserChecker();
     }
 
     private void initToolbar() {
@@ -219,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                         sleepSwitch.setChecked(profile.getSleepNotification());
                     }
                 }
-                if(profile != null){
+                if (profile != null) {
                     profile.setNotifications(notificationSwitch.isChecked());
                     dataBaseRepository.setProfile(profile);
                 }
