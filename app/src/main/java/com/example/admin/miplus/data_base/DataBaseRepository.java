@@ -26,11 +26,12 @@ public class DataBaseRepository {
     private SleepData sleepData;
     private GeoSettings mapType;
     private GeoSettings markerColor;
-    private GeoSettings polylineColor;
     private GeoData geoData;
 
     public void setProfile(Profile profile){
-        db.collection("profiles").document(mAuth.getUid()).set(profile);
+        if(mAuth.getUid() != null){
+            db.collection("profiles").document(mAuth.getUid()).set(profile);
+        }
     }
 
     public Task<DocumentSnapshot> getProfileTask() {
