@@ -19,6 +19,8 @@ public class Profile {
     private boolean isLightTheme;
     private boolean isShowGeoposition;
     private int waterCount;
+    private int Checkpoints;
+    private Date checkPointsDate;
     private Date date;
 
     public int getStepsTarget() {
@@ -69,6 +71,22 @@ public class Profile {
         this.endRadian = endRadian;
     }
 
+    public int getCheckpoints() {
+        return Checkpoints;
+    }
+
+    public void setCheckpoints(int checkpoints) {
+        Checkpoints = checkpoints;
+    }
+
+    public Date getCheckPointsDate() {
+        return checkPointsDate;
+    }
+
+    public void setCheckPointsDate(Date checkpoints) {
+        checkPointsDate = checkpoints;
+    }
+
     public void setDefaultInstance() {
         setStepsTarget(8000);
         try {
@@ -96,6 +114,8 @@ public class Profile {
         setLightTheme(true);
         setShowGeoposition(true);
         setWaterCount(0);
+        setCheckpoints(0);
+        setCheckPointsDate(new Date());
         setDate(new Date());
     }
 

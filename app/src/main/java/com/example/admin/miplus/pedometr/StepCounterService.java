@@ -215,7 +215,7 @@ public class StepCounterService extends Service implements SensorEventListener {
     private void setStepsToBd(int steps) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (stepsData != null && stepsData.getDate() != null && System.currentTimeMillis() != 0 && mAuth.getUid() != null) {
-            if (System.currentTimeMillis() > stepsData.getDate().getTime() + 60000) {
+            if (System.currentTimeMillis() > stepsData.getDate().getTime() + 999999999) {
                 stepsData.setSteps(steps);
                 stepsData.setDate(new Date());
                 dataBaseRepository.setStepsData(stepsData);

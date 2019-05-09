@@ -3,6 +3,7 @@ package com.example.admin.miplus.data_base;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.example.admin.miplus.data_base.models.CheckPoint;
 import com.example.admin.miplus.data_base.models.GeoData;
 import com.example.admin.miplus.data_base.models.GeoSettings;
 import com.example.admin.miplus.data_base.models.Profile;
@@ -11,12 +12,9 @@ import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.Date;
 
 
 public class DataBaseRepository {
@@ -27,6 +25,7 @@ public class DataBaseRepository {
     private GeoSettings mapType;
     private GeoSettings markerColor;
     private GeoSettings polylineColor;
+    private CheckPoint checkPoint;
     private GeoData geoData;
 
     public void setProfile(Profile profile){
@@ -84,7 +83,6 @@ public class DataBaseRepository {
             @NonNull
             @Override
             public Task<GeoData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
-                //Query dateFilter = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").orderBy(date);
                 geoData = (GeoData) querySnapshot.toObjects(GeoData.class);
                 return null;
             }
@@ -139,5 +137,16 @@ public class DataBaseRepository {
     public GeoSettings getMarkerColorFS(){
         return markerColor;
     }
-}
 
+    public void setCheckPoint(CheckPoint checkPoint){
+        db.collection("geopositions").document(mAuth.getUid()).collection("CheckPoint").document(String.valueOf(checkPoint.getNum())).set(checkPoint);
+    }
+
+    public Task<QuerySnapshot> getCheckPointTask() {
+        return db.collection("geopositions").document(mAuth.getUid()).collection("CheckPoint").orderBy("date").get();
+    }
+
+    public CheckPoint getCheckPoint(){
+        return checkPoint;
+    }
+}

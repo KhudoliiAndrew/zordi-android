@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +52,6 @@ public class MapSettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(LAYOUT, container, false);
 
-/*
         Button mapSettingsPhone = (Button) view.findViewById(R.id.mapSettingsPhone);
         mapSettingsPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +59,6 @@ public class MapSettingsFragment extends Fragment {
                 startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
             }
         });
-*/
 
         Button backToMapButton = (Button) view.findViewById(R.id.backToMapButton);
         backToMapButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +79,6 @@ public class MapSettingsFragment extends Fragment {
                 listItems = new String[] {"Normal", "Satellite", "Hybrid", "Terrain"};
                 AlertDialog.Builder mapTypeBuilder = new AlertDialog.Builder(getActivity());
                 mapTypeBuilder.setTitle("Choose a type");
-          //      mapTypeBuilder.setIcon(R.drawable.ic_list);
                 mapTypeBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -119,7 +119,6 @@ public class MapSettingsFragment extends Fragment {
                 listItemsM = new String[] {"Blue", "Red", "Green", "Black"};
                 AlertDialog.Builder markerColorBuilder = new AlertDialog.Builder(getActivity());
                 markerColorBuilder.setTitle("Choose a type");
-                //markerColorBuilder.setIcon(R.drawable.ic_list);
                 markerColorBuilder.setSingleChoiceItems(listItemsM, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -151,6 +150,7 @@ public class MapSettingsFragment extends Fragment {
                 markerColorDialog.show();
             }
         });
+
         return view;
     }
 }

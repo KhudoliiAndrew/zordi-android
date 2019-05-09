@@ -29,10 +29,24 @@
 
                 <Button
                     android:id="@+id/backToMapButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"
                     android:layout_marginBottom="170dp"
-                    android:layout_marginEnd="355dp"
+
+                    android:background="@android:color/transparent"
+                    android:text="Back to Map"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <Button
+                    android:id="@+id/mapSettingsPhone"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="35dp"
                     android:background="@drawable/ic_arrow_back_white_24dp"
                     android:elevation="3dp"
                     app:layout_constraintEnd_toEndOf="parent"
