@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                                 profile = task.getResult().toObject(Profile.class);
                                 Log.d(">>>>>>", "3333333333");
                                 Intent goToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                                //goToMainActivity.putExtra("fromLogin", true);
+                                goToMainActivity.putExtra("fromLogin", true);
                                 LoginActivity.this.startActivity(goToMainActivity);
                                 LoginActivity.this.finish();
                             } else {
@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                                 dataBaseRepository.setProfile(profile);
                                 Log.d(">>>>>>", "44444444444");
                                 Intent goToMainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                                //goToMainActivity.putExtra("fromLogin", true);
+                                goToMainActivity.putExtra("fromLogin", true);
                                 LoginActivity.this.startActivity(goToMainActivity);
                                 LoginActivity.this.finish();
                             }

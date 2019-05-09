@@ -59,7 +59,8 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     private SleepData sleepData = new SleepData();
     private List<SleepData> sleepDataList = new ArrayList<SleepData>();
 
-    private TextToSpeech textSay ;
+    private TextToSpeech textSay;
+    int result;
 
     public void setSteps(int steps) {
         this.steps = steps;
@@ -86,17 +87,15 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.first_activity, container, false);
-        //textToSpeetch();
+
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
-            viewSetter(view);
         } else {
             dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             profile = task.getResult().toObject(Profile.class);
-                            viewSetter(view);
                         }
                     });
         }
@@ -115,14 +114,17 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                                 dataBaseRepository.setStepsDataByDay(stepsData);
                                 stepsData.setDefaultInstance();
                                 dataBaseRepository.setStepsData(stepsData);
+                                textToSpeech(stepsData.getSteps() + "steps completed");
                             } else {
                                 steps = stepsData.getSteps();
                                 viewSetter(view);
+                                textToSpeech(stepsData.getSteps() + "steps completed");
                             }
                         } else {
                             stepsData.setDefaultInstance();
                             steps = stepsData.getSteps();
                             dataBaseRepository.setStepsData(stepsData);
+                            textToSpeech(stepsData.getSteps() + "steps completed");
                         }
                     }
 
@@ -267,18 +269,20 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
         }
     }
 
-    private void textToSpeetch(){
-
-        textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    textSay.setLanguage(Locale.ENGLISH);
-                }
+    private void textToSpeech(final String text) {
+            if (profile.getSpeak()) {
+                textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                            textSay.setLanguage(Locale.UK);
+                            textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                        } else {
+                            Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
-        });
-        textSay.speak("Hello", TextToSpeech.QUEUE_FLUSH, null);
-
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -298,7 +302,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
 
     private void bindService() {
         Intent intent = new Intent(getActivity(), StepCounterService.class);
-        getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        if(getActivity() != null){
+            getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @Override

@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(hasConnection(this)){
+        if (hasConnection()) {
             if (currentUser != null) {
                 dataBaseRepository.getProfileTask()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -60,42 +60,26 @@ public class SplashActivity extends AppCompatActivity {
                 SplashActivity.this.startActivity(userIntent);
                 SplashActivity.this.finish();
             }
-        } else{
+        } else {
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
         }
     }
 
-    public static boolean hasConnection(final Context context)
-    {
-        /*ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifiInfo = cm != null ? cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI) : null;
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        wifiInfo = cm != null ? cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) : null;
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        wifiInfo = cm != null ? cm.getActiveNetworkInfo() : null;
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        return false;*/
-
+    public static boolean hasConnection() {
         Runtime runtime = Runtime.getRuntime();
         try {
 
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
+            int exitValue = ipProcess.waitFor();
             return (exitValue == 0);
 
-        } catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return false;
     }

@@ -1,6 +1,7 @@
 package com.example.admin.miplus.fragment.FirstWindow;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
@@ -28,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
@@ -43,6 +46,10 @@ public class SleepInformationFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Profile profile = new Profile();
     private String sleepTarget;
+
+    private TextToSpeech textSay;
+    private String whichTextSay;
+    int result;
 
     @Nullable
     @Override
@@ -100,12 +107,7 @@ public class SleepInformationFragment extends Fragment {
                                                 sleepDataList = task.getResult().toObjects(SleepData.class);
                                                 sleepData = sleepDataList.get(sleepDataList.size() - 1);
                                                 if (profile != null) {
-                                                    if (date.getDate() != sleepData.getDate().getDate()) {
-                                                        sleepData.setStartSleep(profile.getStartSleep());
-                                                        sleepData.setEndSleep(profile.getEndSleep());
-                                                        sleepData.setDate(date);
-                                                        dataBaseRepository.setSleepData(sleepData);
-                                                    }
+
                                                     adviceSetter(view);
                                                 }
 
@@ -114,10 +116,6 @@ public class SleepInformationFragment extends Fragment {
                                             } else {
                                                 Date date = new Date();
                                                 if (profile != null) {
-                                                    sleepData.setStartSleep(profile.getStartSleep());
-                                                    sleepData.setEndSleep(profile.getEndSleep());
-                                                    sleepData.setDate(date);
-                                                    dataBaseRepository.setSleepData(sleepData);
                                                     adviceSetter(view);
                                                 }
                                                 viewSetter(view);
@@ -135,6 +133,26 @@ public class SleepInformationFragment extends Fragment {
         return view;
     }
 
+    private void textToSpeech(final String text, final String text2, final String text3, final String text4, final String text5) {
+        if (profile.getSpeak()) {
+            textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                        textSay.setLanguage(Locale.UK);
+                        textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                        textSay.speak(text2, TextToSpeech.QUEUE_ADD, null);
+                        textSay.speak(text3, TextToSpeech.QUEUE_ADD, null);
+                        textSay.speak(text4, TextToSpeech.QUEUE_ADD, null);
+                        textSay.speak(text5, TextToSpeech.QUEUE_ADD, null);
+                    } else {
+                        Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -148,6 +166,10 @@ public class SleepInformationFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         if (getActivity() != null) {
+            if (textSay != null) {
+                textSay.stop();
+                textSay.shutdown();
+            }
             Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
             ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -168,6 +190,7 @@ public class SleepInformationFragment extends Fragment {
             if (sleepData.getStartSleep().getTime() < profile.getStartSleep().getTime()) {
                 long range = profile.getStartSleep().getTime() - sleepData.getStartSleep().getTime() - 10800000;
                 firstAdvice.setText("Fell asleep " + simpleDateFormat.format(range) + " early");
+
             }
             if (sleepData.getStartSleep().getTime() > profile.getStartSleep().getTime()) {
                 long range = sleepData.getStartSleep().getTime() - profile.getStartSleep().getTime() - 10800000;
@@ -219,6 +242,7 @@ public class SleepInformationFragment extends Fragment {
                 long range = sleepRangeMust - sleepRangeReal - 10800000;
                 thirdAdvice.setText("Sleep " + "reduced by " + simpleDateFormat.format(range));
             }
+            textToSpeech("Start sleeping in" + simpleDateFormat.format(sleepData.getStartSleep()), "End sleeping in" +simpleDateFormat.format(sleepData.getEndSleep()), firstAdvice.getText().toString(), secondAdvice.getText().toString(), thirdAdvice.getText().toString());
         }
     }
 

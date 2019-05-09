@@ -1,6 +1,7 @@
 package com.example.admin.miplus.fragment.FirstWindow;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.data_base.DataBaseRepository;
@@ -27,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
@@ -37,7 +40,7 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class StepsInformationFragment extends Fragment {
+public class StepsInformationFragment extends Fragment implements TextToSpeech.OnInitListener {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private StepsData stepsData = new StepsData();
@@ -48,6 +51,10 @@ public class StepsInformationFragment extends Fragment {
     private Profile profile = new Profile();
 
     boolean hasLabel = false;
+
+    private TextToSpeech textSay;
+    private String whichTextSay;
+    int result;
 
     @Nullable
     @Override
@@ -136,16 +143,21 @@ public class StepsInformationFragment extends Fragment {
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
             distanceText.setText(formattedDouble);
 
-            if(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f < 10){
+            if (0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f < 10) {
                 formattedDoubleCal = new DecimalFormat("#0.00").format(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f);
             }
-            if(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f < 100 && 0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f >= 10){
+            if (0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f < 100 && 0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f >= 10) {
                 formattedDoubleCal = new DecimalFormat("#00.00").format(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f);
             }
-            if(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f > 100){
+            if (0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f > 100) {
                 formattedDoubleCal = new DecimalFormat("#000.00").format(0.5f * profile.getWeight() * ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f);
+
             }
             callText.setText(formattedDoubleCal);
+
+            if (distance != 0) {
+                textToSpeech(formattedDoubleCal + "calories burned", formattedDouble + "kilometers traveled");
+            }
         }
     }
 
@@ -158,16 +170,16 @@ public class StepsInformationFragment extends Fragment {
         actionbar.setDisplayShowHomeEnabled(true);
     }
 
-    private void initChart( View view) {
+    private void initChart(View view) {
         Date date = new Date();
         TextView startActivity = (TextView) view.findViewById(R.id.start_activity_text);
         TextView endActivity = (TextView) view.findViewById(R.id.end_activity_text);
         TextView noSteps = (TextView) view.findViewById(R.id.no_steps_today);
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        if(stepsDataList.size() != 0) {
+        if (stepsDataList.size() != 0) {
             endActivity.setText(String.valueOf(formatter.format(stepsDataList.get(stepsDataList.size() - 1).getDate().getTime())));
-        } else{
+        } else {
             noSteps.setText("No progress of your steps");
             startActivity.setText("");
             endActivity.setText("");
@@ -232,20 +244,9 @@ public class StepsInformationFragment extends Fragment {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
 
         if (getContext() != null) {
-        boolean a = true;
-        for (int i = 4; i > 0; i--) {
-            if (monthStepsDataList.size() >= 4) {
-                monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
-                values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));
-                if (a) {
-                    firstDay.setText(String.valueOf(formatter.format(monthStepsData.getDate())));
-                    endDay.setText(String.valueOf(formatter.format(monthStepsDataList.get(monthStepsDataList.size() - 1).getDate())));
-                    a = false;
-                }
-            } else {
-                if (monthStepsDataList.size() - i <= -1) {
-                    values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
-                } else {
+            boolean a = true;
+            for (int i = 4; i > 0; i--) {
+                if (monthStepsDataList.size() >= 4) {
                     monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
                     values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));
                     if (a) {
@@ -253,9 +254,20 @@ public class StepsInformationFragment extends Fragment {
                         endDay.setText(String.valueOf(formatter.format(monthStepsDataList.get(monthStepsDataList.size() - 1).getDate())));
                         a = false;
                     }
+                } else {
+                    if (monthStepsDataList.size() - i <= -1) {
+                        values.add(new SubcolumnValue(10, getResources().getColor(R.color.colorBackgroundChart)));
+                    } else {
+                        monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
+                        values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));
+                        if (a) {
+                            firstDay.setText(String.valueOf(formatter.format(monthStepsData.getDate())));
+                            endDay.setText(String.valueOf(formatter.format(monthStepsDataList.get(monthStepsDataList.size() - 1).getDate())));
+                            a = false;
+                        }
+                    }
                 }
             }
-        }
 
         }
 
@@ -268,16 +280,47 @@ public class StepsInformationFragment extends Fragment {
         chart.setInteractive(false);
     }
 
+    private void textToSpeech(final String text, final String text2) {
+        if (profile.getSpeak()) {
+            textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                        result = textSay.setLanguage(Locale.UK);
+                        textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                        textSay.speak(text2, TextToSpeech.QUEUE_ADD, null);
+                    } else {
+                        Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
-        if(getActivity() != null) {
+        if (getActivity() != null) {
+            if (textSay != null) {
+                textSay.stop();
+                textSay.shutdown();
+            }
             Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
             ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
             //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        }
+    }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+            result = textSay.setLanguage(Locale.UK);
+            textSay.speak(whichTextSay, TextToSpeech.QUEUE_ADD, null);
+        } else {
+            Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
         }
     }
 }

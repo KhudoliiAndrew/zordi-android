@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
 
     private TextToSpeech textSay;
+    private Menu menu;
     int result;
 
     @Override
@@ -65,9 +66,11 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.DarkAppThemeWithTransparentStatusBar);
         super.onCreate(savedInstanceState);
 
-        textToSpeech("hola");
+
+
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
+            newUserChecker();
         } else {
             if (dataBaseRepository.getProfileTask() != null) {
                 dataBaseRepository.getProfileTask()
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 profile = task.getResult().toObject(Profile.class);
+                                newUserChecker();
                             }
                         });
             }
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         if(profile != null){
             if(profile.getSpeak()){
@@ -150,8 +155,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // newUserChecker();
     }
 
     private void initToolbar() {
@@ -179,9 +182,11 @@ public class MainActivity extends AppCompatActivity {
                 dataBaseRepository.setProfile(profile);
                 if(profile.getSpeak()){
                     item.setIcon(R.drawable.ic_volume_up_white_24dp);
+                    textToSpeech("So I started talking - restart the application");
                 }
                 if(!profile.getSpeak()){
                     item.setIcon(R.drawable.ic_volume_off_white_24dp);
+                    textToSpeech("So I shut up - restart the application");
                 }
             }
             return true;
@@ -246,17 +251,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void textToSpeech(final String text) {
-        textSay = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    result = textSay.setLanguage(Locale.UK);
-                    textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+       // if(profile.getSpeak()){
+            textSay = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                        result = textSay.setLanguage(Locale.UK);
+                        textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+       // }
     }
 
     private void setHeaderContent() {
@@ -280,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
                         FirebaseAuth.getInstance().signOut();
                         Intent userIntent = new Intent(MainActivity.this, SplashActivity.class);
                         MainActivity.this.startActivity(userIntent);
+                        //MainActivity.this.finish();
                     }
                 });
     }
@@ -312,6 +320,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+        }
+    }
+
+    private void newUserChecker() {
+        if (getIntent().getBooleanExtra("fromLogin", false) && profile.getSpeak()) {
+            if(menu!= null){
+                menu.findItem(R.id.speak_item).setIcon(R.drawable.ic_volume_up_white_24dp);
+            }
+            textToSpeech("Hi, I'm your personal voice assistant. I will help you to read the text, if you can not yourself. If you can do it yourself - turn off the button in the upper right corner");
         }
     }
 }

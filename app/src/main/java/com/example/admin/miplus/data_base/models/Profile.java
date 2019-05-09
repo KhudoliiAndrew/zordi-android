@@ -21,6 +21,7 @@ public class Profile {
     private int waterCount;
     private Date date;
     private boolean isSpeak;
+    private int Checkpoints;
 
     public int getStepsTarget() {
         return stepsTarget;
@@ -99,6 +100,7 @@ public class Profile {
         setWaterCount(0);
         setDate(new Date());
         setSpeak(true);
+        setCheckpoints(0);
     }
 
     public int getHeight() {
@@ -180,5 +182,13 @@ public class Profile {
 
     public void setSpeak(boolean speak) {
         isSpeak = speak;
+    }
+
+    public int getCheckpoints() {
+        return Checkpoints;
+    }
+
+    public void setCheckpoints(int checkpoints) {
+        Checkpoints = checkpoints;
     }
 }

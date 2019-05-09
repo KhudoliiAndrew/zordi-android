@@ -1,12 +1,15 @@
 package com.example.admin.miplus.fragment;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget, HeightDialogFragment.PushHeight, WeightDialogFragment.PushWeight {
     private View view;
@@ -37,6 +41,8 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     private Profile profile = new Profile();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private TextToSpeech textSay;
 
     public static ThirdFragment getInstance() {
         Bundle args = new Bundle();
@@ -55,13 +61,15 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
             viewSetter(view);
             switchSetter(view);
             Date date = new Date();
-            if(profile.getDate().getDate() != date.getDate()){
+            if (profile.getDate().getDate() != date.getDate()) {
                 profile.setWaterCount(0);
                 profile.setDate(date);
                 dataBaseRepository.setProfile(profile);
                 setWaterCounter(view);
-            } else{
+                textToSpeech("Drank " + profile.getWaterCount() + " milliliters of water from " + (profile.getWeight() * 35) + " milliliters");
+            } else {
                 setWaterCounter(view);
+                textToSpeech("Drank " + profile.getWaterCount() + " milliliters of water from " + (profile.getWeight() * 35) + " milliliters");
             }
         } else {
             dataBaseRepository.getProfileTask()
@@ -72,13 +80,15 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                             viewSetter(view);
                             switchSetter(view);
                             Date date = new Date();
-                            if(profile.getDate().getDate() != date.getDate()){
+                            if (profile.getDate().getDate() != date.getDate()) {
                                 profile.setWaterCount(0);
                                 profile.setDate(date);
                                 dataBaseRepository.setProfile(profile);
                                 setWaterCounter(view);
-                            } else{
+                                textToSpeech("Drank " + profile.getWaterCount() + " milliliters of water from " + (profile.getWeight() * 35) + " milliliters");
+                            } else {
                                 setWaterCounter(view);
+                                textToSpeech("Drank " + profile.getWaterCount() + " milliliters of water from " + (profile.getWeight() * 35) + " milliliters");
                             }
                         }
                     });
@@ -135,7 +145,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     }
 
     private void viewSetter(View view) {
-        if(profile != null){
+        if (profile != null) {
             TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
             TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
             TextView heightText = (TextView) view.findViewById(R.id.height_text);
@@ -158,7 +168,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
            /* lightThemeSwitch.setChecked(profile.getLightTheme());
             darkThemeSwitch.setChecked(!profile.getLightTheme());*/
 
-            if(!profile.getNotifications() ){
+            if (!profile.getNotifications()) {
                 stepsSwitch.setChecked(false);
                 sleepSwitch.setChecked(false);
             } else {
@@ -170,16 +180,20 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     profile.setStepsNotification(stepsSwitch.isChecked());
-                    if(isChecked) profile.setNotifications(true);
+                    if (isChecked) profile.setNotifications(true);
                     dataBaseRepository.setProfile(profile);
+                    if (!isChecked) textToSpeech("Steps notification disabled");
+                    if (isChecked) textToSpeech("Steps notification enabled");
                 }
             });
             sleepSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     profile.setSleepNotification(sleepSwitch.isChecked());
-                    if(isChecked) profile.setNotifications(true);
+                    if (isChecked) profile.setNotifications(true);
                     dataBaseRepository.setProfile(profile);
+                    if (!isChecked) textToSpeech("Alarm disabled");
+                    if (isChecked) textToSpeech("Alarm enabled");
                 }
             });
 
@@ -204,7 +218,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         }
     }
 
-    private void setWaterCounter(View view){
+    private void setWaterCounter(View view) {
         TextView textView = (TextView) view.findViewById(R.id.all_water);
         textView.setText(" /" + (profile.getWeight() * 35) + " ml");
         Button button = (Button) view.findViewById(R.id.add_water_ml);
@@ -213,15 +227,33 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(profile.getWaterCount() < 10000){
+                if (profile.getWaterCount() < 10000) {
                     profile.setWaterCount(profile.getWaterCount() + 250);
                     textView1.setText(String.valueOf(profile.getWaterCount()));
                     dataBaseRepository.setProfile(profile);
-                } else{
+                    textToSpeech("Drank " + profile.getWaterCount() + " milliliters of water from " + (profile.getWeight() * 35) + " milliliters");
+                } else {
                     Toast.makeText(getActivity(), "You drank too much", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+
+    private void textToSpeech(final String s) {
+        if (profile.getSpeak()) {
+            textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                        textSay.setLanguage(Locale.UK);
+                        textSay.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+                    } else {
+                        Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -230,6 +262,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         dataBaseRepository.setProfile(profile);
         TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
         stepsText.setText(String.valueOf(stepsTarget));
+        textToSpeech("Your steps target is" + stepsTarget + " steps");
     }
 
     @Override
@@ -250,6 +283,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         dataBaseRepository.setProfile(profile);
         TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
         sleepText.setText(new SimpleDateFormat("HH:mm").format(sleepTarget));
+        textToSpeech("Your sleep target is" + new SimpleDateFormat("HH:mm").format(sleepTarget));
     }
 
     @Override
@@ -270,6 +304,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         dataBaseRepository.setProfile(profile);
         TextView heightText = (TextView) view.findViewById(R.id.height_text);
         heightText.setText(String.valueOf(profile.getHeight() + " cm"));
+        textToSpeech("Your height" + height + " cm");
     }
 
     @Override
@@ -280,5 +315,15 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         weightText.setText(String.valueOf(profile.getWeight() + " kg"));
         TextView textView = (TextView) view.findViewById(R.id.all_water);
         textView.setText(" /" + (profile.getWeight() * 35) + " ml");
+        textToSpeech("Your weight" + weight + " kg");
+    }
+
+    @Override
+    public void onPause() {
+        if (textSay != null) {
+            textSay.stop();
+            textSay.shutdown();
+        }
+        super.onPause();
     }
 }

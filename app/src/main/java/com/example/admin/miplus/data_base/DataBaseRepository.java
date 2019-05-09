@@ -35,16 +35,20 @@ public class DataBaseRepository {
     }
 
     public Task<DocumentSnapshot> getProfileTask() {
-        final Task<DocumentSnapshot> task = db.collection("profiles").document(mAuth.getUid()).get();
-        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, Profile>(){
-            @NonNull
-            @Override
-            public Task<Profile> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
-                profile = documentSnapshot.toObject(Profile.class);
-                return null;
-            }
-        });
-        return task;
+        if(mAuth.getUid()!=null){
+            final Task<DocumentSnapshot> task = db.collection("profiles").document(mAuth.getUid()).get();
+            task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, Profile>(){
+                @NonNull
+                @Override
+                public Task<Profile> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                    profile = documentSnapshot.toObject(Profile.class);
+                    return null;
+                }
+            });
+            return task;
+        } else {
+            return null;
+        }
     }
 
     public Profile getProfile(){
@@ -76,7 +80,9 @@ public class DataBaseRepository {
     }
 
     public void setGeoData(GeoData geoData){
-        db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
+        if (mAuth.getUid() != null){
+            db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").document().set(geoData);
+        }
     }
 
     public Task<QuerySnapshot> getGeoDataTask() {
@@ -85,7 +91,6 @@ public class DataBaseRepository {
             @NonNull
             @Override
             public Task<GeoData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
-                //Query dateFilter = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").orderBy(date);
                 geoData = (GeoData) querySnapshot.toObjects(GeoData.class);
                 return null;
             }

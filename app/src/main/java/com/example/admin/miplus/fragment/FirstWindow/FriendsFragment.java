@@ -2,6 +2,7 @@ package com.example.admin.miplus.fragment.FirstWindow;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,6 +38,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class FriendsFragment extends Fragment implements ItemClickListener {
 
@@ -47,11 +51,14 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
     MyRecyclerViewAdapter adapter;
     List<RowType> items = new ArrayList<>();
 
+    private TextToSpeech textSay;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.friends_fragment, container, false);
 
+        textToSpeech("You have two friends");
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             viewSetter(view);
@@ -106,15 +113,20 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
         }
     }
 
-    private  void setCardContent(View view){
-        if(getActivity() != null){
+    private void setCardContent(View view) {
+        if (getActivity() != null) {
             ImageView logo = (ImageView) view.findViewById(R.id.friend_logo);
             Glide.with(getActivity()).load(R.drawable.photo_oleg).apply(RequestOptions.circleCropTransform()).into(logo);
+
+            ImageView logo2 = (ImageView) view.findViewById(R.id.friend_Andrew_logo);
+            Glide.with(getActivity()).load(R.drawable.andrew_logo).apply(RequestOptions.circleCropTransform()).into(logo2);
+
             RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.add_friend_container);
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getActivity(), "You can add more friends in the future", Toast.LENGTH_LONG).show();
+                    textToSpeech("You can add more friends in the future");
                 }
             });
             SwitchCompat switchCompat = (SwitchCompat) view.findViewById(R.id.geoposition_switch);
@@ -124,6 +136,22 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     profile.setShowGeoposition(isChecked);
                     dataBaseRepository.setProfile(profile);
+                }
+            });
+        }
+    }
+
+    private void textToSpeech(final String text) {
+        if (profile.getSpeak()) {
+            textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                        textSay.setLanguage(Locale.UK);
+                        textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -142,9 +170,9 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
 
     @Override
     public void onClick(View view, int position) {
-            AddFriendFragment addFriendFragment = new AddFriendFragment();
-            FragmentManager fragmentManager = getActivity().getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.fragments_container, addFriendFragment).addToBackStack(null).commit();
+        AddFriendFragment addFriendFragment = new AddFriendFragment();
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragments_container, addFriendFragment).addToBackStack(null).commit();
     }
 
 

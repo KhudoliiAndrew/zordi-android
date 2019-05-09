@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -68,6 +69,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,6 +80,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -111,6 +114,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     //integer for permissions result request
     private static final int ALL_PERMISSIONS_RESULT = 1011;
 
+    private TextToSpeech textSay;
+    private Profile profile = new Profile();
+
     public static SecondFragment getInstance() {
         Bundle args = new Bundle();
         SecondFragment fragment = new SecondFragment();
@@ -125,6 +131,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         Log.d(">>>>>>", "OnCreateView");
         View view = inflater.inflate(LAYOUT, container, false);
 
+        textToSpeech();
         bindService();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -152,21 +159,21 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mapSettings.setOnClickListener(this);*/
 
         getDataFirebase();
-
-        if (dataBaseRepository.getMapSettings() != null) {
-            geoSettings = dataBaseRepository.getMapSettings();
-            getMapType();
-        } else {
-            dataBaseRepository.getMapSettingsTask()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            geoSettings = task.getResult().toObject(GeoSettings.class);
-                            getMapType();
-                        }
-                    });
+        if(hasConnection()) {
+            if (dataBaseRepository.getMapSettings() != null) {
+                geoSettings = dataBaseRepository.getMapSettings();
+                getMapType();
+            } else {
+                dataBaseRepository.getMapSettingsTask()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                geoSettings = task.getResult().toObject(GeoSettings.class);
+                                getMapType();
+                            }
+                        });
+            }
         }
-
         return view;
     }
 
@@ -323,10 +330,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onLocationChanged(final Location location) {
-        Log.d(">>>>>>", "Location Zordi");
         if (location == null) {
             Toast.makeText(getActivity(), "Can't get current location", Toast.LENGTH_LONG).show();
-
         } else {
 
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
@@ -630,21 +635,79 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         dataBaseRepository.setGeoData(geoData);
 
         geoDataList.add(geoData);
+        if(hasConnection()){
+            if (dataBaseRepository.getMarkerColorFS() != null) {
+                geoSettingsM = dataBaseRepository.getMarkerColorFS();
+                getMarkerColorHere();
+            } else {
+                dataBaseRepository.getMarkerColorFSTask()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                geoSettingsM = task.getResult().toObject(GeoSettings.class);
+                                getMarkerColorHere();
+                            }
+                        });
+            }
+        }
+        redrawLine();
+    }
 
-        if (dataBaseRepository.getMarkerColorFS() != null) {
-            geoSettingsM = dataBaseRepository.getMarkerColorFS();
-            getMarkerColorHere();
+    public static boolean hasConnection() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private void textToSpeech() {
+        if (dataBaseRepository.getProfile() != null) {
+            profile = dataBaseRepository.getProfile();
+            if (profile.getSpeak()) {
+                textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                            textSay.setLanguage(Locale.UK);
+                            textSay.speak(profile.getCheckpoints() + "checkpoints out of 10 completed", TextToSpeech.QUEUE_FLUSH, null);
+                        } else {
+                            Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
         } else {
-            dataBaseRepository.getMarkerColorFSTask()
+            dataBaseRepository.getProfileTask()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            geoSettingsM = task.getResult().toObject(GeoSettings.class);
-                            getMarkerColorHere();
+                            profile = task.getResult().toObject(Profile.class);
+                            if (profile != null && profile.getSpeak()) {
+                                textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                                    @Override
+                                    public void onInit(int status) {
+                                        if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                                            textSay.setLanguage(Locale.UK);
+                                            textSay.speak(profile.getCheckpoints() + "checkpoints out of 10 completed", TextToSpeech.QUEUE_FLUSH, null);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
                         }
                     });
         }
-        redrawLine();
     }
 
     public BitmapDescriptor getMarkerIcon(String color) {
@@ -670,7 +733,9 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private void bindService() {
         Intent intent = new Intent(getActivity(), MapPositionService.class);
-        getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        if(getActivity() != null){
+            getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @Override
