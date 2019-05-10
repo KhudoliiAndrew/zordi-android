@@ -82,7 +82,7 @@ public class StepCounterService extends Service implements SensorEventListener {
                             final Date date = new Date();
                             stepsDataList = task.getResult().toObjects(StepsData.class);
                             stepsData = stepsDataList.get(stepsDataList.size() - 1);
-                            if(stepsData.getDate().getDay() == date.getDay()) {
+                            if (stepsData.getDate().getDay() == date.getDay()) {
                                 steps = stepsData.getSteps();
                             }
                         } else {
@@ -93,64 +93,70 @@ public class StepCounterService extends Service implements SensorEventListener {
                 });
 
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor sSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
-        if (sSensor != null) {
+        Sensor sensor = null;
+        if (sensorManager != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
+        }
+
+
+        /*if (sSensor != null) {
             sensorManager.registerListener(this, sSensor, SensorManager.SENSOR_DELAY_UI);
 
         } else {
-            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
-        }
+
+        }*/
         return Service.START_STICKY;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Sensor sensor = event.sensor;
-        if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            synchronized (this) {
-                float vSum = 0;
-                for (int i = 0; i < 3; i++) {
-                    final float v = mYOffset + event.values[i] * mScale[1];
-                    vSum += v;
-                }
-                int k = 0;
-                float v = vSum / 3;
-
-                float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
-                if (direction == -mLastDirections[k]) {
-                    // Direction changed
-                    int extType = (direction > 0 ? 0 : 1); // minumum or maximum?
-                    mLastExtremes[extType][k] = mLastValues[k];
-                    float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
-
-                    if (diff > mLimit) {
-
-                        boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
-                        boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
-                        boolean isNotContra = (mLastMatch != 1 - extType);
-
-                        if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                            steps++;
-                            if (mCallBack != null) mCallBack.setSteps(steps);
-                            setStepsToBd(steps);
-                            goalNotification();
-
-                            for (StepListener stepListener : mStepListeners) {
-                                stepListener.onStep();
-                            }
-                            mLastMatch = extType;
-                        } else {
-                            mLastMatch = -1;
-                        }
+        if (stepsData.getSteps() != 0) {
+            Sensor sensor = event.sensor;
+            if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                synchronized (this) {
+                    float vSum = 0;
+                    for (int i = 0; i < 3; i++) {
+                        final float v = mYOffset + event.values[i] * mScale[1];
+                        vSum += v;
                     }
-                    mLastDiff[k] = diff;
+                    int k = 0;
+                    float v = vSum / 3;
+
+                    float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
+                    if (direction == -mLastDirections[k]) {
+                        // Direction changed
+                        int extType = (direction > 0 ? 0 : 1); // minumum or maximum?
+                        mLastExtremes[extType][k] = mLastValues[k];
+                        float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
+
+                        if (diff > mLimit) {
+
+                            boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
+                            boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
+                            boolean isNotContra = (mLastMatch != 1 - extType);
+
+                            if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
+                                steps++;
+                                if (mCallBack != null) mCallBack.setSteps(steps);
+                                setStepsToBd(steps);
+                                goalNotification();
+
+                                for (StepListener stepListener : mStepListeners) {
+                                    stepListener.onStep();
+                                }
+                                mLastMatch = extType;
+                            } else {
+                                mLastMatch = -1;
+                            }
+                        }
+                        mLastDiff[k] = diff;
+                    }
+                    mLastDirections[k] = direction;
+                    mLastValues[k] = v;
                 }
-                mLastDirections[k] = direction;
-                mLastValues[k] = v;
             }
-        } else {
         }
     }
 
@@ -208,7 +214,9 @@ public class StepCounterService extends Service implements SensorEventListener {
 
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.notify(1, notification);
+            if (notificationManager != null) {
+                notificationManager.notify(1, notification);
+            }
         }
     }
 

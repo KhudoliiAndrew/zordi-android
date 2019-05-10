@@ -3,6 +3,7 @@ package com.example.admin.miplus.data_base;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.example.admin.miplus.data_base.models.CheckPoint;
 import com.example.admin.miplus.data_base.models.GeoData;
 import com.example.admin.miplus.data_base.models.GeoSettings;
 import com.example.admin.miplus.data_base.models.Profile;
@@ -26,6 +27,8 @@ public class DataBaseRepository {
     private SleepData sleepData;
     private GeoSettings mapType;
     private GeoSettings markerColor;
+    private GeoSettings polylineColor;
+    private CheckPoint checkPoint;
     private GeoData geoData;
 
     public void setProfile(Profile profile){
@@ -41,7 +44,9 @@ public class DataBaseRepository {
                 @NonNull
                 @Override
                 public Task<Profile> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
-                    profile = documentSnapshot.toObject(Profile.class);
+                    if (documentSnapshot != null) {
+                        profile = documentSnapshot.toObject(Profile.class);
+                    }
                     return null;
                 }
             });
@@ -56,27 +61,49 @@ public class DataBaseRepository {
     }
 
     public void setStepsData(StepsData stepsData){
-        db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").document().set(stepsData);
+        if (mAuth.getUid() != null){
+            db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").document().set(stepsData);
+        }
+
     }
 
     public Task<QuerySnapshot> getStepsDataListOrderedDate(){
-        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").orderBy("date").get();
+        if (mAuth.getUid() != null){
+            return db.collection("stepsData").document(mAuth.getUid()).collection("stepsHistory").orderBy("date").get();
+        } else {
+            return null;
+        }
+
     }
 
     public void setStepsDataByDay(StepsData stepsData){
-        db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").document().set(stepsData);
+        if (mAuth.getUid() != null){
+            db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").document().set(stepsData);
+        }
+
     }
 
     public Task<QuerySnapshot> getStepsDataByDay(){
-        return db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").orderBy("date").get();
+        if (mAuth.getUid() != null){
+            return db.collection("stepsData").document(mAuth.getUid()).collection("stepsDay").orderBy("date").get();
+        } else {
+            return null;
+        }
     }
 
     public void setSleepData(SleepData sleepData){
-        db.collection("sleepData").document(mAuth.getUid()).collection("sleepDayData").document().set(sleepData);
+        if (mAuth.getUid() != null){
+            db.collection("sleepData").document(mAuth.getUid()).collection("sleepDayData").document().set(sleepData);
+        }
+
     }
 
     public Task<QuerySnapshot> getSleepData(){
-        return db.collection("sleepData").document(mAuth.getUid()).collection("sleepDayData").orderBy("date").get();
+        if (mAuth.getUid() != null){
+            return db.collection("sleepData").document(mAuth.getUid()).collection("sleepDayData").orderBy("date").get();
+        } else {
+            return null;
+        }
     }
 
     public void setGeoData(GeoData geoData){
@@ -86,16 +113,22 @@ public class DataBaseRepository {
     }
 
     public Task<QuerySnapshot> getGeoDataTask() {
-        final Task<QuerySnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").get();
-        task.onSuccessTask(new SuccessContinuation<QuerySnapshot, GeoData>() {
-            @NonNull
-            @Override
-            public Task<GeoData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
-                geoData = (GeoData) querySnapshot.toObjects(GeoData.class);
-                return null;
-            }
-        });
-        return task;
+        if (mAuth.getUid() != null){
+            final Task<QuerySnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("LocationHistory").get();
+            task.onSuccessTask(new SuccessContinuation<QuerySnapshot, GeoData>() {
+                @NonNull
+                @Override
+                public Task<GeoData> then(@Nullable QuerySnapshot querySnapshot) throws Exception {
+                    if (querySnapshot != null) {
+                        geoData = (GeoData) querySnapshot.toObjects(GeoData.class);
+                    }
+                    return null;
+                }
+            });
+            return task;
+        } else{
+            return null;
+        }
     }
 
     public GeoData getGeoData(){
@@ -103,21 +136,29 @@ public class DataBaseRepository {
     }
 
     public void setMapSettings(GeoSettings mapType){
-        db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").set(mapType);
+        if (mAuth.getUid() != null) {
+            db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").set(mapType);
+        }
     }
 
     public Task<DocumentSnapshot> getMapSettingsTask() {
-        final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").get();
-        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>(){
+        if (mAuth.getUid() != null) {
+            final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MapType").get();
+            task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>() {
 
-            @NonNull
-            @Override
-            public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
-                mapType = documentSnapshot.toObject(GeoSettings.class);
-                return null;
-            }
-        });
-        return task;
+                @NonNull
+                @Override
+                public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                    if (documentSnapshot != null) {
+                        mapType = documentSnapshot.toObject(GeoSettings.class);
+                    }
+                    return null;
+                }
+            });
+            return task;
+        } else {
+            return null;
+        }
     }
 
     public GeoSettings getMapSettings(){
@@ -125,25 +166,54 @@ public class DataBaseRepository {
     }
 
     public void setMarkerColorFS(GeoSettings markerColor){
+        if(mAuth.getUid() != null){
+
+        }
         db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").set(markerColor);
     }
 
     public Task<DocumentSnapshot> getMarkerColorFSTask() {
-        final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").get();
-        task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>(){
+        if(mAuth.getUid() != null){
+            final Task<DocumentSnapshot> task = db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").get();
+            task.onSuccessTask(new SuccessContinuation<DocumentSnapshot, GeoSettings>(){
 
-            @NonNull
-            @Override
-            public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
-                markerColor = documentSnapshot.toObject(GeoSettings.class);
-                return null;
-            }
-        });
-        return task;
+                @NonNull
+                @Override
+                public Task<GeoSettings> then(@Nullable DocumentSnapshot documentSnapshot) throws Exception {
+                    if (documentSnapshot != null) {
+                        markerColor = documentSnapshot.toObject(GeoSettings.class);
+                    }
+                    return null;
+                }
+            });
+            return task;
+        } else {
+            return null;
+        }
+
     }
 
     public GeoSettings getMarkerColorFS(){
         return markerColor;
     }
-}
 
+    public void setCheckPoint(CheckPoint checkPoint){
+        if(mAuth.getUid() != null){
+            db.collection("geopositions").document(mAuth.getUid()).collection("CheckPoint").document(String.valueOf(checkPoint.getNum())).set(checkPoint);
+        }
+
+    }
+
+    public Task<QuerySnapshot> getCheckPointTask() {
+        if(mAuth.getUid() != null){
+            return db.collection("geopositions").document(mAuth.getUid()).collection("CheckPoint").orderBy("date").get();
+        } else {
+            return null;
+        }
+
+    }
+
+    public CheckPoint getCheckPoint(){
+        return checkPoint;
+    }
+}

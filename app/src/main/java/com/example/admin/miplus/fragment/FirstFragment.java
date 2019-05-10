@@ -68,7 +68,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
             TextView stepsText = (TextView) getView().findViewById(R.id.steps_cuantity_text);
             stepsText.setText(String.valueOf(steps));
             circleProgressBar = (CircleProgressBar) getView().findViewById(R.id.circle_progress_bar);
-            circleProgressBar.progressChange(steps, profile.getStepsTarget());
+            if(profile.getStepsTarget() != 0){
+                circleProgressBar.progressChange(steps, profile.getStepsTarget());
+            }
             TextView cardDistanceText = (TextView) getView().findViewById(R.id.distance_card_text);
             float distance = ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * steps) * 0.001f;
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
@@ -230,7 +232,9 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
 
         if (stepsData != null && profile != null && stepsDayData != null) {
             stepsText.setText(String.valueOf(stepsData.getSteps()));
-            circleProgressBar.progressChange(stepsData.getSteps(), profile.getStepsTarget());
+            if(profile.getStepsTarget() != 0){
+                circleProgressBar.progressChange(stepsData.getSteps(), profile.getStepsTarget());
+            }
             float distance = ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f;
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
             cardDistanceText.setText(formattedDouble + " km");

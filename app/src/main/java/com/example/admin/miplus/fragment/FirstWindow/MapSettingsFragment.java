@@ -72,7 +72,7 @@ public class MapSettingsFragment extends Fragment {
 
         Button mapType = (Button) view.findViewById(R.id.map_type_button);
         final TextView mapTypeText = (TextView) view.findViewById(R.id.map_type_text);
-        mapType.setOnClickListener(new View.OnClickListener() {
+       /* mapType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listItems = new String[] {"Normal", "Satellite", "Hybrid", "Terrain"};
@@ -109,7 +109,7 @@ public class MapSettingsFragment extends Fragment {
                 AlertDialog mapTypeDialog = mapTypeBuilder.create();
                 mapTypeDialog.show();
             }
-        });
+        });*/
 
         Button markerColor = (Button) view.findViewById(R.id.marker_color_button);
         final TextView markerColorText = (TextView) view.findViewById(R.id.marker_color_text);

@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.miplus.R;
@@ -32,6 +35,28 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
+        checkUser();
+
+    }
+
+    public static boolean hasConnection() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private void checkUser(){
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (hasConnection()) {
             if (currentUser != null) {
@@ -61,26 +86,17 @@ public class SplashActivity extends AppCompatActivity {
                 SplashActivity.this.finish();
             }
         } else {
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+            TextView textView = (TextView) findViewById(R.id.reload_text);
+            textView.setText("No internet connection");
+            ImageView imageView = (ImageView) findViewById(R.id.reload_splash);
+            imageView.setImageResource(R.drawable.ic_replay_white_24dp);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkUser();
+                    Toast.makeText(SplashActivity.this, "Checking...", Toast.LENGTH_LONG).show();
+                }
+            });
         }
-    }
-
-    public static boolean hasConnection() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return false;
     }
 }

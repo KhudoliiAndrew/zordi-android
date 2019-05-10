@@ -23,7 +23,7 @@ public class StepsData {
     }
 
     public void setDefaultInstance(){
-        setSteps(0);
+        setSteps(1);
         setDate(new Date());
     }
 }

@@ -13,4 +13,31 @@
         app:srcCompat="@drawable/ptichka"
         android:layout_centerInParent="true"
         android:elevation="10dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/reload_splash"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/reload_splash"/>
+
+        <TextView
+            android:id="@+id/reload_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorWhite"
+            android:textSize="21dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"/>
+    </RelativeLayout>
+
+
 </RelativeLayout>
