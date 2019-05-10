@@ -10,19 +10,13 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.fragment.FirstFragment;
 
 
 public class CircleProgressBar extends View {
     private static final String TAG = "CircleProgressBar";
-
-    private float progress = 0;
-    private int max;
-    private float arcAngle = 130;
 
     // Status
     private static final String INSTANCE_STATUS = "instance_status";
@@ -48,35 +42,15 @@ public class CircleProgressBar extends View {
     private static final int DEFAULT_TIMER_COLON_COLOR = Color.TRANSPARENT; // start of sleep circle
     private final int DEFAULT_TIMER_TEXT_COLOR = getResources().getColor(R.color.colorPrimaryDark);
 
-    // Paint
-    private Paint mCirclePaint;
-    private Paint mHighlightLinePaint;
     private Paint mLinePaint;
     private Paint mProgressLinePaint;
     private Paint mCircleButtonPaint;
-    private Paint mNumberPaint;
-    private Paint mTimerNumberPaint;
-    private Paint mTimerTextPaint;
     private Paint mTimerColonPaint;
 
     // Dimension
     private float mGapBetweenCircleAndLine;
-    private float mNumberSize;
-    private float mLineWidth;
     private float mCircleButtonRadius;
     private float mCircleStrokeWidth;
-    private float mTimerNumberSize;
-    private float mTimerTextSize;
-
-    // Color
-    private int mCircleColor;
-    private int mCircleButtonColor;
-    private int mLineColor;
-    private int mProgressLineColor;
-    private int mHighlightLineColor;
-    private int mNumberColor;
-    private int mTimerNumberColor;
-    private int mTimerTextColor;
 
     // Parameters
     private float mCx;
@@ -84,13 +58,7 @@ public class CircleProgressBar extends View {
     private float mRadius;
     private float mCurrentRadian = 4;
     private float mCurrentRadian1;
-    private float staticRadian = 2.28f;
-    private float staticRadian1 = 4;
-    private float mPreRadian;
-    private boolean mInCircleButton;
-    private boolean mInCircleButton1;
     private boolean ismInCircleButton;
-    private int mCurrentTime = 0; // seconds
 
     public float getmCurrentRadian() {
         return mCurrentRadian;
@@ -98,10 +66,6 @@ public class CircleProgressBar extends View {
 
     public void setmCurrentRadian(float mCurrentRadian) {
         this.mCurrentRadian = mCurrentRadian;
-    }
-
-    public float getmCurrentRadian1() {
-        return mCurrentRadian1;
     }
 
     public void setmCurrentRadian1(float mCurrentRadian1) {
@@ -126,71 +90,65 @@ public class CircleProgressBar extends View {
         // Set default dimension or read xml attributes
         mGapBetweenCircleAndLine = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_GAP_BETWEEN_CIRCLE_AND_LINE,
                 getContext().getResources().getDisplayMetrics());
-        mNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_NUMBER_SIZE, getContext().getResources()
+        float mNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_NUMBER_SIZE, getContext().getResources()
                 .getDisplayMetrics());
-        mLineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_LINE_WIDTH, getContext().getResources()
+        float mLineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_LINE_WIDTH, getContext().getResources()
                 .getDisplayMetrics());
         mCircleButtonRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_CIRCLE_BUTTON_RADIUS, getContext()
                 .getResources().getDisplayMetrics());
         mCircleStrokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_CIRCLE_STROKE_WIDTH, getContext()
                 .getResources().getDisplayMetrics());
-        mTimerNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_NUMBER_SIZE, getContext()
+        float mTimerNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_NUMBER_SIZE, getContext()
                 .getResources().getDisplayMetrics());
-        mTimerTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_TEXT_SIZE, getContext()
+        float mTimerTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_TEXT_SIZE, getContext()
                 .getResources().getDisplayMetrics());
 
         // Set default color or read xml attributes
-        mCircleColor = DEFAULT_CIRCLE_COLOR;
-        mCircleButtonColor = DEFAULT_CIRCLE_BUTTON_COLOR;
-        mLineColor = DEFAULT_LINE_COLOR;
-        mProgressLineColor = PROGRESS_LINE_COLOR;
-        mHighlightLineColor = DEFAULT_HIGHLIGHT_LINE_COLOR;
-        mNumberColor = DEFAULT_NUMBER_COLOR;
-        mTimerNumberColor = DEFAULT_TIMER_NUMBER_COLOR;
-        mTimerTextColor = DEFAULT_TIMER_TEXT_COLOR;
+        // Color
 
         // Init all paints
-        mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // Paint
+        Paint mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCircleButtonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mHighlightLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mHighlightLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mProgressLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTimerNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTimerTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mTimerNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mTimerTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTimerColonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         // CirclePaint
-        mCirclePaint.setColor(mCircleColor);
+        mCirclePaint.setColor(DEFAULT_CIRCLE_COLOR);
         mCirclePaint.setStyle(Paint.Style.STROKE);
         mCirclePaint.setStrokeWidth(mCircleStrokeWidth);
 
         // CircleButtonPaint
-        mCircleButtonPaint.setColor(mCircleButtonColor);
+        mCircleButtonPaint.setColor(DEFAULT_CIRCLE_BUTTON_COLOR);
         mCircleButtonPaint.setAntiAlias(true);
         mCircleButtonPaint.setStyle(Paint.Style.FILL);
 
         // LinePaint
-        mLinePaint.setColor(mLineColor);
-        mProgressLinePaint.setColor(mProgressLineColor);
+        mLinePaint.setColor(DEFAULT_LINE_COLOR);
+        mProgressLinePaint.setColor(PROGRESS_LINE_COLOR);
         mLinePaint.setStrokeWidth(mCircleButtonRadius * 2 + 8);
         mProgressLinePaint.setStrokeWidth(mCircleButtonRadius * 2 + 8);
         mLinePaint.setStyle(Paint.Style.STROKE);
         mProgressLinePaint.setStyle(Paint.Style.STROKE);
 
         // HighlightLinePaint
-        mHighlightLinePaint.setColor(mHighlightLineColor);
+        mHighlightLinePaint.setColor(DEFAULT_HIGHLIGHT_LINE_COLOR);
         mHighlightLinePaint.setStrokeWidth(mLineWidth);
 
         // NumberPaint
-        mNumberPaint.setColor(mNumberColor);
+        mNumberPaint.setColor(DEFAULT_NUMBER_COLOR);
         mNumberPaint.setTextSize(mNumberSize);
         mNumberPaint.setTextAlign(Paint.Align.CENTER);
         mNumberPaint.setStyle(Paint.Style.STROKE);
         mNumberPaint.setStrokeWidth(mCircleButtonRadius * 2 + 8);
 
         // TimerNumberPaint
-        mTimerNumberPaint.setColor(mTimerNumberColor);
+        mTimerNumberPaint.setColor(DEFAULT_TIMER_NUMBER_COLOR);
         mTimerNumberPaint.setTextSize(mTimerNumberSize);
         mTimerNumberPaint.setTextAlign(Paint.Align.CENTER);
 
@@ -212,7 +170,9 @@ public class CircleProgressBar extends View {
         canvas.rotate(-90, mCx, mCy);
         RectF rect = new RectF(mCx - (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCy - (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCx + (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine), mCy + (mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine));
 
-        if (staticRadian1 >staticRadian) {
+        float staticRadian = 2.28f;
+        float staticRadian1 = 4;
+        if (staticRadian1 > staticRadian) {
             canvas.drawArc(rect, (float) Math.toDegrees(staticRadian1), (float) Math.toDegrees(2 * (float) Math.PI) - (float) Math.toDegrees(staticRadian1) + (float) Math.toDegrees(staticRadian), false, mLinePaint);
         } else {
             canvas.drawArc(rect, (float) Math.toDegrees(staticRadian1), (float) Math.toDegrees(staticRadian) - (float) Math.toDegrees(staticRadian1), false, mLinePaint);

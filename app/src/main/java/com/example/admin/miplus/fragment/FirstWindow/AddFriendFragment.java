@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.example.admin.miplus.R;
 
+import java.util.Objects;
+
 public class AddFriendFragment extends Fragment {
     @Nullable
     @Override
@@ -25,7 +27,7 @@ public class AddFriendFragment extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionbar.setDisplayShowHomeEnabled(true);
     }

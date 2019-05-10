@@ -50,6 +50,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             newUserChecker();
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                profile = task.getResult().toObject(Profile.class);
+                                profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                                 newUserChecker();
                             }
                         });
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         setContentNavigationView();
 
-        Button signoutButton = (Button) findViewById(R.id.log_out);
+        Button signoutButton = findViewById(R.id.log_out);
         signoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,11 +118,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-        if(profile != null){
-            if(profile.getSpeak()){
+        if (profile != null) {
+            if (profile.getSpeak()) {
                 menu.findItem(R.id.speak_item).setIcon(R.drawable.ic_volume_up_white_24dp);
             }
-            if(!profile.getSpeak()){
+            if (!profile.getSpeak()) {
                 menu.findItem(R.id.speak_item).setIcon(R.drawable.ic_volume_off_white_24dp);
             }
         }
@@ -130,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initBottomNavigationView() {
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
         TabsPagerFragmentAdapter adapter = new TabsPagerFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_main_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -158,33 +158,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setTitleTextColor(Color.WHITE);
 
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        }
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         if (item.getItemId() == android.R.id.home && getSupportFragmentManager().getBackStackEntryCount() == 0) {
             drawerLayout.openDrawer(GravityCompat.START);
         } else {
             onBackPressed();
         }
         if (item.getItemId() == R.id.speak_item) {
-            if(profile != null){
+            if (profile != null) {
                 profile.setSpeak(!profile.getSpeak());
                 dataBaseRepository.setProfile(profile);
-                if(profile.getSpeak()){
+                if (profile.getSpeak()) {
                     item.setIcon(R.drawable.ic_volume_up_white_24dp);
                     textToSpeech("So I started talking - restart the application");
                 }
-                if(!profile.getSpeak()){
+                if (!profile.getSpeak()) {
                     item.setIcon(R.drawable.ic_volume_off_white_24dp);
                     textToSpeech("So I shut up - restart the application");
                 }
@@ -196,8 +199,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setContentNavigationView() {
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar, GravityCompat.START, GravityCompat.END) {
 
             @Override
@@ -220,11 +223,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSwitchPositions() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
-        final SwitchCompat sleepSwitch = (SwitchCompat) findViewById(R.id.sleep_switch);
-        final SwitchCompat stepsSwitch = (SwitchCompat) findViewById(R.id.steps_switch);
-        final SwitchCompat notificationSwitch = (SwitchCompat) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.notification_item)).findViewById(R.id.drawer_switch);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        NavigationView navigationView = findViewById(R.id.navigation);
+        final SwitchCompat sleepSwitch = findViewById(R.id.sleep_switch);
+        final SwitchCompat stepsSwitch = findViewById(R.id.steps_switch);
+        final SwitchCompat notificationSwitch = MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.notification_item)).findViewById(R.id.drawer_switch);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
 
         if (profile != null) notificationSwitch.setChecked(profile.getNotifications());
 
@@ -251,27 +254,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void textToSpeech(final String text) {
-       // if(profile.getSpeak()){
-            textSay = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-                @Override
-                public void onInit(int status) {
-                    if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
-                        result = textSay.setLanguage(Locale.UK);
-                        textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
-                    }
+        // if(profile.getSpeak()){
+        textSay = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
+                    result = textSay.setLanguage(Locale.UK);
+                    textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
                 }
-            });
-       // }
+            }
+        });
+        // }
     }
 
     private void setHeaderContent() {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final TextView name = (TextView) findViewById(R.id.user_name_google);
-        final TextView email = (TextView) findViewById(R.id.user_email_google);
-        final ImageView logo = (ImageView) findViewById(R.id.user_logo_google);
-        name.setText(mAuth.getCurrentUser().getDisplayName());
+        final TextView name = findViewById(R.id.user_name_google);
+        final TextView email = findViewById(R.id.user_email_google);
+        final ImageView logo = findViewById(R.id.user_logo_google);
+        name.setText(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
         email.setText(mAuth.getCurrentUser().getEmail());
         Glide.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
     }
@@ -304,9 +307,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_main_navigation_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_main_navigation_view);
 
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -325,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void newUserChecker() {
         if (getIntent().getBooleanExtra("fromLogin", false) && profile.getSpeak()) {
-            if(menu!= null){
+            if (menu != null) {
                 menu.findItem(R.id.speak_item).setIcon(R.drawable.ic_volume_up_white_24dp);
             }
             textToSpeech("Hi, I'm your personal voice assistant. I will help you to read the text, if you can not yourself. If you can do it yourself - turn off the button in the upper right corner");

@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -39,6 +38,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        RelativeLayout facebookLoginButton = (RelativeLayout) findViewById(R.id.facebook1);
+        RelativeLayout facebookLoginButton = findViewById(R.id.facebook1);
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                firebaseAuthWithGoogle(Objects.requireNonNull(account));
                 FirebaseUser GoogleUser = mAuth.getCurrentUser();
                 updateUI(GoogleUser);
             } catch (ApiException e) {

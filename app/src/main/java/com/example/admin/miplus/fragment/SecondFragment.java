@@ -2,29 +2,25 @@ package com.example.admin.miplus.fragment;
 
 import android.Manifest;
 import android.content.ComponentName;
-import android.content.ServiceConnection;
-import android.graphics.Typeface;
-import android.os.IBinder;
-import android.speech.tts.TextToSpeech;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.DrawableRes;
+import android.os.IBinder;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -32,22 +28,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.Services.MapPositionService;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.CheckPoint;
 import com.example.admin.miplus.data_base.models.GeoData;
-import com.example.admin.miplus.data_base.models.GeoSettings;
 import com.example.admin.miplus.data_base.models.Profile;
-import com.example.admin.miplus.fragment.FirstWindow.MapSettingsFragment;
-import com.example.admin.miplus.fragment.FirstWindow.StepsInformationFragment;
-import com.example.admin.miplus.pedometr.StepCounterService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -59,7 +49,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -70,23 +59,16 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -111,10 +93,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public Polyline line;
 
     private MapPositionService mapPositionService;
-
-    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 10000; // = 10 seconds
-    private final float SMALLEST_DISPLACEMENT = 10F; //10 meters
 
     // lists for permissions
     private ArrayList<String> permissionsToRequest;
@@ -187,7 +165,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            checkPointsList = task.getResult().toObjects(CheckPoint.class);
+                            checkPointsList = Objects.requireNonNull(task.getResult()).toObjects(CheckPoint.class);
                             Date date = new Date();
                             if(checkPointsList.size() == 0){
                                 for (int p = 0; p < 10; p++) {
@@ -224,7 +202,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
             Date date = new Date();
-            TextView textView = (TextView) getView().findViewById(R.id.checkpoints_counter_text);
+            TextView textView = Objects.requireNonNull(getView()).findViewById(R.id.checkpoints_counter_text);
             textView.setText(String.valueOf(profile.getCheckpoints()));
             if (profile.getCheckPointsDate().getDate() != date.getDate()) {
                 profile.setCheckpoints(0);
@@ -237,8 +215,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
-                            TextView textView = (TextView) getView().findViewById(R.id.checkpoints_counter_text);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
+                            TextView textView = Objects.requireNonNull(getView()).findViewById(R.id.checkpoints_counter_text);
                             textView.setText(String.valueOf(profile.getCheckpoints()));
                             Date date = new Date();
                             if (profile.getCheckPointsDate().getDate() != date.getDate()) {
@@ -288,13 +266,13 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private boolean hasPermission(String permission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return getActivity().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+            return Objects.requireNonNull(getActivity()).checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
     }
 
     public void onGoogleApiClientConnected() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+        mGoogleApiClient = new GoogleApiClient.Builder(Objects.requireNonNull(getActivity()))
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -331,6 +309,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
+                int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
                 apiAvailability.getErrorDialog(getActivity(), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST);
             }
             return false;
@@ -360,7 +339,6 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     }
 
-    @Nullable
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(">>>>>>", "MapReady");
@@ -403,7 +381,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(">>>>>>", "Connected");
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getActivity(), "You need to enable permissions to display location!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -417,16 +395,21 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     private void startLocationUpdates() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        long UPDATE_INTERVAL = 10000;
         mLocationRequest.setInterval(UPDATE_INTERVAL);
+        // = 10 seconds
+        long FASTEST_INTERVAL = 10000;
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        //10 meters
+        float SMALLEST_DISPLACEMENT = 10F;
         mLocationRequest.setSmallestDisplacement(SMALLEST_DISPLACEMENT);
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
+        if(mGoogleApiClient.isConnected()){
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
     }
 
     @Override
@@ -506,8 +489,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         };
     }
 
-    private void getMapType() {
-        /*if (geoSettings != null && geoSettings.getMapType() != null){
+    /*private void getMapType() {
+        *//*if (geoSettings != null && geoSettings.getMapType() != null){
             if (geoSettings.getMapType().equals(getString(R.string.map_type_normal))) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             } else if (geoSettings.getMapType().equals(getString(R.string.map_type_satellite))) {
@@ -517,10 +500,10 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
             } else if (geoSettings.getMapType().equals(getString(R.string.map_type_terrain))) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
             }
-        }else{*/
+        }else{*//*
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //}
-    }
+    }*/
 
     private String getCheckPointsColor(CheckPoint checkPoint) {
         if (checkPoint.getGone()) {
@@ -549,7 +532,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        vectorDrawable.setBounds(0, 0, Objects.requireNonNull(vectorDrawable).getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
@@ -561,10 +544,8 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleMap.clear();  //clears all Markers and Polylines
 
         PolylineOptions options = new PolylineOptions().width(10).color(Color.parseColor("#3f51b5")).geodesic(true);
-        Iterator<GeoData> itr = geoDataList.iterator();
 
-        while (itr.hasNext()) {
-            GeoData a = itr.next();
+        for (GeoData a : geoDataList) {
             if (a != null) {
             } else {
                 continue;
@@ -662,44 +643,41 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(">>>>>>", "Permissions");
         final ArrayList<String> permissionsRejected = new ArrayList<>();
-        switch (requestCode) {
-            case ALL_PERMISSIONS_RESULT:
-                for (String perm : permissionsToRequest) {
-                    if (!hasPermission(perm)) {
-                        permissionsRejected.add(perm);
-                    }
+        if (requestCode == ALL_PERMISSIONS_RESULT) {
+            for (String perm : permissionsToRequest) {
+                if (!hasPermission(perm)) {
+                    permissionsRejected.add(perm);
                 }
-                if (permissionsRejected.size() > 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
-                            new AlertDialog.Builder(getActivity())
-                                    .setMessage("These permissions are mandatory to get your location. You need to allow them.")
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]),
-                                                        ALL_PERMISSIONS_RESULT);
-                                            }
+            }
+            if (permissionsRejected.size() > 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                        new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
+                                .setMessage("These permissions are mandatory to get your location. You need to allow them.")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]),
+                                                    ALL_PERMISSIONS_RESULT);
                                         }
-                                    })
-                                    .setNegativeButton("Cancel", null).create().show();
-                            Toast.makeText(getActivity(), "Please, enable permissions to display location", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-                } else {
-                    if (mGoogleApiClient != null) {
-                        mGoogleApiClient.connect();
-                        //permission ok, we get last location
-                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
-                        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                        startLocationUpdates();
+                                    }
+                                })
+                                .setNegativeButton("Cancel", null).create().show();
+                        Toast.makeText(getActivity(), "Please, enable permissions to display location", Toast.LENGTH_LONG).show();
                     }
                 }
-                break;
+            } else {
+                if (mGoogleApiClient != null) {
+                    mGoogleApiClient.connect();
+                    //permission ok, we get last location
+                    if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    startLocationUpdates();
+                }
+            }
         }
     }
 
@@ -708,7 +686,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleMap.animateCamera(update);
 
         if (checkPointsList.size() == 10) {
-            TextView textView = (TextView) getActivity().findViewById(R.id.checkpoints_counter_text);
+            TextView textView = Objects.requireNonNull(getActivity()).findViewById(R.id.checkpoints_counter_text);
             if (ll.latitude < 50.4601 && ll.latitude > 50.4595 && ll.longitude < 30.5164 && ll.longitude > 30.5158 && !checkPointsList.get(0).getGone()) {
                 Log.d(">>>>>>", "+1");
                 profile.setCheckpoints(profile.getCheckpoints() + 1);
@@ -842,7 +820,7 @@ public class SecondFragment extends Fragment implements OnMapReadyCallback, Goog
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                             if (profile != null && profile.getSpeak()) {
                                 textSay = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
                                     @Override

@@ -1,18 +1,12 @@
 package com.example.admin.miplus.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.activity.activity_in_main.MainActivity;
 
 import java.util.List;
 
@@ -32,14 +26,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public class FriendViewHolder extends RecyclerView.ViewHolder {
 
-        public FriendViewHolder(View view) {
+        FriendViewHolder(View view) {
             super(view);
         }
 
     }
 
     public class AddFriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public AddFriendViewHolder(View view) {
+        AddFriendViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
         }
@@ -50,8 +44,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case RowType.FRIEND_ROW_TYPE:
                 View buttonTypeView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_view_friends, parent, false);
@@ -65,7 +60,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         dataSet.get(position).onBindViewHolder(holder);
     }
 

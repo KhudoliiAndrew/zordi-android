@@ -8,8 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,20 +25,17 @@ import com.example.admin.miplus.fragment.Dialogs.StepsTargetDialogFragment;
 import com.example.admin.miplus.fragment.Dialogs.WeightDialogFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ThirdFragment extends Fragment implements StepsTargetDialogFragment.PushStepsTarget, SleepRangeDialogFragment.PushSleepTarget, HeightDialogFragment.PushHeight, WeightDialogFragment.PushWeight {
     private View view;
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private TextToSpeech textSay;
 
@@ -76,7 +71,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                             viewSetter(view);
                             switchSetter(view);
                             Date date = new Date();
@@ -96,17 +91,17 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
         }
 
 
-        TextView stepsButton = (TextView) view.findViewById(R.id.steps_watch_button);
-        TextView sleepButton = (TextView) view.findViewById(R.id.waking_watch_button);
-        RelativeLayout heightbutton = (RelativeLayout) view.findViewById(R.id.height_container);
-        RelativeLayout weigthbutton = (RelativeLayout) view.findViewById(R.id.weight_container);
+        TextView stepsButton = view.findViewById(R.id.steps_watch_button);
+        TextView sleepButton = view.findViewById(R.id.waking_watch_button);
+        RelativeLayout heightbutton = view.findViewById(R.id.height_container);
+        RelativeLayout weigthbutton = view.findViewById(R.id.weight_container);
 
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (profile != null) {
                     DialogFragment dlgf2 = new SleepRangeDialogFragment(profile.getSleepTarget(), profile.getStartSleep(), profile.getEndSleep(), profile.getStartRadian(), profile.getEndRadian(), ThirdFragment.this);
-                    dlgf2.show(getFragmentManager(), "dlgf2");
+                    dlgf2.show(Objects.requireNonNull(getFragmentManager()), "dlgf2");
                 }
             }
         });
@@ -116,7 +111,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
             public void onClick(View v) {
                 if (profile != null) {
                     DialogFragment dlgf1 = new StepsTargetDialogFragment(profile.getStepsTarget(), ThirdFragment.this);
-                    dlgf1.show(getFragmentManager(), "dlgf1");
+                    dlgf1.show(Objects.requireNonNull(getFragmentManager()), "dlgf1");
                 }
 
             }
@@ -127,7 +122,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
             public void onClick(View v) {
                 if (profile != null) {
                     DialogFragment dlgf3 = new HeightDialogFragment(profile.getHeight(), ThirdFragment.this);
-                    dlgf3.show(getFragmentManager(), "dlgf3");
+                    dlgf3.show(Objects.requireNonNull(getFragmentManager()), "dlgf3");
                 }
             }
         });
@@ -137,7 +132,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
             public void onClick(View v) {
                 if (profile != null) {
                     DialogFragment dlgf4 = new WeightDialogFragment(profile.getWeight(), ThirdFragment.this);
-                    dlgf4.show(getFragmentManager(), "dlgf4");
+                    dlgf4.show(Objects.requireNonNull(getFragmentManager()), "dlgf4");
                 }
             }
         });
@@ -146,21 +141,21 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
 
     private void viewSetter(View view) {
         if (profile != null) {
-            TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
-            TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
-            TextView heightText = (TextView) view.findViewById(R.id.height_text);
-            TextView weightText = (TextView) view.findViewById(R.id.weight_text);
+            TextView stepsText = view.findViewById(R.id.quantity_of_steps_text);
+            TextView sleepText = view.findViewById(R.id.sleep_length_text);
+            TextView heightText = view.findViewById(R.id.height_text);
+            TextView weightText = view.findViewById(R.id.weight_text);
             stepsText.setText(String.valueOf(profile.getStepsTarget()));
             sleepText.setText(new SimpleDateFormat("HH:mm").format(profile.getSleepTarget()));
-            heightText.setText(String.valueOf(profile.getHeight() + " cm"));
-            weightText.setText(String.valueOf(profile.getWeight() + " kg"));
+            heightText.setText(profile.getHeight() + " cm");
+            weightText.setText(profile.getWeight() + " kg");
         }
     }
 
     private void switchSetter(View view) {
         if (profile != null) {
-            final SwitchCompat sleepSwitch = (SwitchCompat) view.findViewById(R.id.sleep_switch);
-            final SwitchCompat stepsSwitch = (SwitchCompat) view.findViewById(R.id.steps_switch);
+            final SwitchCompat sleepSwitch = view.findViewById(R.id.sleep_switch);
+            final SwitchCompat stepsSwitch = view.findViewById(R.id.steps_switch);
           /*  final SwitchCompat lightThemeSwitch = (SwitchCompat) view.findViewById(R.id.light_theme_switch);
             final SwitchCompat darkThemeSwitch = (SwitchCompat) view.findViewById(R.id.dark_theme_switch);*/
 
@@ -219,10 +214,10 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     }
 
     private void setWaterCounter(View view) {
-        TextView textView = (TextView) view.findViewById(R.id.all_water);
+        TextView textView = view.findViewById(R.id.all_water);
         textView.setText(" /" + (profile.getWeight() * 35) + " ml");
-        Button button = (Button) view.findViewById(R.id.add_water_ml);
-        final TextView textView1 = (TextView) view.findViewById(R.id.water_counter_text);
+        Button button = view.findViewById(R.id.add_water_ml);
+        final TextView textView1 = view.findViewById(R.id.water_counter_text);
         textView1.setText(String.valueOf(profile.getWaterCount()));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +255,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public void stepsTarget(int stepsTarget) {
         profile.setStepsTarget(stepsTarget);
         dataBaseRepository.setProfile(profile);
-        TextView stepsText = (TextView) view.findViewById(R.id.quantity_of_steps_text);
+        TextView stepsText = view.findViewById(R.id.quantity_of_steps_text);
         stepsText.setText(String.valueOf(stepsTarget));
         textToSpeech("Your steps target is" + stepsTarget + " steps");
     }
@@ -281,7 +276,7 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public void sleepTarget(Date sleepTarget) {
         profile.setSleepTarget(sleepTarget);
         dataBaseRepository.setProfile(profile);
-        TextView sleepText = (TextView) view.findViewById(R.id.sleep_length_text);
+        TextView sleepText = view.findViewById(R.id.sleep_length_text);
         sleepText.setText(new SimpleDateFormat("HH:mm").format(sleepTarget));
         textToSpeech("Your sleep target is" + new SimpleDateFormat("HH:mm").format(sleepTarget));
     }
@@ -302,8 +297,8 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public void height(int height) {
         profile.setHeight(height);
         dataBaseRepository.setProfile(profile);
-        TextView heightText = (TextView) view.findViewById(R.id.height_text);
-        heightText.setText(String.valueOf(profile.getHeight() + " cm"));
+        TextView heightText = view.findViewById(R.id.height_text);
+        heightText.setText(profile.getHeight() + " cm");
         textToSpeech("Your height" + height + " cm");
     }
 
@@ -311,9 +306,9 @@ public class ThirdFragment extends Fragment implements StepsTargetDialogFragment
     public void weight(int weight) {
         profile.setWeight(weight);
         dataBaseRepository.setProfile(profile);
-        TextView weightText = (TextView) view.findViewById(R.id.weight_text);
-        weightText.setText(String.valueOf(profile.getWeight() + " kg"));
-        TextView textView = (TextView) view.findViewById(R.id.all_water);
+        TextView weightText = view.findViewById(R.id.weight_text);
+        weightText.setText(profile.getWeight() + " kg");
+        TextView textView = view.findViewById(R.id.all_water);
         textView.setText(" /" + (profile.getWeight() * 35) + " ml");
         textToSpeech("Your weight" + weight + " kg");
     }

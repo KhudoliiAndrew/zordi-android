@@ -12,22 +12,17 @@ import com.example.admin.miplus.data_base.models.StepsData;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.Date;
 
 
 public class DataBaseRepository {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Profile profile;
-    private SleepData sleepData;
     private GeoSettings mapType;
     private GeoSettings markerColor;
-    private GeoSettings polylineColor;
     private CheckPoint checkPoint;
     private GeoData geoData;
 
@@ -167,9 +162,9 @@ public class DataBaseRepository {
 
     public void setMarkerColorFS(GeoSettings markerColor){
         if(mAuth.getUid() != null){
-
+            db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").set(markerColor);
         }
-        db.collection("geopositions").document(mAuth.getUid()).collection("MapSettings").document("MarkerColor").set(markerColor);
+
     }
 
     public Task<DocumentSnapshot> getMarkerColorFSTask() {

@@ -21,9 +21,7 @@ import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.SleepData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
@@ -42,14 +41,8 @@ public class SleepInformationFragment extends Fragment {
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private SleepData sleepData = new SleepData();
     private List<SleepData> sleepDataList = new ArrayList<SleepData>();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Profile profile = new Profile();
-    private String sleepTarget;
-
     private TextToSpeech textSay;
-    private String whichTextSay;
-    int result;
 
     @Nullable
     @Override
@@ -97,13 +90,12 @@ public class SleepInformationFragment extends Fragment {
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                             dataBaseRepository.getSleepData()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.getResult() != null && !task.getResult().isEmpty()) {
-                                                Date date = new Date();
                                                 sleepDataList = task.getResult().toObjects(SleepData.class);
                                                 sleepData = sleepDataList.get(sleepDataList.size() - 1);
                                                 if (profile != null) {
@@ -114,7 +106,6 @@ public class SleepInformationFragment extends Fragment {
                                                 viewSetter(view);
                                                 initMonthChart(view);
                                             } else {
-                                                Date date = new Date();
                                                 if (profile != null) {
                                                     adviceSetter(view);
                                                 }
@@ -154,10 +145,10 @@ public class SleepInformationFragment extends Fragment {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionbar.setDisplayShowHomeEnabled(true);
     }
@@ -170,19 +161,19 @@ public class SleepInformationFragment extends Fragment {
                 textSay.stop();
                 textSay.shutdown();
             }
-            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
             ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
             //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
         }
     }
 
     private void adviceSetter(View view) {
-        TextView firstAdvice = (TextView) view.findViewById(R.id.first_advice);
-        TextView secondAdvice = (TextView) view.findViewById(R.id.second_advice);
-        TextView thirdAdvice = (TextView) view.findViewById(R.id.third_advice);
+        TextView firstAdvice = view.findViewById(R.id.first_advice);
+        TextView secondAdvice = view.findViewById(R.id.second_advice);
+        TextView thirdAdvice = view.findViewById(R.id.third_advice);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
@@ -248,9 +239,9 @@ public class SleepInformationFragment extends Fragment {
 
 
     private void viewSetter(View view) {
-        TextView sleepLength = (TextView) view.findViewById(R.id.sleep_cuantity_fragment);
-        TextView sleepStart = (TextView) view.findViewById(R.id.text_start_sleep);
-        TextView sleepEnd = (TextView) view.findViewById(R.id.end_sleep_text);
+        TextView sleepLength = view.findViewById(R.id.sleep_cuantity_fragment);
+        TextView sleepStart = view.findViewById(R.id.text_start_sleep);
+        TextView sleepEnd = view.findViewById(R.id.end_sleep_text);
 
         sleepLength.setText(new SimpleDateFormat("HH:mm").format(sleepLongDate(sleepData.getStartSleep(), sleepData.getEndSleep())));
         sleepStart.setText(new SimpleDateFormat("HH:mm").format(sleepData.getStartSleep()));
@@ -258,14 +249,12 @@ public class SleepInformationFragment extends Fragment {
     }
 
     private void initMonthChart(View view) {
-        ColumnChartView chart = (ColumnChartView) view.findViewById(R.id.column_day_sleep_chart);
-        List<SubcolumnValue> values = new ArrayList<SubcolumnValue>();
-        List<Column> columns = new ArrayList<Column>();
+        ColumnChartView chart = view.findViewById(R.id.column_day_sleep_chart);
+        List<SubcolumnValue> values = new ArrayList<>();
+        List<Column> columns = new ArrayList<>();
 
-        Date date = new Date();
-        TextView firstDay = (TextView) view.findViewById(R.id.four_day_before_text);
-        TextView endDay = (TextView) view.findViewById(R.id.today_text);
-        TextView noHistory = (TextView) view.findViewById(R.id.no_steps_history);
+        TextView firstDay = view.findViewById(R.id.four_day_before_text);
+        TextView endDay = view.findViewById(R.id.today_text);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
 
@@ -312,11 +301,11 @@ public class SleepInformationFragment extends Fragment {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             if (startSleep.getTime() >= endSleep.getTime()) {
                 date.setTime(75600000 - startSleep.getTime() + endSleep.getTime());
-                Log.d("<><><><>", "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end " + endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime()) + "   range " + String.valueOf(86400000 - startSleep.getTime() + endSleep.getTime()) + "  " + simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime()));
+                Log.d("<><><><>", "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end " + endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime()) + "   range " + (86400000 - startSleep.getTime() + endSleep.getTime()) + "  " + simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime()));
             } else {
                 if (startSleep.getTime() < endSleep.getTime()) {
                     date.setTime(endSleep.getTime() - startSleep.getTime() - 10800000);
-                    Log.d("<><><><>", "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end " + endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime()) + "   range " + String.valueOf(endSleep.getTime() - startSleep.getTime()) + "  " + simpleDateFormat.format(endSleep.getTime() - startSleep.getTime()));
+                    Log.d("<><><><>", "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end " + endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime()) + "   range " + (endSleep.getTime() - startSleep.getTime()) + "  " + simpleDateFormat.format(endSleep.getTime() - startSleep.getTime()));
                 }
             }
             return date;

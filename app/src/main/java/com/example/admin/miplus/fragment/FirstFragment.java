@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,17 +32,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class FirstFragment extends Fragment implements StepCounterService.CallBack {
 
@@ -55,23 +51,22 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     private CircleProgressBar circleProgressBar;
     private int steps;
     private StepCounterService stepCounterService;
-    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
+    private List<StepsData> stepsDataList = new ArrayList<>();
     private SleepData sleepData = new SleepData();
-    private List<SleepData> sleepDataList = new ArrayList<SleepData>();
+    private List<SleepData> sleepDataList = new ArrayList<>();
 
     private TextToSpeech textSay;
-    int result;
 
     public void setSteps(int steps) {
         this.steps = steps;
         if (getView() != null) {
-            TextView stepsText = (TextView) getView().findViewById(R.id.steps_cuantity_text);
+            TextView stepsText = getView().findViewById(R.id.steps_cuantity_text);
             stepsText.setText(String.valueOf(steps));
-            circleProgressBar = (CircleProgressBar) getView().findViewById(R.id.circle_progress_bar);
+            circleProgressBar = getView().findViewById(R.id.circle_progress_bar);
             if(profile.getStepsTarget() != 0){
                 circleProgressBar.progressChange(steps, profile.getStepsTarget());
             }
-            TextView cardDistanceText = (TextView) getView().findViewById(R.id.distance_card_text);
+            TextView cardDistanceText = getView().findViewById(R.id.distance_card_text);
             float distance = ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * steps) * 0.001f;
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
             cardDistanceText.setText(formattedDouble + " km");
@@ -97,7 +92,7 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                         }
                     });
         }
@@ -137,7 +132,6 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
-                            final Date date = new Date();
                             stepsDataList = task.getResult().toObjects(StepsData.class);
                             stepsDayData = stepsDataList.get(stepsDataList.size() - 1);
                             viewSetter(view);
@@ -185,49 +179,49 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
     }
 
     private void listenerSet(View view) {
-        RelativeLayout stepsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toStepsInformationCard);
+        RelativeLayout stepsRelativeLayout = view.findViewById(R.id.toStepsInformationCard);
         stepsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     StepsInformationFragment stepsInformationFragment = new StepsInformationFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
+                    Objects.requireNonNull(fragmentManager).beginTransaction().replace(R.id.fragments_container, stepsInformationFragment).addToBackStack(null).commit();
                 }
             }
         });
 
-        RelativeLayout sleepRelativeLayout = (RelativeLayout) view.findViewById(R.id.toSleepInformationCard);
+        RelativeLayout sleepRelativeLayout = view.findViewById(R.id.toSleepInformationCard);
         sleepRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     SleepInformationFragment sleepInformationFragment = new SleepInformationFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragments_container, sleepInformationFragment).addToBackStack(null).commit();
+                    Objects.requireNonNull(fragmentManager).beginTransaction().replace(R.id.fragments_container, sleepInformationFragment).addToBackStack(null).commit();
 
                 }
             }
         });
 
-        RelativeLayout friendsRelativeLayout = (RelativeLayout) view.findViewById(R.id.toFriendsCard);
+        RelativeLayout friendsRelativeLayout = view.findViewById(R.id.toFriendsCard);
         friendsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     FriendsFragment friendsFragment = new FriendsFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragments_container, friendsFragment).addToBackStack(null).commit();
+                    Objects.requireNonNull(fragmentManager).beginTransaction().replace(R.id.fragments_container, friendsFragment).addToBackStack(null).commit();
                 }
             }
         });
     }
 
     public void viewSetter(View view) {
-        TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_text);
-        circleProgressBar = (CircleProgressBar) view.findViewById(R.id.circle_progress_bar);
-        TextView cardDistanceText = (TextView) view.findViewById(R.id.distance_card_text);
-        TextView yestedayStepsText = (TextView) view.findViewById(R.id.yesterday_steps_text);
+        TextView stepsText = view.findViewById(R.id.steps_cuantity_text);
+        circleProgressBar = view.findViewById(R.id.circle_progress_bar);
+        TextView cardDistanceText = view.findViewById(R.id.distance_card_text);
+        TextView yestedayStepsText = view.findViewById(R.id.yesterday_steps_text);
 
 
         if (stepsData != null && profile != null && stepsDayData != null) {
@@ -238,14 +232,14 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
             float distance = ((((profile.getHeight() * 0.01f) / 4) + 0.37f) * stepsData.getSteps()) * 0.001f;
             String formattedDouble = new DecimalFormat("#0.00").format(distance);
             cardDistanceText.setText(formattedDouble + " km");
-            yestedayStepsText.setText(String.valueOf(stepsDayData.getSteps()) + " steps");
+            yestedayStepsText.setText(stepsDayData.getSteps() + " steps");
         }
 
     }
 
     private void sleepCardSetter(View view) {
-        TextView startSleepText = (TextView) view.findViewById(R.id.start_sleep_text_first_fragment);
-        TextView endSleepText = (TextView) view.findViewById(R.id.end_sleep_text_first_fragment);
+        TextView startSleepText = view.findViewById(R.id.start_sleep_text_first_fragment);
+        TextView endSleepText = view.findViewById(R.id.end_sleep_text_first_fragment);
 
         startSleepText.setText(new SimpleDateFormat("HH:mm").format(sleepData.getStartSleep()));
         endSleepText.setText(new SimpleDateFormat("HH:mm").format(sleepData.getEndSleep()));
@@ -263,7 +257,7 @@ public class FirstFragment extends Fragment implements StepCounterService.CallBa
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                             if (startSleep != null) {
                                 whenStartTime.setTime((long) (Math.random() * ((startSleep.getTime() + 7200000) - (startSleep.getTime() - 3600000) + 3600000) + (startSleep.getTime() - 3600000)));
                             }

@@ -6,39 +6,27 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-import android.widget.TextView;
 
-import com.example.admin.miplus.CustomXML.CircleProgressBar;
 import com.example.admin.miplus.R;
 import com.example.admin.miplus.activity.SplashActivity;
 import com.example.admin.miplus.data_base.DataBaseRepository;
 import com.example.admin.miplus.data_base.models.Profile;
 import com.example.admin.miplus.data_base.models.StepsData;
-import com.example.admin.miplus.fragment.FirstFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -48,17 +36,16 @@ public class StepCounterService extends Service implements SensorEventListener {
     private Profile profile = new Profile();
 
     private int steps = 0;
-    private float mLimit = 10;
-    private float mLastValues[] = new float[3 * 2];
-    private float mScale[] = new float[2];
+    private float[] mLastValues = new float[3 * 2];
+    private float[] mScale = new float[2];
     private float mYOffset;
-    private float mLastDirections[] = new float[3 * 2];
-    private float mLastExtremes[][] = {new float[3 * 2], new float[3 * 2]};
-    private float mLastDiff[] = new float[3 * 2];
+    private float[] mLastDirections = new float[3 * 2];
+    private float[][] mLastExtremes = {new float[3 * 2], new float[3 * 2]};
+    private float[] mLastDiff = new float[3 * 2];
     private int mLastMatch = -1;
 
-    private ArrayList<StepListener> mStepListeners = new ArrayList<StepListener>();
-    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
+    private ArrayList<StepListener> mStepListeners = new ArrayList<>();
+    private List<StepsData> stepsDataList = new ArrayList<>();
     private StepsData stepsData = new StepsData();
 
     private MyBinder mLocalbinder = new MyBinder();
@@ -94,19 +81,11 @@ public class StepCounterService extends Service implements SensorEventListener {
 
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        Sensor sensor = null;
+        Sensor sensor;
         if (sensorManager != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
         }
-
-
-        /*if (sSensor != null) {
-            sensorManager.registerListener(this, sSensor, SensorManager.SENSOR_DELAY_UI);
-
-        } else {
-
-        }*/
         return Service.START_STICKY;
     }
 
@@ -124,13 +103,14 @@ public class StepCounterService extends Service implements SensorEventListener {
                     int k = 0;
                     float v = vSum / 3;
 
-                    float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
+                    float direction = (Float.compare(v, mLastValues[k]));
                     if (direction == -mLastDirections[k]) {
                         // Direction changed
                         int extType = (direction > 0 ? 0 : 1); // minumum or maximum?
                         mLastExtremes[extType][k] = mLastValues[k];
                         float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
 
+                        float mLimit = 10;
                         if (diff > mLimit) {
 
                             boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);

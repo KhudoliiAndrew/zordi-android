@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.fragment.ThirdFragment;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public class HeightDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -35,13 +35,13 @@ public class HeightDialogFragment extends DialogFragment implements View.OnClick
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(getDialog().getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.height_dialog, null);
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
 
         int min = 30;
         int max = 280;
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.height_picker);
+        final NumberPicker numberPicker = view.findViewById(R.id.height_picker);
         numberPicker.setMaxValue(max);
         numberPicker.setValue(previsiourHeight);
         numberPicker.setMinValue(min);
@@ -49,15 +49,14 @@ public class HeightDialogFragment extends DialogFragment implements View.OnClick
         NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
             @Override
             public String format(int value) {
-                int temp = value;
-                return  temp + " cm" ;
+                return  value + " cm" ;
             }
         };
         numberPicker.setFormatter(formatter);
         numberPicker.setWrapSelectorWheel(false);
-        changePickerColor(numberPicker, Color.TRANSPARENT);
+        changePickerColor(numberPicker);
 
-        View firstItem = (View) numberPicker.getChildAt(0);
+        View firstItem = numberPicker.getChildAt(0);
         if (firstItem != null) {
             firstItem.setVisibility(View.INVISIBLE);
         }
@@ -66,7 +65,7 @@ public class HeightDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.height_picker);
+        final NumberPicker numberPicker = view.findViewById(R.id.height_picker);
         int heightNumber = numberPicker.getValue() ;
         if (pushHeight != null) {
             pushHeight.height(heightNumber);
@@ -74,11 +73,11 @@ public class HeightDialogFragment extends DialogFragment implements View.OnClick
         dismiss();
     }
 
-    private void changePickerColor(NumberPicker picker, int color) {
+    private void changePickerColor(NumberPicker picker) {
         try {
             Field mField = NumberPicker.class.getDeclaredField("mSelectionDivider");
             mField.setAccessible(true);
-            ColorDrawable colorDrawable = new ColorDrawable(color);
+            ColorDrawable colorDrawable = new ColorDrawable(Color.TRANSPARENT);
             mField.set(picker, colorDrawable);
         } catch (Exception e) {
             e.printStackTrace();

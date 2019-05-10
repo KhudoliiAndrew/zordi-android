@@ -1,38 +1,21 @@
 package com.example.admin.miplus.fragment.Dialogs;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.admin.miplus.CustomXML.ForFormatterPicker;
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.data_base.DataBaseRepository;
-import com.example.admin.miplus.data_base.models.Profile;
-import com.example.admin.miplus.fragment.ThirdFragment;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Field;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
+import java.util.Objects;
 
 public class StepsTargetDialogFragment extends DialogFragment implements View.OnClickListener {
     View view;
@@ -51,13 +34,13 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(getDialog().getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.steps_dialog, null);
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
 
         int min = 1;
         int max = 50;
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.StepsPicker);
+        final NumberPicker numberPicker = view.findViewById(R.id.StepsPicker);
         numberPicker.setMaxValue(max);
         numberPicker.setValue(previsiourSteps / MULTIPLIER_RESULT);
         numberPicker.setMinValue(min);
@@ -71,9 +54,9 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
         };
         numberPicker.setFormatter(formatter);
         numberPicker.setWrapSelectorWheel(false);
-        changePickerColor(numberPicker, Color.TRANSPARENT);
+        changePickerColor(numberPicker);
 
-        View firstItem = (View) numberPicker.getChildAt(0);
+        View firstItem = numberPicker.getChildAt(0);
         if (firstItem != null) {
             firstItem.setVisibility(View.INVISIBLE);
         }
@@ -82,7 +65,7 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
 
     @Override
     public void onClick(View v) {
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.StepsPicker);
+        final NumberPicker numberPicker = view.findViewById(R.id.StepsPicker);
         int stepsTargetNumber = numberPicker.getValue() * MULTIPLIER_RESULT;
         if (pushStepsTarget != null) {
             pushStepsTarget.stepsTarget(stepsTargetNumber);
@@ -90,11 +73,11 @@ public class StepsTargetDialogFragment extends DialogFragment implements View.On
         dismiss();
     }
 
-    private void changePickerColor(NumberPicker picker, int color) {
+    private void changePickerColor(NumberPicker picker) {
         try {
             Field mField = NumberPicker.class.getDeclaredField("mSelectionDivider");
             mField.setAccessible(true);
-            ColorDrawable colorDrawable = new ColorDrawable(color);
+            ColorDrawable colorDrawable = new ColorDrawable(Color.TRANSPARENT);
             mField.set(picker, colorDrawable);
         } catch (Exception e) {
             e.printStackTrace();

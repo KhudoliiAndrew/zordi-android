@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -24,8 +23,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.adapter.FriendRowType;
-import com.example.admin.miplus.adapter.AddFriendRowType;
 import com.example.admin.miplus.adapter.ItemClickListener;
 import com.example.admin.miplus.adapter.MyRecyclerViewAdapter;
 import com.example.admin.miplus.adapter.RowType;
@@ -39,6 +36,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -47,9 +45,9 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private Profile profile = new Profile();
 
-    RecyclerView recyclerView;
+    /*RecyclerView recyclerView;
     MyRecyclerViewAdapter adapter;
-    List<RowType> items = new ArrayList<>();
+    List<RowType> items = new ArrayList<>();*/
 
     private TextToSpeech textSay;
 
@@ -61,7 +59,6 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
         textToSpeech("You have two friends");
         if (dataBaseRepository.getProfile() != null) {
             profile = dataBaseRepository.getProfile();
-            viewSetter(view);
             setHeaderContent(view);
             setCardContent(view);
         } else {
@@ -69,8 +66,7 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
-                            viewSetter(view);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                             setHeaderContent(view);
                             setCardContent(view);
                         }
@@ -89,25 +85,22 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
         return view;
     }
 
-    private void viewSetter(View view) {
-    }
-
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionbar.setDisplayShowHomeEnabled(true);
     }
 
     private void setHeaderContent(View view) {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final TextView name = (TextView) view.findViewById(R.id.user_name_google);
-        final TextView email = (TextView) view.findViewById(R.id.user_email_google);
-        final ImageView logo = (ImageView) view.findViewById(R.id.user_logo_google);
+        final TextView name = view.findViewById(R.id.user_name_google);
+        final TextView email = view.findViewById(R.id.user_email_google);
+        final ImageView logo = view.findViewById(R.id.user_logo_google);
         if (getActivity() != null) {
-            name.setText(mAuth.getCurrentUser().getDisplayName());
+            name.setText(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
             email.setText(mAuth.getCurrentUser().getEmail());
             Glide.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(logo);
         }
@@ -115,13 +108,13 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
 
     private void setCardContent(View view) {
         if (getActivity() != null) {
-            ImageView logo = (ImageView) view.findViewById(R.id.friend_logo);
+            ImageView logo = view.findViewById(R.id.friend_logo);
             Glide.with(getActivity()).load(R.drawable.photo_oleg).apply(RequestOptions.circleCropTransform()).into(logo);
 
-            ImageView logo2 = (ImageView) view.findViewById(R.id.friend_Andrew_logo);
+            ImageView logo2 = view.findViewById(R.id.friend_Andrew_logo);
             Glide.with(getActivity()).load(R.drawable.andrew_logo).apply(RequestOptions.circleCropTransform()).into(logo2);
 
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.add_friend_container);
+            RelativeLayout relativeLayout = view.findViewById(R.id.add_friend_container);
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,7 +122,7 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
                     textToSpeech("You can add more friends in the future");
                 }
             });
-            SwitchCompat switchCompat = (SwitchCompat) view.findViewById(R.id.geoposition_switch);
+            SwitchCompat switchCompat = view.findViewById(R.id.geoposition_switch);
             switchCompat.setChecked(profile.getShowGeoposition());
             switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -160,10 +153,10 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
@@ -171,7 +164,7 @@ public class FriendsFragment extends Fragment implements ItemClickListener {
     @Override
     public void onClick(View view, int position) {
         AddFriendFragment addFriendFragment = new AddFriendFragment();
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragments_container, addFriendFragment).addToBackStack(null).commit();
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -43,33 +42,15 @@ public class CircleAlarmTimerView extends View {
     private static final int DEFAULT_TIMER_COLON_COLOR = Color.TRANSPARENT; // start of sleep circle
     private final int DEFAULT_TIMER_TEXT_COLOR = getResources().getColor(R.color.colorPrimaryDark);
 
-    // Paint
-    private Paint mCirclePaint;
-    private Paint mHighlightLinePaint;
     private Paint mLinePaint;
     private Paint mCircleButtonPaint;
     private Paint mNumberPaint;
-    private Paint mTimerNumberPaint;
-    private Paint mTimerTextPaint;
     private Paint mTimerColonPaint;
 
     // Dimension
     private float mGapBetweenCircleAndLine;
-    private float mNumberSize;
-    private float mLineWidth;
     private float mCircleButtonRadius;
     private float mCircleStrokeWidth;
-    private float mTimerNumberSize;
-    private float mTimerTextSize;
-
-    // Color
-    private int mCircleColor;
-    private int mCircleButtonColor;
-    private int mLineColor;
-    private int mHighlightLineColor;
-    private int mNumberColor;
-    private int mTimerNumberColor;
-    private int mTimerTextColor;
 
     // Parameters
     private float mCx;
@@ -119,66 +100,61 @@ public class CircleAlarmTimerView extends View {
         // Set default dimension or read xml attributes
         mGapBetweenCircleAndLine = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_GAP_BETWEEN_CIRCLE_AND_LINE,
                 getContext().getResources().getDisplayMetrics());
-        mNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_NUMBER_SIZE, getContext().getResources()
+        float mNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_NUMBER_SIZE, getContext().getResources()
                 .getDisplayMetrics());
-        mLineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_LINE_WIDTH, getContext().getResources()
+        float mLineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_LINE_WIDTH, getContext().getResources()
                 .getDisplayMetrics());
         mCircleButtonRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_CIRCLE_BUTTON_RADIUS, getContext()
                 .getResources().getDisplayMetrics());
         mCircleStrokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_CIRCLE_STROKE_WIDTH, getContext()
                 .getResources().getDisplayMetrics());
-        mTimerNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_NUMBER_SIZE, getContext()
+        float mTimerNumberSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_NUMBER_SIZE, getContext()
                 .getResources().getDisplayMetrics());
-        mTimerTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_TEXT_SIZE, getContext()
+        float mTimerTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_TIMER_TEXT_SIZE, getContext()
                 .getResources().getDisplayMetrics());
 
         // Set default color or read xml attributes
-        mCircleColor = DEFAULT_CIRCLE_COLOR;
-        mCircleButtonColor = DEFAULT_CIRCLE_BUTTON_COLOR;
-        mLineColor = DEFAULT_LINE_COLOR;
-        mHighlightLineColor = DEFAULT_HIGHLIGHT_LINE_COLOR;
-        mNumberColor = DEFAULT_NUMBER_COLOR;
-        mTimerNumberColor = DEFAULT_TIMER_NUMBER_COLOR;
-        mTimerTextColor = DEFAULT_TIMER_TEXT_COLOR;
+        // Color
 
         // Init all paints
-        mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // Paint
+        Paint mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCircleButtonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mHighlightLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mHighlightLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTimerNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTimerTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mTimerNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mTimerTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTimerColonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         // CirclePaint
-        mCirclePaint.setColor(mCircleColor);
+        mCirclePaint.setColor(DEFAULT_CIRCLE_COLOR);
         mCirclePaint.setStyle(Paint.Style.STROKE);
         mCirclePaint.setStrokeWidth(mCircleStrokeWidth);
 
         // CircleButtonPaint
-        mCircleButtonPaint.setColor(mCircleButtonColor);
+        mCircleButtonPaint.setColor(DEFAULT_CIRCLE_BUTTON_COLOR);
         mCircleButtonPaint.setAntiAlias(true);
         mCircleButtonPaint.setStyle(Paint.Style.FILL);
 
         // LinePaint
-        mLinePaint.setColor(mLineColor);
+        mLinePaint.setColor(DEFAULT_LINE_COLOR);
         mLinePaint.setStrokeWidth(mCircleButtonRadius * 2 + 8);
         mLinePaint.setStyle(Paint.Style.STROKE);
 
         // HighlightLinePaint
-        mHighlightLinePaint.setColor(mHighlightLineColor);
+        mHighlightLinePaint.setColor(DEFAULT_HIGHLIGHT_LINE_COLOR);
         mHighlightLinePaint.setStrokeWidth(mLineWidth);
 
         // NumberPaint
-        mNumberPaint.setColor(mNumberColor);
+        mNumberPaint.setColor(DEFAULT_NUMBER_COLOR);
         mNumberPaint.setTextSize(mNumberSize);
         mNumberPaint.setTextAlign(Paint.Align.CENTER);
         mNumberPaint.setStyle(Paint.Style.STROKE);
         mNumberPaint.setStrokeWidth(mCircleButtonRadius * 2 + 8);
 
         // TimerNumberPaint
-        mTimerNumberPaint.setColor(mTimerNumberColor);
+        mTimerNumberPaint.setColor(DEFAULT_TIMER_NUMBER_COLOR);
         mTimerNumberPaint.setTextSize(mTimerNumberSize);
         mTimerNumberPaint.setTextAlign(Paint.Align.CENTER);
 
@@ -322,20 +298,14 @@ public class CircleAlarmTimerView extends View {
         float r = mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine;
         float x2 = (float) (mCx + r * Math.sin(mCurrentRadian1));
         float y2 = (float) (mCy - r * Math.cos(mCurrentRadian1));
-        if (Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2)) < mCircleButtonRadius) {
-            return true;
-        }
-        return false;
+        return Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2)) < mCircleButtonRadius;
     }
 
     private boolean mInCircleButton(float x, float y) {
         float r = mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine;
         float x2 = (float) (mCx + r * Math.sin(mCurrentRadian));
         float y2 = (float) (mCy - r * Math.cos(mCurrentRadian));
-        if (Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2)) < mCircleButtonRadius) {
-            return true;
-        }
-        return false;
+        return Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2)) < mCircleButtonRadius;
     }
 
     private float getRadian(float x, float y) {

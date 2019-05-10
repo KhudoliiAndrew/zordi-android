@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
@@ -40,21 +40,18 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class StepsInformationFragment extends Fragment implements TextToSpeech.OnInitListener {
+public class StepsInformationFragment extends Fragment {
 
     final DataBaseRepository dataBaseRepository = new DataBaseRepository();
     private StepsData stepsData = new StepsData();
-    private StepsData monthStepsData = new StepsData();
-    private List<StepsData> stepsDataList = new ArrayList<StepsData>();
-    private List<StepsData> monthStepsDataList = new ArrayList<StepsData>();
+    private List<StepsData> stepsDataList = new ArrayList<>();
+    private List<StepsData> monthStepsDataList = new ArrayList<>();
     private int steps = 0;
     private Profile profile = new Profile();
 
     boolean hasLabel = false;
 
     private TextToSpeech textSay;
-    private String whichTextSay;
-    int result;
 
     @Nullable
     @Override
@@ -69,7 +66,7 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            profile = task.getResult().toObject(Profile.class);
+                            profile = Objects.requireNonNull(task.getResult()).toObject(Profile.class);
                             viewSetter(view);
                         }
                     });
@@ -108,14 +105,13 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
-                            final Date date = new Date();
                             monthStepsDataList = task.getResult().toObjects(StepsData.class);
                             initMonthChart(view);
                         } else {
-                            TextView firstDay = (TextView) view.findViewById(R.id.four_day_before_text);
-                            TextView endDay = (TextView) view.findViewById(R.id.today_text);
-                            TextView noHistory = (TextView) view.findViewById(R.id.no_steps_history);
-                            ColumnChartView chart = (ColumnChartView) view.findViewById(R.id.column_chart);
+                            TextView firstDay = view.findViewById(R.id.four_day_before_text);
+                            TextView endDay = view.findViewById(R.id.today_text);
+                            TextView noHistory = view.findViewById(R.id.no_steps_history);
+                            ColumnChartView chart = view.findViewById(R.id.column_chart);
 
                             chart.setZoomEnabled(false);
                             chart.setScrollEnabled(false);
@@ -133,9 +129,9 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
 
     private void viewSetter(View view) {
         String formattedDoubleCal = "0";
-        TextView stepsText = (TextView) view.findViewById(R.id.steps_cuantity_fragment);
-        TextView callText = (TextView) view.findViewById(R.id.text_calories);
-        TextView distanceText = (TextView) view.findViewById(R.id.end_sleep__text);
+        TextView stepsText = view.findViewById(R.id.steps_cuantity_fragment);
+        TextView callText = view.findViewById(R.id.text_calories);
+        TextView distanceText = view.findViewById(R.id.end_sleep__text);
 
         if (stepsData != null && profile != null) {
             stepsText.setText(String.valueOf(steps));
@@ -162,19 +158,19 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionbar.setDisplayShowHomeEnabled(true);
     }
 
     private void initChart(View view) {
         Date date = new Date();
-        TextView startActivity = (TextView) view.findViewById(R.id.start_activity_text);
-        TextView endActivity = (TextView) view.findViewById(R.id.end_activity_text);
-        TextView noSteps = (TextView) view.findViewById(R.id.no_steps_today);
+        TextView startActivity = view.findViewById(R.id.start_activity_text);
+        TextView endActivity = view.findViewById(R.id.end_activity_text);
+        TextView noSteps = view.findViewById(R.id.no_steps_today);
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         if (stepsDataList.size() != 0) {
@@ -202,7 +198,7 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
                     data.setLines(lines);
 
 
-                    LineChartView chartView = (LineChartView) view.findViewById(R.id.chart);
+                    LineChartView chartView = view.findViewById(R.id.chart);
                     chartView.setLineChartData(data);
 
 
@@ -232,20 +228,19 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
     }
 
     private void initMonthChart(View view) {
-        ColumnChartView chart = (ColumnChartView) view.findViewById(R.id.column_chart);
-        List<SubcolumnValue> values = new ArrayList<SubcolumnValue>();
-        List<Column> columns = new ArrayList<Column>();
+        ColumnChartView chart = view.findViewById(R.id.column_chart);
+        List<SubcolumnValue> values = new ArrayList<>();
+        List<Column> columns = new ArrayList<>();
 
-        Date date = new Date();
-        TextView firstDay = (TextView) view.findViewById(R.id.four_day_before_text);
-        TextView endDay = (TextView) view.findViewById(R.id.today_text);
-        TextView noHistory = (TextView) view.findViewById(R.id.no_steps_history);
+        TextView firstDay = view.findViewById(R.id.four_day_before_text);
+        TextView endDay = view.findViewById(R.id.today_text);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
 
         if (getContext() != null) {
             boolean a = true;
             for (int i = 4; i > 0; i--) {
+                StepsData monthStepsData;
                 if (monthStepsDataList.size() >= 4) {
                     monthStepsData = monthStepsDataList.get(monthStepsDataList.size() - i);
                     values.add(new SubcolumnValue(monthStepsData.getSteps(), getResources().getColor(R.color.colorPrimary)));
@@ -286,7 +281,7 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
                 @Override
                 public void onInit(int status) {
                     if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
-                        result = textSay.setLanguage(Locale.UK);
+                        textSay.setLanguage(Locale.UK);
                         textSay.speak(text, TextToSpeech.QUEUE_FLUSH, null);
                         textSay.speak(text2, TextToSpeech.QUEUE_ADD, null);
                     } else {
@@ -305,22 +300,12 @@ public class StepsInformationFragment extends Fragment implements TextToSpeech.O
                 textSay.stop();
                 textSay.shutdown();
             }
-            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
             ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
             //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-        }
-    }
-
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS && Locale.UK != null) {
-            result = textSay.setLanguage(Locale.UK);
-            textSay.speak(whichTextSay, TextToSpeech.QUEUE_ADD, null);
-        } else {
-            Toast.makeText(getActivity(), "Feature not supported in your device", Toast.LENGTH_SHORT).show();
         }
     }
 }

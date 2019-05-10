@@ -15,15 +15,14 @@ import android.widget.TextView;
 
 import com.example.admin.miplus.CustomXML.CircleAlarmTimerView;
 import com.example.admin.miplus.R;
-import com.example.admin.miplus.fragment.ThirdFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class SleepRangeDialogFragment extends DialogFragment implements View.OnClickListener {
     View view;
-    private Date sleepTarget;
     private Date startSleep;
     private Date endSleep;
     private PushSleepTarget pushSleepTarget;
@@ -36,7 +35,6 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
 
     @SuppressLint("ValidFragment")
     public SleepRangeDialogFragment(Date sleepTarget, Date startSleep, Date endSleep, float startRadian, float endRadian, PushSleepTarget pushSleepTarget) {
-        this.sleepTarget = sleepTarget;
         this.startSleep = startSleep;
         this.endSleep = endSleep;
         this.pushSleepTarget = pushSleepTarget;
@@ -50,11 +48,11 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(getDialog().getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.sleep_dialog, null);
         view.findViewById(R.id.ok_button_picker).setOnClickListener(this);
-        textView1 = (TextView) view.findViewById(R.id.start);
-        textView2 = (TextView) view.findViewById(R.id.end);
+        textView1 = view.findViewById(R.id.start);
+        textView2 = view.findViewById(R.id.end);
 
         textView1.setText(new SimpleDateFormat("HH:mm").format(startSleep));
         textView2.setText(new SimpleDateFormat("HH:mm").format(endSleep));
@@ -80,8 +78,8 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
     private void initView() {
 
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-        sleepDistance = (TextView) view.findViewById(R.id.sleep_distance);
-        circleAlarmTimerView = (CircleAlarmTimerView) view.findViewById(R.id.circle_timer_picker);
+        sleepDistance = view.findViewById(R.id.sleep_distance);
+        circleAlarmTimerView = view.findViewById(R.id.circle_timer_picker);
         circleAlarmTimerView.setmCurrentRadian1(startRadian);
         circleAlarmTimerView.setmCurrentRadian(endRadian);
         circleAlarmTimerView.setOnTimeChangedListener(new CircleAlarmTimerView.OnTimeChangedListener() {
@@ -123,11 +121,11 @@ public class SleepRangeDialogFragment extends DialogFragment implements View.OnC
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             if(startSleep.getTime() >= endSleep.getTime()){
                 date.setTime(75600000 - startSleep.getTime() + endSleep.getTime());
-                Log.d("<><><><>",   "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end "+ endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime())  + "   range " + String.valueOf(86400000 - startSleep.getTime() + endSleep.getTime()) + "  " + simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime()));
+                Log.d("<><><><>",   "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end "+ endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime())  + "   range " + (86400000 - startSleep.getTime() + endSleep.getTime()) + "  " + simpleDateFormat.format(86400000 - startSleep.getTime() + endSleep.getTime()));
             } else{
                 if(startSleep.getTime() < endSleep.getTime()){
                     date.setTime(endSleep.getTime() - startSleep.getTime() - 10800000);
-                    Log.d("<><><><>",   "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end "+ endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime())  + "   range " + String.valueOf(endSleep.getTime() - startSleep.getTime()) + "  " + simpleDateFormat.format(endSleep.getTime() - startSleep.getTime()));
+                    Log.d("<><><><>",   "start " + startSleep.getTime() + "  " + simpleDateFormat.format(startSleep.getTime()) + "   end "+ endSleep.getTime() + "  " + simpleDateFormat.format(endSleep.getTime())  + "   range " + (endSleep.getTime() - startSleep.getTime()) + "  " + simpleDateFormat.format(endSleep.getTime() - startSleep.getTime()));
                 }
             }
             return date;

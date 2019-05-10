@@ -1,13 +1,9 @@
 package com.example.admin.miplus.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
         checkUser();
+        //printhashkey();
 
     }
 
@@ -86,9 +83,9 @@ public class SplashActivity extends AppCompatActivity {
                 SplashActivity.this.finish();
             }
         } else {
-            TextView textView = (TextView) findViewById(R.id.reload_text);
+            TextView textView = findViewById(R.id.reload_text);
             textView.setText("No internet connection");
-            ImageView imageView = (ImageView) findViewById(R.id.reload_splash);
+            ImageView imageView = findViewById(R.id.reload_splash);
             imageView.setImageResource(R.drawable.ic_replay_white_24dp);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,4 +96,25 @@ public class SplashActivity extends AppCompatActivity {
             });
         }
     }
+
+   /* public void printhashkey(){
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.penguin.miplus",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                Log.i("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+
+    }*/
 }

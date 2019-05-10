@@ -3,10 +3,8 @@ package com.example.admin.miplus.fragment.Dialogs;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,13 +16,15 @@ import android.widget.Toast;
 
 import com.example.admin.miplus.R;
 
+import java.util.Objects;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DonateDialogFragment extends DialogFragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(getDialog().getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View v = inflater.inflate(R.layout.donate_dialog, null);
         v.findViewById(R.id.coppy_button_donate_dialog).setOnClickListener(this);
 
@@ -33,9 +33,9 @@ public class DonateDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) Objects.requireNonNull(getActivity()).getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("", "5168 7559 0373 9171");
-        clipboard.setPrimaryClip(clip);
+        Objects.requireNonNull(clipboard).setPrimaryClip(clip);
         Toast toast = Toast.makeText(getApplicationContext(), "Copy", Toast.LENGTH_SHORT);
         toast.show();
     }
